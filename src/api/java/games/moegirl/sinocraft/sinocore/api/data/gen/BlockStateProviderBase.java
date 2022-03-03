@@ -1,6 +1,5 @@
 package games.moegirl.sinocraft.sinocore.api.data.gen;
 
-import net.minecraft.core.Registry;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.model.generators.BlockStateProvider;

@@ -40,6 +40,7 @@ public class ItemModelProviderBase extends ItemModelProvider {  // qyl: Use FooB
     @Override
     protected void registerModels() {
         Set<Item> items = getItems();
+        items = skipItems(items);
 
         registerItemBlock(items.stream()
                 .filter(i -> i instanceof BlockItem)
@@ -54,7 +55,7 @@ public class ItemModelProviderBase extends ItemModelProvider {  // qyl: Use FooB
 
     /**
      * @param items Set of items.
-     * @return Builders.
+     * @return
      */
     protected Set<Item> skipItems(Set<Item> items) {
         return items;
