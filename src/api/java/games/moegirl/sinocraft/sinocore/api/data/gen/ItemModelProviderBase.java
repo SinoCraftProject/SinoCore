@@ -79,7 +79,7 @@ public class ItemModelProviderBase extends ItemModelProvider {  // qyl: Use FooB
      */
     private ItemModelBuilder handheldItem(String name) {
         return withExistingParent(name, HANDHELD)
-                .texture("layer0", modLoc("items/" + name));    // qyl: Change prefix to mc builtin "modLoc".
+                .texture("layer0", modLoc("item/" + name));    // qyl: Change prefix to mc builtin "modLoc".
     }
 
     /**
@@ -97,7 +97,7 @@ public class ItemModelProviderBase extends ItemModelProvider {  // qyl: Use FooB
      */
     private ItemModelBuilder generatedItem(String name) {
         return withExistingParent(name, GENERATED)
-                .texture("layer0", modLoc("items/" + name));    // qyl: Change prefix to mc builtin "modLoc".
+                .texture("layer0", modLoc("item/" + name));    // qyl: Change prefix to mc builtin "modLoc".
     }
 
     /**
