@@ -14,6 +14,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -25,6 +27,8 @@ import java.util.stream.Collectors;
 public class ItemModelProviderBase extends ItemModelProvider {  // qyl: Use FooBase for our base data providers.
     public static final ResourceLocation GENERATED = new ResourceLocation("item/generated");
     public static final ResourceLocation HANDHELD = new ResourceLocation("item/handheld");
+
+    protected Set<Item> skipItems = new HashSet<>();
 
     private final DeferredRegister<? extends Item> deferredRegister;
 
@@ -40,7 +44,7 @@ public class ItemModelProviderBase extends ItemModelProvider {  // qyl: Use FooB
     @Override
     protected void registerModels() {
         Set<Item> items = getItems();
-        items = skipItems(items);
+        items.removeAll(skipItems);
 
         registerItemBlock(items.stream()
                 .filter(i -> i instanceof BlockItem)
@@ -57,8 +61,8 @@ public class ItemModelProviderBase extends ItemModelProvider {  // qyl: Use FooB
      * @param items Set of items.
      * @return
      */
-    protected Set<Item> skipItems(Set<Item> items) {
-        return items;
+    protected void skipItems(Item... items) {
+        skipItems.addAll(Arrays.asList(items));
     }
 
     /**

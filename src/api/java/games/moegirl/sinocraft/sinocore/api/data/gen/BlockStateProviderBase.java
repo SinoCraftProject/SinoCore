@@ -3,10 +3,14 @@ package games.moegirl.sinocraft.sinocore.api.data.gen;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
+import net.minecraftforge.client.model.generators.MultiPartBlockStateBuilder;
+import net.minecraftforge.client.model.generators.VariantBlockStateBuilder;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -17,6 +21,9 @@ import java.util.stream.Collectors;
  */
 public class BlockStateProviderBase extends BlockStateProvider {
     private final DeferredRegister<? extends Block> deferredRegister;
+    private boolean adding = true;
+    private final Set<Block> skipBlocks = new HashSet<>();
+
     public BlockStateProviderBase(DataGenerator generator, String modId, ExistingFileHelper existingFileHelper, DeferredRegister<? extends Block> deferredRegister) {
         super(generator, modId, existingFileHelper);
         this.deferredRegister = deferredRegister;
@@ -25,7 +32,7 @@ public class BlockStateProviderBase extends BlockStateProvider {
     @Override
     protected void registerStatesAndModels() {
         Set<Block> blocks = getBlocks();
-        blocks = skipBlock(blocks);
+        blocks.removeAll(skipBlocks);
 
         registerBlock(blocks);
     }
@@ -39,8 +46,31 @@ public class BlockStateProviderBase extends BlockStateProvider {
         blocks.forEach(this::simpleBlock);
     }
 
-    protected Set<Block> skipBlock(Set<Block> blocks) {
-        return blocks;
+    protected void skipBlock(Block... blocks) {
+        skipBlocks.addAll(Arrays.asList(blocks));
     }
 
+    @Override
+    public VariantBlockStateBuilder getVariantBuilder(Block b) {
+        if (isAdding()) {
+            skipBlock(b);
+        }
+        return super.getVariantBuilder(b);
+    }
+
+    @Override
+    public MultiPartBlockStateBuilder getMultipartBuilder(Block b) {
+        if (isAdding()) {
+            skipBlock(b);
+        }
+        return super.getMultipartBuilder(b);
+    }
+
+    public boolean isAdding() {
+        return adding;
+    }
+
+    public void setAdding(boolean adding) {
+        this.adding = adding;
+    }
 }
