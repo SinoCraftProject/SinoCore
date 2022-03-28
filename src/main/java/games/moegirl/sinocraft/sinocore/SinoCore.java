@@ -4,10 +4,10 @@ import games.moegirl.sinocraft.sinocore.api.ApiLoader;
 import games.moegirl.sinocraft.sinocore.api.SinoCoreAPI;
 import games.moegirl.sinocraft.sinocore.api.impl.Crafting;
 import games.moegirl.sinocraft.sinocore.api.impl.Mixins;
-import games.moegirl.sinocraft.sinocore.block.ModBlockItemRegister;
-import games.moegirl.sinocraft.sinocore.block.ModBlockRegister;
-import games.moegirl.sinocraft.sinocore.block.blockentity.ModBlockEntityRegister;
-import games.moegirl.sinocraft.sinocore.crafting.IngredientRegister;
+import games.moegirl.sinocraft.sinocore.common.block.ModBlockItemRegister;
+import games.moegirl.sinocraft.sinocore.common.block.ModBlockRegister;
+import games.moegirl.sinocraft.sinocore.common.blockentity.ModBlockEntityRegister;
+import games.moegirl.sinocraft.sinocore.common.crafting.IngredientRegister;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -18,7 +18,7 @@ public class SinoCore {
     public static final String MODID = "sinocore";
 
     public SinoCore() {
-        SinoCoreAPI.load(this::registerApi);
+        SinoCoreAPI._loadCoreApi(this::registerApi);
 
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
 

@@ -31,7 +31,7 @@ public class SinoCoreAPI {
      *
      * @return Crafting API
      */
-    public static ICrafting getCrafting() {
+    public static ICrafting getCraftings() {
         return crafting;
     }
 
@@ -55,7 +55,7 @@ public class SinoCoreAPI {
         return Trees.INSTANCE;
     }
 
-    public static void load(Consumer<ApiLoader> consumer) {
+    public static void _loadCoreApi(Consumer<ApiLoader> consumer) {
         if (!isInitialized && "sinocore".equals(ModLoadingContext.get().getActiveNamespace())) {
             consumer.accept(new ApiLoaderImpl());
             isInitialized = true;

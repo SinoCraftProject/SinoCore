@@ -1,6 +1,5 @@
 package games.moegirl.sinocraft.sinocore.api.world;
 
-import net.minecraft.core.Holder;
 import net.minecraft.data.worldgen.features.FeatureUtils;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.resources.ResourceLocation;
@@ -62,7 +61,7 @@ public abstract class BaseFeatureBuilder<C extends FeatureConfiguration, SELF ex
      * @return this builder
      */
     public SELF fromModifier(PlacedFeature parent) {
-        modifiers.addAll(parent.placement());
+        modifiers.addAll(parent.getPlacement());
         return getThis();
     }
 
@@ -90,7 +89,7 @@ public abstract class BaseFeatureBuilder<C extends FeatureConfiguration, SELF ex
     public ConfiguredFeature<C, ?> configured() {
         if (configured == null) {
             C config = buildConfiguration();
-            configured = feature.place(config);
+            configured = feature.configured(config);
         }
         return configured;
     }
@@ -150,7 +149,7 @@ public abstract class BaseFeatureBuilder<C extends FeatureConfiguration, SELF ex
         if (result == null) {
             synchronized (this) {
                 if (result == null) {
-                    result = configured().place(modifiers);
+                    result = configured().placed(modifiers);
                 }
             }
         }
@@ -170,7 +169,7 @@ public abstract class BaseFeatureBuilder<C extends FeatureConfiguration, SELF ex
                 isConfiguredRegistered = true;
             }
             if (!isFeatureRegistered) {
-                PlacementUtils.register(name, Holder.direct(build()));
+                PlacementUtils.register(name, build());
                 isFeatureRegistered = true;
             }
         }

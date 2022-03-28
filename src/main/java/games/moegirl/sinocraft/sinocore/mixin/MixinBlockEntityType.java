@@ -1,7 +1,7 @@
 package games.moegirl.sinocraft.sinocore.mixin;
 
 import com.google.common.collect.ImmutableSet;
-import games.moegirl.sinocraft.sinocore.utility.mixin.IBlockEntityType;
+import games.moegirl.sinocraft.sinocore.common.util.mixin.IBlockEntityType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import org.spongepowered.asm.mixin.Final;
