@@ -1,8 +1,8 @@
 package games.moegirl.sinocraft.sinocore.mixin;
 
 import games.moegirl.sinocraft.sinocore.api.tree.Tree;
-import games.moegirl.sinocraft.sinocore.common.util.mixin.IBoat;
-import games.moegirl.sinocraft.sinocore.common.util.mixin.IBoatItem;
+import games.moegirl.sinocraft.sinocore.utility.mixin.IBoat;
+import games.moegirl.sinocraft.sinocore.utility.mixin.IBoatItem;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;

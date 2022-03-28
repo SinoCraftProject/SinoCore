@@ -1,6 +1,6 @@
 package games.moegirl.sinocraft.sinocore.api.block;
 
-import games.moegirl.sinocraft.sinocore.api.util.BlockLootables;
+import games.moegirl.sinocraft.sinocore.api.utility.BlockLootables;
 import net.minecraft.world.level.storage.loot.LootTable;
 
 /**

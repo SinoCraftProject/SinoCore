@@ -1,7 +1,7 @@
 package games.moegirl.sinocraft.sinocore.api.impl.mixin;
 
 import games.moegirl.sinocraft.sinocore.api.mixin.IBlockEntityTypes;
-import games.moegirl.sinocraft.sinocore.common.util.mixin.IBlockEntityType;
+import games.moegirl.sinocraft.sinocore.utility.mixin.IBlockEntityType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 

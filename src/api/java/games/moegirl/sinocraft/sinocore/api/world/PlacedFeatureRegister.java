@@ -1,6 +1,7 @@
 package games.moegirl.sinocraft.sinocore.api.world;
 
-import games.moegirl.sinocraft.sinocore.api.util.Suppliers;
+import games.moegirl.sinocraft.sinocore.api.utility.Suppliers;
+import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeSpecialEffects;
@@ -81,7 +82,7 @@ public class PlacedFeatureRegister {
         BiomeSpecialEffects effects = event.getEffects();
         features.stream()
                 .filter(e -> e.test(name, category, climate, effects))
-                .forEach(e -> generation.addFeature(e.decoration.ordinal(), e));
+                .forEach(e -> generation.addFeature(e.decoration(), Holder.direct(e.get())));
     }
 
     public static final class Entry<C extends FeatureConfiguration, B extends BaseFeatureBuilder<C, B>> implements Supplier<PlacedFeature> {

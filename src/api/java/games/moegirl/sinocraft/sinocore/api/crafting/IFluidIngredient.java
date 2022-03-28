@@ -15,7 +15,7 @@ import java.util.Optional;
  */
 public interface IFluidIngredient {
 
-    IFluidIngredient EMPTY = SinoCoreAPI.getCraftings().ofFluid(Fluids.EMPTY, 0);
+    IFluidIngredient EMPTY = SinoCoreAPI.getCrafting().ofFluid(Fluids.EMPTY, 0);
 
     /**
      * Get fluid

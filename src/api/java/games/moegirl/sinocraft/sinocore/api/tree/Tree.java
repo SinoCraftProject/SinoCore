@@ -2,7 +2,7 @@ package games.moegirl.sinocraft.sinocore.api.tree;
 
 import net.minecraft.data.BlockFamily;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.WoodType;
 import net.minecraftforge.api.distmarker.Dist;
@@ -46,7 +46,7 @@ public class Tree {
     @Nullable
     BlockFamily blockFamily;
     @Nullable
-    Tag.Named<Block> tagLogs;
+    TagKey<Block> tagLogs;
     @Nullable
     Object boatLayer;
     TreeRegisterHelper register = new TreeRegisterHelper(this);
@@ -75,7 +75,7 @@ public class Tree {
         return Objects.requireNonNull(blockFamily);
     }
 
-    public Tag<Block> getTagLogs() {
+    public TagKey<Block> getTagLogs() {
         return Objects.requireNonNull(tagLogs);
     }
 

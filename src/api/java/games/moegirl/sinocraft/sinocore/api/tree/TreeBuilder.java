@@ -2,6 +2,7 @@ package games.moegirl.sinocraft.sinocore.api.tree;
 
 import games.moegirl.sinocraft.sinocore.api.block.*;
 import games.moegirl.sinocraft.sinocore.api.world.TreeFeatureBuilder;
+import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -11,7 +12,6 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;
 import java.util.function.Function;
@@ -239,14 +239,13 @@ public class TreeBuilder {
             private ConfiguredFeature<?, ?> configuredFeature = null;
             private boolean initialized = false;
 
-            @Nullable
             @Override
-            protected ConfiguredFeature<?, ?> getConfiguredFeature(Random pRandom, boolean pLargeHive) {
+            protected Holder<? extends ConfiguredFeature<?, ?>> getConfiguredFeature(Random pRandom, boolean pLargeHive) {
                 if (!initialized) {
                     configuredFeature = feature.apply(pRandom);
                     initialized = true;
                 }
-                return configuredFeature;
+                return Holder.direct(configuredFeature);
             }
         };
         return this;
