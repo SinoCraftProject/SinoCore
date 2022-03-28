@@ -1,13 +1,12 @@
 package games.moegirl.sinocraft.sinocore.api.tree;
 
 import com.mojang.datafixers.util.Pair;
-import games.moegirl.sinocraft.sinocore.api.data.LanguageProviderBase;
+import games.moegirl.sinocraft.sinocore.api.data.gen.LanguageProviderBase;
 import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.Tag;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -183,18 +182,18 @@ public class TreeRegister {
     /**
      * Add block tags to data provider, call in {@link TagsProvider#addTags()}
      *
-     * @param tag method to create tag appender, use {@link TagsProvider#tag(TagKey)}
+     * @param tag method to create tag appender, use {@link TagsProvider#tag(Tag.Named)}
      */
-    public void addBlockTags(Function<TagKey<Block>, TagsProvider.TagAppender<Block>> tag) {
+    public void addBlockTags(Function<Tag.Named<Block>, TagsProvider.TagAppender<Block>> tag) {
         forEach(tree -> tree.getRegister().addBlockTags(tag));
     }
 
     /**
      * Add item tags to data provider, call in {@link TagsProvider#addTags()}
      *
-     * @param tag method to create tag appender, use {@link TagsProvider#tag(TagKey)}
+     * @param tag method to create tag appender, use {@link TagsProvider#tag(Tag.Named)}
      */
-    public void addItemTags(Function<TagKey<Item>, TagsProvider.TagAppender<Item>> tag) {
+    public void addItemTags(Function<Tag.Named<Item>, TagsProvider.TagAppender<Item>> tag) {
         forEach(tree -> tree.getRegister().addItemTags(tag));
     }
 

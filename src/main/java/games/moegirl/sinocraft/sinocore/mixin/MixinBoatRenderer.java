@@ -2,7 +2,7 @@ package games.moegirl.sinocraft.sinocore.mixin;
 
 import com.mojang.datafixers.util.Pair;
 import games.moegirl.sinocraft.sinocore.api.tree.Tree;
-import games.moegirl.sinocraft.sinocore.utility.mixin.IBoat;
+import games.moegirl.sinocraft.sinocore.common.util.mixin.IBoat;
 import net.minecraft.client.model.BoatModel;
 import net.minecraft.client.renderer.entity.BoatRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;

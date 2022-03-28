@@ -2,7 +2,7 @@ package games.moegirl.sinocraft.sinocore.api.tree;
 
 import com.mojang.datafixers.util.Pair;
 import games.moegirl.sinocraft.sinocore.api.SinoCoreAPI;
-import games.moegirl.sinocraft.sinocore.api.data.LanguageProviderBase;
+import games.moegirl.sinocraft.sinocore.api.data.gen.LanguageProviderBase;
 import games.moegirl.sinocraft.sinocore.api.mixin.IBlockEntityTypes;
 import net.minecraft.Util;
 import net.minecraft.advancements.critereon.EnterBlockTrigger;
@@ -21,7 +21,6 @@ import net.minecraft.server.packs.PackType;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.Tag;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
@@ -488,9 +487,9 @@ public record TreeRegisterHelper(Tree tree) {
      *
      * @param tag tag appender creator, use {@link TagsProvider#tag}
      */
-    public void addBlockTags(Function<TagKey<Block>, TagsProvider.TagAppender<Block>> tag) {
+    public void addBlockTags(Function<Tag.Named<Block>, TagsProvider.TagAppender<Block>> tag) {
         String name = (tree.getName().getPath() + "_logs").toLowerCase(Locale.ROOT);
-        tree.tagLogs = BlockTags.create(new ResourceLocation(tree.getName().getNamespace(), name));
+        tree.tagLogs = BlockTags.createOptional(new ResourceLocation(tree.getName().getNamespace(), name));
         TreeBlocks blocks = tree.getBlocks();
         tag.apply(tree.tagLogs).add(blocks.log(), blocks.strippedLog(), blocks.wood(), blocks.strippedLog());
 
@@ -521,7 +520,7 @@ public record TreeRegisterHelper(Tree tree) {
      *
      * @param tag tag appender creator, use {@link TagsProvider#tag}
      */
-    public void addItemTags(Function<TagKey<Item>, TagsProvider.TagAppender<Item>> tag) {
+    public void addItemTags(Function<Tag.Named<Item>, TagsProvider.TagAppender<Item>> tag) {
         TreeItems items = tree.getItems();
         tag.apply(ItemTags.BOATS).add(items.boat());
         if (items.stick != null) {

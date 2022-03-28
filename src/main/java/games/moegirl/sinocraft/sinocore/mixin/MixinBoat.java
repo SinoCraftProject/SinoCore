@@ -1,7 +1,7 @@
 package games.moegirl.sinocraft.sinocore.mixin;
 
 import games.moegirl.sinocraft.sinocore.api.tree.Tree;
-import games.moegirl.sinocraft.sinocore.utility.mixin.IBoat;
+import games.moegirl.sinocraft.sinocore.common.util.mixin.IBoat;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.syncher.EntityDataAccessor;
