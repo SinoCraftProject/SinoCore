@@ -1,10 +1,11 @@
 package games.moegirl.sinocraft.sinocore.common.util;
 
 import com.google.gson.JsonSyntaxException;
-import net.minecraft.core.Registry;
+import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.SerializationTags;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.FluidTags;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.material.Fluid;
 
@@ -18,20 +19,23 @@ public class TagHelper {
      * @param name tag name
      * @return item tag
      * @exception JsonSyntaxException if the tag is not existed
+     * @deprecated use {@link ItemTags#create(ResourceLocation)}
      */
-    public static Tag<Item> getItemTag(ResourceLocation name) {
-        return SerializationTags.getInstance()
-                .getTagOrThrow(Registry.ITEM_REGISTRY, name, (t) -> new JsonSyntaxException("Unknown item tag '" + t + "'"));
+    @Deprecated(forRemoval = true)
+    public static TagKey<Item> getItemTag(ResourceLocation name) {
+        return ItemTags.create(name);
     }
 
     /**
-     * Get item tag
+     * Get fluid tag
      * @param name tag name
-     * @return item tag
+     * @return fluid tag
      * @exception JsonSyntaxException if the tag is not existed
+     * @deprecated use {@link FluidTags#create(ResourceLocation)}
      */
-    public static Tag<Item> getItemTag(String name) {
-        return getItemTag(new ResourceLocation(name));
+    @Deprecated(forRemoval = true)
+    public static TagKey<Fluid> getFluidTag(ResourceLocation name) {
+        return FluidTags.create(name);
     }
 
     /**
@@ -40,19 +44,8 @@ public class TagHelper {
      * @return fluid tag
      * @exception JsonSyntaxException if the tag is not existed
      */
-    public static Tag<Fluid> getFluidTag(ResourceLocation name) {
-        return SerializationTags.getInstance()
-                .getTagOrThrow(Registry.FLUID_REGISTRY, name, (t) -> new JsonSyntaxException("Unknown fluid tag '" + t + "'"));
-    }
-
-    /**
-     * Get fluid tag
-     * @param name tag name
-     * @return fluid tag
-     * @exception JsonSyntaxException if the tag is not existed
-     */
-    public static Tag<Fluid> getFluidTag(String name) {
-        return getFluidTag(new ResourceLocation(name));
+    public static TagKey<Fluid> getFluidTag(String name) {
+        return FluidTags.create(new ResourceLocation(name));
     }
 
     /**
@@ -60,10 +53,11 @@ public class TagHelper {
      * @param tag item tag
      * @return tag name
      * @throws IllegalStateException if the tag is not existed
+     * @deprecated use {@link TagKey#location()}
      */
-    public static ResourceLocation getItemId(Tag<Item> tag) {
-        return SerializationTags.getInstance()
-                .getIdOrThrow(Registry.ITEM_REGISTRY, tag, () -> new IllegalStateException("Unknown item tag"));
+    @Deprecated(forRemoval = true)
+    public static ResourceLocation getItemId(TagKey<Item> tag) {
+        return tag.location();
     }
 
     /**
@@ -71,9 +65,10 @@ public class TagHelper {
      * @param tag fluid tag
      * @return tag name
      * @throws IllegalStateException if the tag is not existed
+     * @deprecated use {@link TagKey#location()}
      */
-    public static ResourceLocation getFluidId(Tag<Fluid> tag) {
-        return SerializationTags.getInstance()
-                .getIdOrThrow(Registry.FLUID_REGISTRY, tag, () -> new IllegalStateException("Unknown fluid tag"));
+    @Deprecated(forRemoval = true)
+    public static ResourceLocation getFluidId(TagKey<Fluid> tag) {
+        return tag.location();
     }
 }
