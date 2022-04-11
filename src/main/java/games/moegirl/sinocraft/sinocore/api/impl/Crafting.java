@@ -9,7 +9,7 @@ import games.moegirl.sinocraft.sinocore.common.crafting.FluidIngredient;
 import games.moegirl.sinocraft.sinocore.common.crafting.FluidIngredientSerializer;
 import games.moegirl.sinocraft.sinocore.common.crafting.PredicateIngredient;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.TagKey;
+import net.minecraft.tags.Tag;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.material.Fluid;
 
@@ -51,7 +51,7 @@ public enum Crafting implements ICrafting {
     }
 
     @Override
-    public IFluidIngredient ofFluid(TagKey<Fluid> fluid, int amount) {
+    public IFluidIngredient ofFluid(Tag<Fluid> fluid, int amount) {
         return new FluidIngredient(fluid, amount);
     }
 

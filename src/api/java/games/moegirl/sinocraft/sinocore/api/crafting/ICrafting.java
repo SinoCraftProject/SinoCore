@@ -1,7 +1,7 @@
 package games.moegirl.sinocraft.sinocore.api.crafting;
 
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.TagKey;
+import net.minecraft.tags.Tag;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.material.Fluid;
 
@@ -79,14 +79,14 @@ public interface ICrafting {
      * @param amount amount
      * @return fluid ingredient
      */
-    IFluidIngredient ofFluid(TagKey<Fluid> fluid, int amount);
+    IFluidIngredient ofFluid(Tag<Fluid> fluid, int amount);
 
     /**
      * Create a bucket of fluid ingredient to check fluid tag.
      * @param fluid fluid tag
      * @return fluid ingredient
      */
-    default IFluidIngredient ofFluid(TagKey<Fluid> fluid) {
+    default IFluidIngredient ofFluid(Tag<Fluid> fluid) {
         return ofFluid(fluid, 1000);
     }
 
