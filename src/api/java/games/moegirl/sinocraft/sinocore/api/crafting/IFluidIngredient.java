@@ -1,7 +1,7 @@
 package games.moegirl.sinocraft.sinocore.api.crafting;
 
 import games.moegirl.sinocraft.sinocore.api.SinoCoreAPI;
-import net.minecraft.tags.TagKey;
+import net.minecraft.tags.Tag;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.fluids.FluidStack;
@@ -27,7 +27,7 @@ public interface IFluidIngredient {
      * Get tag to match
      * @return tag or empty
      */
-    Optional<TagKey<Fluid>> tag();
+    Optional<Tag<Fluid>> tag();
 
     /**
      * Get amount of fluid

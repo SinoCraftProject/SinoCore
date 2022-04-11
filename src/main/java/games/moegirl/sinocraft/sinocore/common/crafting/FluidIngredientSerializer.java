@@ -6,9 +6,7 @@ import games.moegirl.sinocraft.sinocore.api.crafting.IFluidIngredientSerializer;
 import games.moegirl.sinocraft.sinocore.common.util.TagHelper;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.Tag;
-import net.minecraft.tags.TagKey;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -30,8 +28,9 @@ public enum FluidIngredientSerializer implements IFluidIngredientSerializer {
             return new FluidIngredient(fluid, amount);
         } else {
             ResourceLocation tagName = buffer.readResourceLocation();
+            Tag<Fluid> tag = TagHelper.getFluidTag(tagName);
             int amount = buffer.readInt();
-            return new FluidIngredient(FluidTags.create(tagName), amount);
+            return new FluidIngredient(tag, amount);
         }
     }
 
@@ -39,7 +38,7 @@ public enum FluidIngredientSerializer implements IFluidIngredientSerializer {
     public IFluidIngredient fromJson(JsonObject json) {
         int amount = GsonHelper.getAsInt(json, "amount", 1000);
         if (json.has("tag")) {
-            TagKey<Fluid> tag = TagHelper.getFluidTag(GsonHelper.getAsString(json, "tag"));
+            Tag<Fluid> tag = TagHelper.getFluidTag(GsonHelper.getAsString(json, "tag"));
             return new FluidIngredient(tag, amount);
         } else if (json.has("fluid")) {
             String fluidName = GsonHelper.getAsString(json, "fluid");
@@ -53,12 +52,12 @@ public enum FluidIngredientSerializer implements IFluidIngredientSerializer {
 
     @Override
     public void write(FriendlyByteBuf buffer, IFluidIngredient ingredient) {
-        Optional<TagKey<Fluid>> tagOptional = ingredient.tag();
+        Optional<Tag<Fluid>> tagOptional = ingredient.tag();
         buffer.writeBoolean(tagOptional.isEmpty());
         if (tagOptional.isEmpty()) {
             buffer.writeRegistryId(ingredient.fluid());
         } else {
-            buffer.writeResourceLocation(tagOptional.get().location());
+            buffer.writeResourceLocation(TagHelper.getFluidId(tagOptional.get()));
         }
         buffer.writeInt(ingredient.amount());
     }
@@ -66,7 +65,7 @@ public enum FluidIngredientSerializer implements IFluidIngredientSerializer {
     @Override
     public JsonObject write(JsonObject object, IFluidIngredient ingredient) {
         if (ingredient.tag().isPresent()) {
-            object.addProperty("tag", ingredient.tag().get().location().toString());
+            object.addProperty("tag", TagHelper.getFluidId(ingredient.tag().get()).toString());
         } else {
             object.addProperty("fluid", ingredient.fluid().delegate.name().toString());
         }

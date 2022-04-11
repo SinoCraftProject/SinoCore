@@ -2,7 +2,7 @@ package games.moegirl.sinocraft.sinocore.api.data.gen.loot.block;
 
 import games.moegirl.sinocraft.sinocore.api.SinoCoreAPI;
 import games.moegirl.sinocraft.sinocore.api.block.ILootableBlock;
-import games.moegirl.sinocraft.sinocore.api.utility.BlockLootables;
+import games.moegirl.sinocraft.sinocore.api.util.BlockLootables;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.core.Registry;
 import net.minecraft.data.loot.BlockLoot;
