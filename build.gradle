@@ -48,6 +48,10 @@ sourceSets {
     api {
         compileClasspath += main.compileClasspath
         runtimeClasspath += main.runtimeClasspath
+
+        java {
+            outputDir = main.java.outputDir
+        }
     }
 
     main {
@@ -69,6 +73,12 @@ repositories {
     maven {
         url 'https://jitpack.io'
     }
+
+    maven {
+        // location of the maven that hosts JEI files
+        name = "Progwml6 maven"
+        url = "https://dvs1.progwml6.com/files/maven/"
+    }
 }
 
 dependencies {
@@ -78,6 +88,8 @@ dependencies {
         officialMojangMappings()
         parchment("org.parchmentmc.data:parchment-1.18.2:2022.05.22@zip")
     }
+
+    modImplementation ("mezz.jei:jei-1.18.2-forge:10.0.0.191")
 }
 
 // Example for how to get properties into the manifest for reading at runtime.
