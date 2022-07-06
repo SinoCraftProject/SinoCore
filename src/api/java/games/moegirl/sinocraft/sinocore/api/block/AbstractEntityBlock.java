@@ -1,6 +1,5 @@
 package games.moegirl.sinocraft.sinocore.api.block;
 
-import com.google.common.reflect.TypeToken;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
@@ -15,6 +14,7 @@ import net.minecraft.world.level.material.Material;
 import net.minecraftforge.common.util.Lazy;
 
 import javax.annotation.Nullable;
+import java.lang.reflect.ParameterizedType;
 import java.util.function.Supplier;
 
 /**
@@ -27,11 +27,11 @@ public abstract class AbstractEntityBlock<T extends BlockEntity> extends BaseEnt
     protected final Lazy<BlockEntityType<T>> entityType;
     private final Class<?> typeClass;
 
-    @SuppressWarnings("UnstableApiUsage")
+    @SuppressWarnings("unchecked")
     public AbstractEntityBlock(Properties properties, Supplier<BlockEntityType<T>> entityType) {
         super(properties);
         this.entityType = Lazy.of(entityType);
-        this.typeClass = TypeToken.of(getClass()).getRawType();
+        this.typeClass = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
     }
 
     public AbstractEntityBlock(Supplier<BlockEntityType<T>> entityType) {
