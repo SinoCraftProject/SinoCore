@@ -2,18 +2,26 @@ package games.moegirl.sinocraft.sinocore.api.utility.texture;
 
 import com.google.common.collect.Iterators;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.blaze3d.vertex.VertexFormat;
+import com.mojang.math.Matrix4f;
 import games.moegirl.sinocraft.sinocore.api.utility.GLSwitcher;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderStateShard;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.inventory.Slot;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.util.Lazy;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -30,9 +38,66 @@ public final class TextureMap {
     private final Entry<SlotsEntry> slots = new Entry<>();
     private final Entry<ProgressEntry> progress = new Entry<>();
     private final Entry<ButtonEntry> buttons = new Entry<>();
+    private final Lazy<RenderType> renderType,
+            renderTypeWithColor,
+            renderTypeWithTransparency,
+            renderTypeWithColorTransparency,
+            renderTypeWithColorLightmap,
+            renderTypeWithColorLightmapTransparency;
 
     TextureMap(ResourceLocation texture) {
         this.texture = texture;
+        renderType = Lazy.of(() -> {
+            RenderType.CompositeState state = RenderType.CompositeState.builder()
+                    .setShaderState(RenderStateShard.POSITION_TEX_SHADER)
+                    .setTextureState(new RenderStateShard.TextureStateShard(texture, false, false))
+                    .createCompositeState(false);
+            return RenderType.create(texture.toString(), DefaultVertexFormat.POSITION_TEX, VertexFormat.Mode.QUADS,
+                    256, false, false, state);
+        });
+        renderTypeWithColor = Lazy.of(() -> {
+            RenderType.CompositeState state = RenderType.CompositeState.builder()
+                    .setShaderState(RenderStateShard.POSITION_COLOR_TEX_SHADER)
+                    .setTextureState(new RenderStateShard.TextureStateShard(texture, false, false))
+                    .createCompositeState(false);
+            return RenderType.create(texture.toString(), DefaultVertexFormat.POSITION_COLOR_TEX, VertexFormat.Mode.QUADS,
+                    256, false, false, state);
+        });
+        renderTypeWithTransparency = Lazy.of(() -> {
+            RenderType.CompositeState state = RenderType.CompositeState.builder()
+                    .setShaderState(RenderStateShard.POSITION_TEX_SHADER)
+                    .setTextureState(new RenderStateShard.TextureStateShard(texture, true, false))
+                    .setTransparencyState(RenderStateShard.TRANSLUCENT_TRANSPARENCY)
+                    .createCompositeState(false);
+            return RenderType.create(texture.toString(), DefaultVertexFormat.POSITION_TEX, VertexFormat.Mode.QUADS,
+                    256, false, false, state);
+        });
+        renderTypeWithColorTransparency = Lazy.of(() -> {
+            RenderType.CompositeState state = RenderType.CompositeState.builder()
+                    .setShaderState(RenderStateShard.POSITION_COLOR_TEX_SHADER)
+                    .setTextureState(new RenderStateShard.TextureStateShard(texture, true, false))
+                    .setTransparencyState(RenderStateShard.TRANSLUCENT_TRANSPARENCY)
+                    .createCompositeState(false);
+            return RenderType.create(texture.toString(), DefaultVertexFormat.POSITION_COLOR_TEX, VertexFormat.Mode.QUADS,
+                    256, false, false, state);
+        });
+        renderTypeWithColorLightmap = Lazy.of(() -> {
+            RenderType.CompositeState state = RenderType.CompositeState.builder()
+                    .setShaderState(RenderStateShard.POSITION_COLOR_TEX_LIGHTMAP_SHADER)
+                    .setTextureState(new RenderStateShard.TextureStateShard(texture, false, false))
+                    .createCompositeState(false);
+            return RenderType.create(texture.toString(), DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP, VertexFormat.Mode.QUADS,
+                    256, false, false, state);
+        });
+        renderTypeWithColorLightmapTransparency = Lazy.of(() -> {
+            RenderType.CompositeState state = RenderType.CompositeState.builder()
+                    .setShaderState(RenderStateShard.POSITION_COLOR_TEX_LIGHTMAP_SHADER)
+                    .setTextureState(new RenderStateShard.TextureStateShard(texture, true, false))
+                    .setTransparencyState(RenderStateShard.TRANSLUCENT_TRANSPARENCY)
+                    .createCompositeState(false);
+            return RenderType.create(texture.toString(), DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP, VertexFormat.Mode.QUADS,
+                    256, false, false, state);
+        });
     }
 
     public static TextureMap of(ResourceLocation texture) {
@@ -120,13 +185,10 @@ public final class TextureMap {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void blitTexture(PoseStack stack, String name,
-                            AbstractContainerScreen<?> gui,
-                            GLSwitcher... configurations) {
+    public void blitTexture(PoseStack stack, String name, AbstractContainerScreen<?> gui, GLSwitcher... configurations) {
         textures.get(name).ifPresent(entry -> {
             bindTexture();
-            blitTexture(stack,
-                    gui.getGuiLeft() + entry.x(), gui.getGuiTop() + entry.y(), entry.w(), entry.h(),
+            blitTexture(stack, gui.getGuiLeft() + entry.x(), gui.getGuiTop() + entry.y(), entry.w(), entry.h(),
                     entry.u(), entry.v(), entry.tw(), entry.th());
         });
         resumeGL(configurations);
@@ -181,6 +243,61 @@ public final class TextureMap {
         for (var switcher : configurations) {
             switcher.resume();
         }
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public void blitTexture(MultiBufferSource bufferSource, PoseStack poseStack, String name,
+                            boolean transparency, float x, float y, float z, float dx, float dz) {
+        textures.get(name).ifPresent(entry -> {
+            bindTexture();
+            Matrix4f matrix = poseStack.last().pose();
+            RenderType type = transparency ? renderTypeWithTransparency.get() : renderType.get();
+            VertexConsumer buffer = bufferSource.getBuffer(type);
+            float[] uv = entry.normalized(width, height);
+            buffer.vertex(matrix, x, y, z).uv(uv[0], uv[2]).endVertex();
+            buffer.vertex(matrix, x, y, z + dz).uv(uv[0], uv[3]).endVertex();
+            buffer.vertex(matrix, x + dx, y, z + dz).uv(uv[1], uv[3]).endVertex();
+            buffer.vertex(matrix, x + dx, y, z).uv(uv[1], uv[2]).endVertex();
+        });
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public void blitTexture(MultiBufferSource bufferSource, PoseStack poseStack, String name,
+                            boolean transparency, float x, float y, float z, float dx, float dz, int packedLight) {
+        blitTexture(bufferSource, poseStack, name, transparency, x, y, z, dx, dz, packedLight, 1, 1, 1, 1);
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public void blitTexture(MultiBufferSource bufferSource, PoseStack poseStack, String name,
+                            boolean transparency, float x, float y, float z, float dx, float dz, float r, float g, float b, float a) {
+        textures.get(name).ifPresent(entry -> {
+            bindTexture();
+            Matrix4f matrix = poseStack.last().pose();
+            RenderType type = transparency ? renderTypeWithColorTransparency.get() : renderTypeWithColor.get();
+            VertexConsumer buffer = bufferSource.getBuffer(type);
+            float[] uv = entry.normalized(width, height);
+            buffer.vertex(matrix, x, y, z).color(r, g, b, a).uv(uv[0], uv[2]).endVertex();
+            buffer.vertex(matrix, x, y, z + dz).color(r, g, b, a).uv(uv[0], uv[3]).endVertex();
+            buffer.vertex(matrix, x + dx, y, z + dz).color(r, g, b, a).uv(uv[1], uv[3]).endVertex();
+            buffer.vertex(matrix, x + dx, y, z).color(r, g, b, a).uv(uv[1], uv[2]).endVertex();
+        });
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public void blitTexture(MultiBufferSource bufferSource, PoseStack poseStack, String name,
+                            boolean transparency, float x, float y, float z, float dx, float dz,
+                            int packedLight, float r, float g, float b, float a) {
+        textures.get(name).ifPresent(entry -> {
+            bindTexture();
+            Matrix4f matrix = poseStack.last().pose();
+            RenderType type = transparency ? renderTypeWithColorLightmapTransparency.get() : renderTypeWithColorLightmap.get();
+            VertexConsumer buffer = bufferSource.getBuffer(type);
+            float[] uv = entry.normalized(width, height);
+            buffer.vertex(matrix, x, y, z).color(r, g, b, a).uv(uv[0], uv[2]).uv2(packedLight).endVertex();
+            buffer.vertex(matrix, x, y, z + dz).color(r, g, b, a).uv(uv[0], uv[3]).uv2(packedLight).endVertex();
+            buffer.vertex(matrix, x + dx, y, z + dz).color(r, g, b, a).uv(uv[1], uv[3]).uv2(packedLight).endVertex();
+            buffer.vertex(matrix, x + dx, y, z).color(r, g, b, a).uv(uv[1], uv[2]).uv2(packedLight).endVertex();
+        });
     }
 
     public ResourceLocation texture() {
