@@ -247,56 +247,55 @@ public final class TextureMap {
 
     @OnlyIn(Dist.CLIENT)
     public void blitTexture(MultiBufferSource bufferSource, PoseStack poseStack, String name,
-                            boolean transparency, float x, float y, float z, float dx, float dz) {
+                            boolean transparency, Rect rect) {
         textures.get(name).ifPresent(entry -> {
             bindTexture();
             Matrix4f matrix = poseStack.last().pose();
             RenderType type = transparency ? renderTypeWithTransparency.get() : renderType.get();
             VertexConsumer buffer = bufferSource.getBuffer(type);
             float[] uv = entry.normalized(width, height);
-            buffer.vertex(matrix, x, y, z).uv(uv[0], uv[2]).endVertex();
-            buffer.vertex(matrix, x, y, z + dz).uv(uv[0], uv[3]).endVertex();
-            buffer.vertex(matrix, x + dx, y, z + dz).uv(uv[1], uv[3]).endVertex();
-            buffer.vertex(matrix, x + dx, y, z).uv(uv[1], uv[2]).endVertex();
+            buffer.vertex(matrix, rect.x0(), rect.y0(), rect.z0()).uv(uv[0], uv[2]).endVertex();
+            buffer.vertex(matrix, rect.x1(), rect.y1(), rect.z1()).uv(uv[0], uv[3]).endVertex();
+            buffer.vertex(matrix, rect.x2(), rect.y2(), rect.z2()).uv(uv[1], uv[3]).endVertex();
+            buffer.vertex(matrix, rect.x3(), rect.y3(), rect.z3()).uv(uv[1], uv[2]).endVertex();
         });
     }
 
     @OnlyIn(Dist.CLIENT)
     public void blitTexture(MultiBufferSource bufferSource, PoseStack poseStack, String name,
-                            boolean transparency, float x, float y, float z, float dx, float dz, int packedLight) {
-        blitTexture(bufferSource, poseStack, name, transparency, x, y, z, dx, dz, packedLight, 1, 1, 1, 1);
+                            boolean transparency, Rect rect, int packedLight) {
+        blitTexture(bufferSource, poseStack, name, transparency, rect, packedLight, 1, 1, 1, 1);
     }
 
     @OnlyIn(Dist.CLIENT)
     public void blitTexture(MultiBufferSource bufferSource, PoseStack poseStack, String name,
-                            boolean transparency, float x, float y, float z, float dx, float dz, float r, float g, float b, float a) {
+                            boolean transparency, Rect rect, float r, float g, float b, float a) {
         textures.get(name).ifPresent(entry -> {
             bindTexture();
             Matrix4f matrix = poseStack.last().pose();
             RenderType type = transparency ? renderTypeWithColorTransparency.get() : renderTypeWithColor.get();
             VertexConsumer buffer = bufferSource.getBuffer(type);
             float[] uv = entry.normalized(width, height);
-            buffer.vertex(matrix, x, y, z).color(r, g, b, a).uv(uv[0], uv[2]).endVertex();
-            buffer.vertex(matrix, x, y, z + dz).color(r, g, b, a).uv(uv[0], uv[3]).endVertex();
-            buffer.vertex(matrix, x + dx, y, z + dz).color(r, g, b, a).uv(uv[1], uv[3]).endVertex();
-            buffer.vertex(matrix, x + dx, y, z).color(r, g, b, a).uv(uv[1], uv[2]).endVertex();
+            buffer.vertex(matrix, rect.x0(), rect.y0(), rect.z0()).color(r, g, b, a).uv(uv[0], uv[2]).endVertex();
+            buffer.vertex(matrix, rect.x1(), rect.y1(), rect.z1()).color(r, g, b, a).uv(uv[0], uv[3]).endVertex();
+            buffer.vertex(matrix, rect.x2(), rect.y2(), rect.z2()).color(r, g, b, a).uv(uv[1], uv[3]).endVertex();
+            buffer.vertex(matrix, rect.x3(), rect.y3(), rect.z3()).color(r, g, b, a).uv(uv[1], uv[2]).endVertex();
         });
     }
 
     @OnlyIn(Dist.CLIENT)
     public void blitTexture(MultiBufferSource bufferSource, PoseStack poseStack, String name,
-                            boolean transparency, float x, float y, float z, float dx, float dz,
-                            int packedLight, float r, float g, float b, float a) {
+                            boolean transparency, Rect rect, int packedLight, float r, float g, float b, float a) {
         textures.get(name).ifPresent(entry -> {
             bindTexture();
             Matrix4f matrix = poseStack.last().pose();
             RenderType type = transparency ? renderTypeWithColorLightmapTransparency.get() : renderTypeWithColorLightmap.get();
             VertexConsumer buffer = bufferSource.getBuffer(type);
             float[] uv = entry.normalized(width, height);
-            buffer.vertex(matrix, x, y, z).color(r, g, b, a).uv(uv[0], uv[2]).uv2(packedLight).endVertex();
-            buffer.vertex(matrix, x, y, z + dz).color(r, g, b, a).uv(uv[0], uv[3]).uv2(packedLight).endVertex();
-            buffer.vertex(matrix, x + dx, y, z + dz).color(r, g, b, a).uv(uv[1], uv[3]).uv2(packedLight).endVertex();
-            buffer.vertex(matrix, x + dx, y, z).color(r, g, b, a).uv(uv[1], uv[2]).uv2(packedLight).endVertex();
+            buffer.vertex(matrix, rect.x0(), rect.y0(), rect.z0()).color(r, g, b, a).uv(uv[0], uv[2]).uv2(packedLight).endVertex();
+            buffer.vertex(matrix, rect.x1(), rect.y1(), rect.z1()).color(r, g, b, a).uv(uv[0], uv[3]).uv2(packedLight).endVertex();
+            buffer.vertex(matrix, rect.x2(), rect.y2(), rect.z2()).color(r, g, b, a).uv(uv[1], uv[3]).uv2(packedLight).endVertex();
+            buffer.vertex(matrix, rect.x3(), rect.y3(), rect.z3()).color(r, g, b, a).uv(uv[1], uv[2]).uv2(packedLight).endVertex();
         });
     }
 
