@@ -194,6 +194,7 @@ public record TreeRegister(Tree tree) {
     public void addBlockTags(Function<TagKey<Block>, TagsProvider.TagAppender<Block>> tag) {
         tag.apply(tree.tagLogs).add(tree.log(), tree.strippedLog(), tree.wood(), tree.strippedLog());
         tag.apply(BlockTags.SAPLINGS).add(tree.sapling());
+        tag.apply(BlockTags.LOGS).addTag(tree.tagLogs);
         tag.apply(BlockTags.LOGS_THAT_BURN).addTag(tree.tagLogs);
         tag.apply(BlockTags.FLOWER_POTS).add(tree.pottedSapling());
         tag.apply(BlockTags.LEAVES).add(tree.leaves());
