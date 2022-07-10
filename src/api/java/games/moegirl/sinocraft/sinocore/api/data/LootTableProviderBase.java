@@ -57,6 +57,7 @@ public abstract class LootTableProviderBase extends LootTableProvider {
     @Override
     protected List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootContextParamSet>> getTables() {
         List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootContextParamSet>> list = new ArrayList<>();
+        addLootTables();
         list.add(Pair.of(() -> blocks, LootContextParamSets.BLOCK));
         list.add(Pair.of(() -> entities, LootContextParamSets.ENTITY));
         simple.forEach((set, table) -> list.add(Pair.of(() -> table, set)));
