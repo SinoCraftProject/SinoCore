@@ -14,6 +14,8 @@ import java.util.function.Consumer;
 public class SinoCoreAPI {
 
     public static final Logger LOGGER = LogManager.getLogger();
+    public static final boolean DEBUG = "true".equalsIgnoreCase(System.getProperty("forge.enableGameTest", "false"));
+
     private static String scId;
     private static CraftingApi crafting;
     private static NetworkApi network;
