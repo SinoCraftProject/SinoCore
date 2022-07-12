@@ -13,6 +13,8 @@ import net.minecraft.commands.Commands;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
@@ -138,6 +140,29 @@ public class CommandBuilder {
             }
         }
         return this;
+    }
+
+    public CommandBuilder subCommand(Consumer<CommandBuilder> subCommand) {
+        Node<?> prev = current;
+        subCommand.accept(this);
+        current = prev;
+        return this;
+    }
+
+    public CommandBuilder subCommand(String name, Consumer<CommandBuilder> subCommand) {
+        Node<?> prev = current;
+        subCommand.accept(then(name));
+        current = prev;
+        return this;
+    }
+
+    public CommandBuilder apply(Consumer<CommandBuilder> consumer) {
+        consumer.accept(this);
+        return this;
+    }
+
+    public CommandBuilder apply(Function<CommandBuilder, CommandBuilder> function) {
+        return function.apply(this);
     }
 
     public LiteralArgumentBuilder<CommandSourceStack> build() {
