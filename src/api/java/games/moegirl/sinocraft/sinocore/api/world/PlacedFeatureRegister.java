@@ -15,14 +15,10 @@ import net.minecraftforge.common.world.BiomeGenerationSettingsBuilder;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public class PlacedFeatureRegister {
@@ -43,34 +39,34 @@ public class PlacedFeatureRegister {
     }
 
     public <C extends FeatureConfiguration, B extends BaseFeatureBuilder<C, B>> Entry<C, B>
-    register(GenerationStep.Decoration decoration, String name, Filter filter, Supplier<B> feature) {
+    register(GenerationStep.Decoration decoration, String name, PlacedFilter filter, Supplier<B> feature) {
         Entry<C, B> e = new Entry<>(feature, filter, new ResourceLocation(modid, name), decoration);
         features.add(e);
         return e;
     }
 
-    public Entry<OreConfiguration, OreFeatureBuilder> registerOre(String name, Filter filter, Supplier<OreFeatureBuilder> feature) {
+    public Entry<OreConfiguration, OreFeatureBuilder> registerOre(String name, PlacedFilter filter, Supplier<OreFeatureBuilder> feature) {
         return register(GenerationStep.Decoration.UNDERGROUND_DECORATION, name, filter, feature);
     }
 
-    public Entry<OreConfiguration, OreFeatureBuilder> registerOre(String name, Filter filter, Function<OreFeatureBuilder, OreFeatureBuilder> feature) {
+    public Entry<OreConfiguration, OreFeatureBuilder> registerOre(String name, PlacedFilter filter, Function<OreFeatureBuilder, OreFeatureBuilder> feature) {
         return registerOre(name, filter, Functions.decorate(OreFeatureBuilder::new, feature));
     }
 
     public Entry<OreConfiguration, OreFeatureBuilder> registerOre(String name, Function<OreFeatureBuilder, OreFeatureBuilder> feature) {
-        return registerOre(name, Filter.ALL, feature);
+        return registerOre(name, PlacedFilter.ALL, feature);
     }
 
-    public Entry<TreeConfiguration, TreeFeatureBuilder> registerTree(String name, Filter filter, Supplier<TreeFeatureBuilder> feature) {
+    public Entry<TreeConfiguration, TreeFeatureBuilder> registerTree(String name, PlacedFilter filter, Supplier<TreeFeatureBuilder> feature) {
         return register(GenerationStep.Decoration.VEGETAL_DECORATION, name, filter, feature);
     }
 
-    public Entry<TreeConfiguration, TreeFeatureBuilder> registerTree(String name, Filter filter, Function<TreeFeatureBuilder, TreeFeatureBuilder> feature) {
+    public Entry<TreeConfiguration, TreeFeatureBuilder> registerTree(String name, PlacedFilter filter, Function<TreeFeatureBuilder, TreeFeatureBuilder> feature) {
         return registerTree(name, filter, Functions.decorate(TreeFeatureBuilder::new, feature));
     }
 
     public Entry<TreeConfiguration, TreeFeatureBuilder> registerTree(String name, Function<TreeFeatureBuilder, TreeFeatureBuilder> feature) {
-        return registerTree(name, Filter.ALL, feature);
+        return registerTree(name, PlacedFilter.ALL, feature);
     }
 
     @SubscribeEvent(priority = EventPriority.HIGH)
@@ -87,14 +83,14 @@ public class PlacedFeatureRegister {
 
     public static final class Entry<C extends FeatureConfiguration, B extends BaseFeatureBuilder<C, B>> implements Supplier<Holder<PlacedFeature>> {
         private final Supplier<B> supplier;
-        private final Filter filter;
+        private final PlacedFilter filter;
         private final ResourceLocation name;
         private final GenerationStep.Decoration decoration;
 
         private B builder = null;
 
         public Entry(Supplier<B> supplier,
-                     Filter filter, ResourceLocation name,
+                     PlacedFilter filter, ResourceLocation name,
                      GenerationStep.Decoration decoration) {
             this.supplier = supplier;
             this.filter = filter;
@@ -123,56 +119,4 @@ public class PlacedFeatureRegister {
         }
     }
 
-    public interface Filter {
-        Filter ALL = (biomeName, category, climate, effects) -> true;
-
-        static Filter ofName(ResourceLocation biome) {
-            return (biomeName, category, climate, effects) -> biome.equals(biomeName);
-        }
-
-        static Filter ofNames(ResourceLocation... biomes) {
-            return ofNames(List.of(biomes));
-        }
-
-        static Filter ofNames(Collection<ResourceLocation> biomes) {
-            return (biomeName, category, climate, effects) -> biomes.stream()
-                    .anyMatch(rl -> Objects.equals(rl, biomeName));
-        }
-
-        static Filter ofBiome(Biome biome) {
-            return (biomeName, category, climate, effects) -> biome.delegate.name().equals(biomeName);
-        }
-
-        static Filter ofBiomes(Biome... biomes) {
-            return ofBiomes(List.of(biomes));
-        }
-
-        static Filter ofBiomes(Collection<Biome> biomes) {
-            return (biomeName, category, climate, effects) -> biomes.stream()
-                    .map(b -> b.delegate.name())
-                    .anyMatch(rl -> Objects.equals(rl, biomeName));
-        }
-
-        static Filter ofCategory(Biome.BiomeCategory category) {
-            return (biomeName, category2, climate, effects) -> category == category2;
-        }
-
-        static Filter ofCategories(Biome.BiomeCategory... categories) {
-            return (biomeName, category, climate, effects) -> ArrayUtils.contains(categories, category);
-        }
-
-        static Filter ofCategories(Collection<Biome.BiomeCategory> categories) {
-            return (biomeName, category, climate, effects) -> categories.contains(category);
-        }
-
-        static Filter ofClimate(Predicate<Biome.ClimateSettings> settings) {
-            return (biomeName, category, climate, effects) -> settings.test(climate);
-        }
-
-        static Filter ofEffects(Predicate<BiomeSpecialEffects> effects) {
-            return (biomeName, category, climate, effects2) -> effects.test(effects2);
-        }
-
-        boolean test(ResourceLocation biomeName, Biome.BiomeCategory category, Biome.ClimateSettings climate, BiomeSpecialEffects effects);
-    }
 }
