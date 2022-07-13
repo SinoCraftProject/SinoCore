@@ -8,6 +8,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.math.Matrix4f;
 import games.moegirl.sinocraft.sinocore.api.utility.GLSwitcher;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.components.Button;
@@ -15,6 +16,7 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
@@ -147,36 +149,69 @@ public final class TextureMap {
     }
 
     @OnlyIn(Dist.CLIENT)
-    private void renderText(PoseStack stack, Font font, String name) {
+    public void renderText(PoseStack stack, String name) {
+        renderText(stack, Minecraft.getInstance().font, name);
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public void renderText(PoseStack stack, Font font, String name) {
         texts.get(name).ifPresent(entry -> {
             if (entry.text() == null) {
                 if (entry.rawText() != null) {
-                    int tx = entry.x();
-                    int ty = entry.y();
-                    String text = entry.rawText();
-                    if (entry.center()) {
-                        tx += font.width(text) / 2;
-                    }
-                    if (entry.shadow()) {
-                        font.drawShadow(stack, text, tx, ty, entry.color());
-                    } else {
-                        font.draw(stack, text, tx, ty, entry.color());
-                    }
+                    renderText(stack, entry, entry.rawText(), font);
                 }
             } else {
-                int tx = entry.x();
-                int ty = entry.y();
-                TranslatableComponent text = new TranslatableComponent(entry.text());
-                if (entry.center()) {
-                    tx += font.width(text) / 2;
-                }
-                if (entry.shadow()) {
-                    font.drawShadow(stack, text, tx, ty, entry.color());
-                } else {
-                    font.draw(stack, text, tx, ty, entry.color());
-                }
+                renderText(stack, entry, new TranslatableComponent(entry.text()), font);
             }
         });
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public void renderText(PoseStack stack, AbstractContainerScreen<?> parent, String name) {
+        renderText(stack, parent, Minecraft.getInstance().font, name);
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public void renderText(PoseStack stack, AbstractContainerScreen<?> parent, Font font, String name) {
+        texts.get(name).ifPresent(entry -> {
+            if (entry.text() == null) {
+                if (entry.rawText() == null) {
+                    renderText(stack, entry, parent.getTitle(), font);
+                } else {
+                    renderText(stack, entry, entry.rawText(), font);
+                }
+            } else {
+                renderText(stack, entry, new TranslatableComponent(entry.text()), font);
+            }
+        });
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    private void renderText(PoseStack stack, TextEntry entry, Component text, Font font) {
+        int tx = entry.x();
+        int ty = entry.y();
+        if (entry.center()) {
+            tx += font.width(text) / 2;
+        }
+        if (entry.shadow()) {
+            font.drawShadow(stack, text, tx, ty, entry.color());
+        } else {
+            font.draw(stack, text, tx, ty, entry.color());
+        }
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    private void renderText(PoseStack stack, TextEntry entry, String text, Font font) {
+        int tx = entry.x();
+        int ty = entry.y();
+        if (entry.center()) {
+            tx += font.width(text) / 2;
+        }
+        if (entry.shadow()) {
+            font.drawShadow(stack, text, tx, ty, entry.color());
+        } else {
+            font.draw(stack, text, tx, ty, entry.color());
+        }
     }
 
     @OnlyIn(Dist.CLIENT)
