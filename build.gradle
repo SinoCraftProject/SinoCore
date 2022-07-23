@@ -98,7 +98,7 @@ jar {
         attributes([
                 "Specification-Title"     : "sinocore",
                 "Specification-Vendor"    : "SinoCraft Project Team",
-                "Specification-Version"   : "4",
+                "Specification-Version"   : "5",
                 "Implementation-Title"    : project.name,
                 "Implementation-Version"  : project.jar.archiveVersion,
                 "Implementation-Vendor"   : "MoeGirl Games",
