@@ -39,7 +39,7 @@ public abstract class ModSignBlock extends SignBlock implements IWoodwork {
         ItemStack itemstack = player.getItemInHand(pHand);
         if (!world.isClientSide && itemstack.isEmpty() && player instanceof ServerPlayer sp) {
             if (world.getBlockEntity(pPos) instanceof ModSignBlockEntity sign && sign.canPlayerEdit(player)) {
-                woodwork.manager().network().sendToClient(new ModSignEditOpenPkt(pPos), sp);
+                woodwork.manager().network().sendToClient(new SignEditOpenS2CPacket(pPos), sp);
                 return InteractionResult.SUCCESS;
             }
         }

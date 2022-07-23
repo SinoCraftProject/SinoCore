@@ -185,7 +185,7 @@ public class ModSignEditScreen extends Screen {
     public void removed() {
         WoodworkManager.getManager(sign.getType())
                 .map(WoodworkManager::network)
-                .ifPresent(nw -> nw.sendToServer(new ModSignTextUpdatePkt(sign.getBlockPos(), messages)));
+                .ifPresent(nw -> nw.sendToServer(new SignTextUpdateC2SPacket(sign.getBlockPos(), messages)));
     }
 
     @Override

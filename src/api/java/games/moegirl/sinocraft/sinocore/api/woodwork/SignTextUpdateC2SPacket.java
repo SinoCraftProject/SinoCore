@@ -13,9 +13,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public record ModSignTextUpdatePkt(BlockPos pos, String[] lines) {
+public record SignTextUpdateC2SPacket(BlockPos pos, String[] lines) {
 
-    public static ModSignTextUpdatePkt read(FriendlyByteBuf buf) {
+    public static SignTextUpdateC2SPacket read(FriendlyByteBuf buf) {
         BlockPos pos = buf.readBlockPos();
         int i = buf.readVarInt();
         String[] lines = new String[4];
@@ -24,7 +24,7 @@ public record ModSignTextUpdatePkt(BlockPos pos, String[] lines) {
         if ((i & 0b0010) == 0b0010) lines[1] = buf.readUtf();
         if ((i & 0b0100) == 0b0100) lines[2] = buf.readUtf();
         if ((i & 0b1000) == 0b1000) lines[3] = buf.readUtf();
-        return new ModSignTextUpdatePkt(pos, lines);
+        return new SignTextUpdateC2SPacket(pos, lines);
     }
 
     public void write(FriendlyByteBuf buf) {

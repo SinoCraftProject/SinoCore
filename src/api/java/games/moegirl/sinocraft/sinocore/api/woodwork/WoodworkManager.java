@@ -1,7 +1,6 @@
 package games.moegirl.sinocraft.sinocore.api.woodwork;
 
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -56,8 +55,8 @@ public class WoodworkManager {
         this.blockEntities = blockEntities;
         this.network = network;
 
-        network.register(ModSignEditOpenPkt.class, ModSignEditOpenPkt::write, ModSignEditOpenPkt::read, ModSignEditOpenPkt::handleClient);
-        network.register(ModSignTextUpdatePkt.class, ModSignTextUpdatePkt::write, ModSignTextUpdatePkt::read, ModSignTextUpdatePkt::handleServer);
+        network.register(SignEditOpenS2CPacket.class, SignEditOpenS2CPacket::write, SignEditOpenS2CPacket::read, SignEditOpenS2CPacket::handleClient);
+        network.register(SignTextUpdateC2SPacket.class, SignTextUpdateC2SPacket::write, SignTextUpdateC2SPacket::read, SignTextUpdateC2SPacket::handleServer);
 
         MANAGERS.put(modid, this);
     }

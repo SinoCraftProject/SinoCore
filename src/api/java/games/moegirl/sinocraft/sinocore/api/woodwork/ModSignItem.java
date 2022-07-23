@@ -30,7 +30,7 @@ public class ModSignItem extends StandingAndWallBlockItem {
                 sp.connection.send(new ClientboundBlockUpdatePacket(pLevel, pPos));
                 WoodworkManager.getManager(sign.getType())
                         .map(WoodworkManager::network)
-                        .ifPresent(wn -> wn.sendToClient(new ModSignEditOpenPkt(pPos), sp));
+                        .ifPresent(wn -> wn.sendToClient(new SignEditOpenS2CPacket(pPos), sp));
             }
         }
 
