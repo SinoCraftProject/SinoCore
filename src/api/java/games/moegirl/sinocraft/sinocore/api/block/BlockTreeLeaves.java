@@ -22,6 +22,7 @@ public class BlockTreeLeaves extends LeavesBlock implements ITreeBlock {
     public BlockTreeLeaves(Tree tree) {
         this(tree, Properties.of(Material.LEAVES)
                 .randomTicks()
+                .noOcclusion()
                 .sound(tree.properties().sound())
                 .strength(tree.properties().strengthModifier().apply(.2f), .2f)
                 .isValidSpawn((_1, _2, _3, entity) -> entity == EntityType.OCELOT || entity == EntityType.PARROT)
