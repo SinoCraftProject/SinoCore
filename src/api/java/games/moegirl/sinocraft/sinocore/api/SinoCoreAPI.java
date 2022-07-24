@@ -12,7 +12,7 @@ import java.util.function.Consumer;
  * SinoCore Public API
  */
 public class SinoCoreAPI {
-
+    public static final String MODID = "sinocore";
     public static final Logger LOGGER = LogManager.getLogger();
     public static final boolean DEBUG = "true".equalsIgnoreCase(System.getProperty("forge.enableGameTest", "false"));
 
@@ -27,6 +27,10 @@ public class SinoCoreAPI {
      */
     public static String getId() {
         return scId;
+    }
+
+    public static String getDefaultId() {
+        return MODID;
     }
 
     /**
