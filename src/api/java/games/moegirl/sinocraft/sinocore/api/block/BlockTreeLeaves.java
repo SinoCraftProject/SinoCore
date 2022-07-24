@@ -19,11 +19,6 @@ public class BlockTreeLeaves extends LeavesBlock implements ITreeBlock {
         this.tree = tree;
     }
 
-    @Override
-    public RenderShape getRenderShape(BlockState state) {
-        return RenderShape.MODEL;
-    }
-
     public BlockTreeLeaves(Tree tree) {
         this(tree, Properties.of(Material.LEAVES)
                 .randomTicks()
