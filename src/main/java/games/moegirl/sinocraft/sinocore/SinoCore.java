@@ -43,7 +43,7 @@ public class SinoCore {
         bus.addListener(this::onSetup);
         SinoCoreAPI._loadCoreApi(this::registerApi);
 
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, QuizQuestionsConfig.CONFIG, "quizzes");
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, QuizQuestionsConfig.CONFIG, "quiz");
     }
 
     private void onSetup(FMLCommonSetupEvent event) {
