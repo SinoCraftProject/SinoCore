@@ -149,7 +149,8 @@ public record TreeRegister(Tree tree) {
 
     private void addItem(RegistryObject<? extends Block> sapling, ItemModelProvider provider) {
         String path = sapling.getId().getPath();
-        provider.withExistingParent(path, provider.mcLoc("item/handheld"));
+        provider.withExistingParent(path, provider.mcLoc("item/handheld"))
+                .texture("layer0", provider.modLoc("block/" + path));
     }
 
     private void addBlockItem(RegistryObject<? extends Block> block, ItemModelProvider provider) {
