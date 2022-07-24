@@ -15,6 +15,7 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SaplingBlock;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSet;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
@@ -137,12 +138,18 @@ public record TreeRegister(Tree tree) {
      * @param provider item model provider
      */
     public void addItemModels(ItemModelProvider provider) {
-        addBlockItem(tree.sapling, provider);
+        addItem(tree.sapling, provider);
+        
         addBlockItem(tree.log, provider);
         addBlockItem(tree.strippedLog, provider);
         addBlockItem(tree.strippedWoods, provider);
         addBlockItem(tree.wood, provider);
         addBlockItem(tree.leaves, provider);
+    }
+
+    private void addItem(RegistryObject<? extends Block> sapling, ItemModelProvider provider) {
+        String path = sapling.getId().getPath();
+        provider.withExistingParent(path, provider.mcLoc("item/handheld"));
     }
 
     private void addBlockItem(RegistryObject<? extends Block> block, ItemModelProvider provider) {
