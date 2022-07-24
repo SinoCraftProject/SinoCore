@@ -8,11 +8,14 @@ import games.moegirl.sinocraft.sinocore.block.SCBlockItems;
 import games.moegirl.sinocraft.sinocore.block.SCBlocks;
 import games.moegirl.sinocraft.sinocore.block.blockentity.SCBlockEntities;
 import games.moegirl.sinocraft.sinocore.command.SCCommands;
+import games.moegirl.sinocraft.sinocore.config.QuizQuestionsConfig;
 import games.moegirl.sinocraft.sinocore.gui.SCMenus;
 import games.moegirl.sinocraft.sinocore.item.SCItems;
 import games.moegirl.sinocraft.sinocore.network.SCNetworks;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
@@ -36,10 +39,11 @@ public class SinoCore {
         SCBlockEntities.register(bus);
 
         SCMenus.register(bus);
-        SCCommands.REGISTRY.register();
 
         bus.addListener(this::onSetup);
         SinoCoreAPI._loadCoreApi(this::registerApi);
+
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, QuizQuestionsConfig.CONFIG, "quizzes");
     }
 
     private void onSetup(FMLCommonSetupEvent event) {

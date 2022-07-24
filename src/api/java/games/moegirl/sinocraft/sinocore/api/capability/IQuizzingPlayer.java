@@ -13,9 +13,13 @@ import java.util.List;
 public interface IQuizzingPlayer extends INBTSerializable<CompoundTag> {
     boolean isQuizzing();
     void setQuizzing(boolean quizzing);
+    boolean isSucceed();
+    void setSucceed(boolean isSucceed);
 
     int getQuizStage();
+    int maxQuizStage();
     void setQuizStage(int count);
+    void setMaxQuizStage(int count);
 
     String getQuestion();
     void setQuestion(String question);

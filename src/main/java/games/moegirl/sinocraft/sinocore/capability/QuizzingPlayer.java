@@ -11,7 +11,9 @@ import java.util.List;
 
 public class QuizzingPlayer implements IQuizzingPlayer {
     protected boolean inQuiz = false;
+    protected boolean succeed = false;
     protected int quizStage = 0;
+    protected int maxStage = 0;
     protected String question = "";
     protected BiMap<String, Boolean> answers = HashBiMap.create(new HashMap<>());
 
@@ -26,13 +28,33 @@ public class QuizzingPlayer implements IQuizzingPlayer {
     }
 
     @Override
+    public boolean isSucceed() {
+        return succeed;
+    }
+
+    @Override
+    public void setSucceed(boolean isSucceed) {
+        succeed = isSucceed;
+    }
+
+    @Override
     public int getQuizStage() {
         return quizStage;
     }
 
     @Override
+    public int maxQuizStage() {
+        return maxStage;
+    }
+
+    @Override
     public void setQuizStage(int stage) {
         quizStage = stage;
+    }
+
+    @Override
+    public void setMaxQuizStage(int count) {
+        maxStage = count;
     }
 
     @Override
@@ -77,6 +99,7 @@ public class QuizzingPlayer implements IQuizzingPlayer {
         var quiz = new CompoundTag();
         quiz.putBoolean("inQuiz", inQuiz);
         quiz.putInt("stage", quizStage);
+        quiz.putInt("maxStage", maxStage);
         quiz.putString("question", question);
 
         var answersList = new ListTag();
@@ -107,6 +130,10 @@ public class QuizzingPlayer implements IQuizzingPlayer {
 
         if (quiz.contains("stage")) {
             quizStage = quiz.getInt("stage");
+        }
+
+        if (quiz.contains("maxStage")) {
+            maxStage = quiz.getInt("maxStage");
         }
 
         if (quiz.contains("question")) {

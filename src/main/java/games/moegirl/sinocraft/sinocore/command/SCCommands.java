@@ -1,34 +1,24 @@
 package games.moegirl.sinocraft.sinocore.command;
 
-import games.moegirl.sinocraft.sinocore.api.command.CommandRegister;
-import games.moegirl.sinocraft.sinocore.api.utility.texture.TextureMap;
-import games.moegirl.sinocraft.sinocore.api.utility.texture.TextureParser;
-import net.minecraft.commands.arguments.ResourceLocationArgument;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.resources.ResourceLocation;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import games.moegirl.sinocraft.sinocore.SinoCore;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraftforge.event.RegisterCommandsEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 
+import static net.minecraft.commands.Commands.literal;
+
+@Mod.EventBusSubscriber(modid = SinoCore.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class SCCommands {
+    public static LiteralArgumentBuilder<CommandSourceStack> SINOCORE_ROOT = literal("sinocore")
+            .then(literal("reload")
+                    .then(ReloadTextureCommand.RELOAD)
+                    .then(QuizCommand.QUIZ)
+            );
 
-    public static final CommandRegister REGISTRY = new CommandRegister();
-
-    public static final String DEBUG_COMMANDS = REGISTRY.register("sinocore", builder -> builder
-            .then("reload")
-            .then("tex_map_name", ResourceLocationArgument.id())
-            .suggests((context, b) -> {
-                TextureParser.names()
-                        .stream()
-                        .map(ResourceLocation::toString)
-                        .forEach(b::suggest);
-                return b.buildFuture();
-            })
-            .execute(context -> {
-                ResourceLocation name = ResourceLocationArgument.getId(context, "tex_map_name");
-                TextureMap map = TextureParser.get(name);
-                if (map == null) {
-                    context.getSource().sendFailure(new TextComponent("Not found texture map named " + name));
-                } else {
-                    map.reload();
-                    context.getSource().sendSuccess(new TextComponent("Reload succeed"), false);
-                }
-            }));
+    @SubscribeEvent
+    public static void onRegisterCommands(RegisterCommandsEvent event) {
+        event.getDispatcher().register(SINOCORE_ROOT);
+    }
 }
