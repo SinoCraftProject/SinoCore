@@ -33,13 +33,7 @@ public class QuizSucceedCondition implements LootItemCondition {
             return false;
         }
 
-        var result = PlayerQuizzingHelper.isCompleteSuccessfully(player);
-
-        if (!isSucceed) {
-            result = !result;
-        }
-
-        return result;
+        return PlayerQuizzingHelper.isCompleteSuccessfully(player, isSucceed);
     }
 
     public static QuizSucceedCondition.Builder builder(boolean succeed) {

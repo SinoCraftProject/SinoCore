@@ -5,7 +5,7 @@ import games.moegirl.sinocraft.sinocore.api.capability.SCCapabilities;
 import net.minecraft.world.entity.player.Player;
 
 public class PlayerQuizzingHelper {
-    public static boolean isCompleteSuccessfully(Player player) {
+    public static boolean isCompleteSuccessfully(Player player, boolean detectSuccess) {
         var cap = player.getCapability(SCCapabilities.QUIZZING_PLAYER_CAPABILITY);
 
         if (!cap.isPresent()) {
@@ -13,7 +13,16 @@ public class PlayerQuizzingHelper {
         }
 
         var quiz = cap.resolve().get();
-        return isEnded(quiz);
+
+        if (detectSuccess) {
+            if (isEnded(quiz)) {
+                return isSuccessful(quiz);
+            } else {
+                return false;
+            }
+        } else {
+            return isEnded(quiz);
+        }
     }
 
     public static boolean hasReachedMaxStage(IQuizzingPlayer quiz) {
@@ -22,5 +31,9 @@ public class PlayerQuizzingHelper {
 
     public static boolean isEnded(IQuizzingPlayer quiz) {
         return hasReachedMaxStage(quiz) || !quiz.isQuizzing();
+    }
+
+    public static boolean isSuccessful(IQuizzingPlayer quiz) {
+        return quiz.isSucceed();
     }
 }
