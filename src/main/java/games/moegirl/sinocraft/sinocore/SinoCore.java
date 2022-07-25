@@ -47,16 +47,6 @@ public class SinoCore {
         bus.addListener(this::onSetup);
         SinoCoreAPI._loadCoreApi(this::registerApi);
 
-        try {
-            var urls = new ArrayList<URL>();
-            urls.add(new URL("."));
-            var cl = new URLClassLoader(urls.toArray(new URL[0]));
-            var clazz = cl.loadClass(("cn.hutool.cron.CronUtil"));
-            System.out.println(clazz);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, QuizQuestionsConfig.CONFIG, "sinoseries/sinocore/quiz.toml");
     }
 

@@ -28,11 +28,6 @@ loom {
     }
 
     launches {
-        it.getAsMap().forEach((s, l) -> {
-            var arg = l.arguments.stream().findFirst(a -> a.startsWith("-cp"))
-            println arg
-        })
-
         data {
             arg "--existing", file("src/main/resources").absolutePath
         }
@@ -103,7 +98,8 @@ dependencies {
         parchment("org.parchmentmc.data:parchment-1.18.2:2022.05.22@zip")
     }
 
-    implementation 'cn.hutool:hutool-cron:5.8.4'
+    compileOnly 'cn.hutool:hutool-cron:5.8.4'
+    forgeRuntimeLibrary 'cn.hutool:hutool-cron:5.8.4'
 
     modImplementation("mezz.jei:jei-1.18.2-forge:10.0.0.191")
 }
