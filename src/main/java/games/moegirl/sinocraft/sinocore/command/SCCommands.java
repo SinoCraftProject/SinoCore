@@ -12,10 +12,8 @@ import static net.minecraft.commands.Commands.literal;
 @Mod.EventBusSubscriber(modid = SinoCore.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class SCCommands {
     public static LiteralArgumentBuilder<CommandSourceStack> SINOCORE_ROOT = literal("sinocore")
-            .then(literal("reload")
-                    .then(ReloadTextureCommand.RELOAD)
-                    .then(QuizCommand.QUIZ)
-            );
+            .then(ReloadTextureCommand.RELOAD)
+            .then(QuizCommand.QUIZ);
 
     @SubscribeEvent
     public static void onRegisterCommands(RegisterCommandsEvent event) {

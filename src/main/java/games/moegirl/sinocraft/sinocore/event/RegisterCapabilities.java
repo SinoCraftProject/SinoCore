@@ -22,7 +22,7 @@ public class RegisterCapabilities {
     public static void onAttachCapabilities(AttachCapabilitiesEvent<Entity> event) {
         if (event.getObject() instanceof Player) {
             var provider = new QuizzingPlayerProvider();
-            event.addCapability(new ResourceLocation(SinoCore.MODID, "playerQuiz"), provider);
+            event.addCapability(new ResourceLocation(SinoCore.MODID, "player_quiz"), provider);
             event.addListener(provider::invalidate);
         }
     }

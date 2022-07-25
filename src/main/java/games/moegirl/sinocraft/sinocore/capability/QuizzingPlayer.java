@@ -5,17 +5,24 @@ import com.google.common.collect.HashBiMap;
 import games.moegirl.sinocraft.sinocore.api.capability.IQuizzingPlayer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import oshi.util.tuples.Pair;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Impl of capability IQuizzingPlayer.
+ *
+ * @author qyl27
+ */
 public class QuizzingPlayer implements IQuizzingPlayer {
     protected boolean inQuiz = false;
     protected boolean succeed = false;
-    protected int quizStage = 0;
-    protected int maxStage = 0;
+    protected int quizStage = -1;
+    protected int maxStage = -1;
     protected String question = "";
-    protected BiMap<String, Boolean> answers = HashBiMap.create(new HashMap<>());
+    protected BiMap<String, Pair<String, Boolean>> answers = HashBiMap.create(new HashMap<>());
 
     @Override
     public boolean isQuizzing() {
@@ -67,14 +74,25 @@ public class QuizzingPlayer implements IQuizzingPlayer {
         question = questionIn;
     }
 
+    /**
+     * Get all answers available.
+     *
+     * @return List of Pair<Mark, Answer>.
+     */
     @Override
-    public List<String> getAnswers() {
-        return answers.keySet().stream().toList();
+    public List<Pair<String, String>> getAnswers() {
+        var list = new ArrayList<Pair<String, String>>();
+
+        for (var entry : answers.entrySet()) {
+            list.add(new Pair<>(entry.getKey(), entry.getValue().getA()));
+        }
+
+        return list;
     }
 
     @Override
-    public void addAnswer(String answer, boolean isCorrect) {
-        answers.put(answer, isCorrect);
+    public void addAnswer(String answer, String mark, boolean isCorrect) {
+        answers.put(mark, new Pair<>(answer, isCorrect));
     }
 
     @Override
@@ -83,13 +101,18 @@ public class QuizzingPlayer implements IQuizzingPlayer {
     }
 
     @Override
-    public String getCorrectAnswer() {
-        return answers.inverse().get(true);
+    public String getCorrectMark() {
+        for (var a : answers.entrySet()) {
+            if (a.getValue().getB()) {
+                return a.getKey();
+            }
+        }
+        return "";
     }
 
     @Override
-    public boolean isCorrect(String answer) {
-        return answers.get(answer);
+    public boolean isCorrect(String mark) {
+        return answers.get(mark).getB();
     }
 
     @Override
@@ -106,7 +129,8 @@ public class QuizzingPlayer implements IQuizzingPlayer {
         for (var answer : answers.entrySet()) {
             var ans = new CompoundTag();
             ans.putString("answer", answer.getKey());
-            ans.putBoolean("isCorrect", answer.getValue());
+            ans.putString("answerMark", answer.getValue().getA());
+            ans.putBoolean("isCorrect", answer.getValue().getB());
             answersList.add(ans);
         }
         nbt.put("answers", answersList);
@@ -143,8 +167,11 @@ public class QuizzingPlayer implements IQuizzingPlayer {
         if (quiz.contains("answers")) {
             for (var answer : quiz.getList("answers", 10)) {
                 if (answer instanceof CompoundTag ans) {
-                    if (ans.contains("answer") && ans.contains("isCorrect")) {
-                        answers.put(ans.getString("answer"), ans.getBoolean("isCorrect"));
+                    if (ans.contains("answer")
+                            && ans.contains("answerMark")
+                            && ans.contains("isCorrect")) {
+                        answers.put(ans.getString("answer"),
+                                new Pair<>(ans.getString("answerMark"), ans.getBoolean("isCorrect")));
                     }
                 }
             }

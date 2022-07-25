@@ -1,8 +1,9 @@
 plugins {
     id 'eclipse'
     id 'maven-publish'
-    id "architectury-plugin" version "3.4-SNAPSHOT"
-    id "dev.architectury.loom" version "0.12.0-SNAPSHOT" apply false
+    id 'architectury-plugin' version '3.4-SNAPSHOT'
+    id 'dev.architectury.loom' version '0.12.0-SNAPSHOT' apply false
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
 
 apply plugin: 'java'
@@ -74,14 +75,18 @@ repositories {
         name = 'ParchmentMC'
         url = 'https://maven.parchmentmc.org'
     }
-    maven {
-        url 'https://jitpack.io'
-    }
+
+    mavenCentral()
 
     maven {
         // location of the maven that hosts JEI files
         name = "Progwml6 maven"
         url = "https://dvs1.progwml6.com/files/maven/"
+    }
+
+    maven {
+        name = 'JitPack'
+        url = 'https://jitpack.io'
     }
 }
 
@@ -93,7 +98,9 @@ dependencies {
         parchment("org.parchmentmc.data:parchment-1.18.2:2022.05.22@zip")
     }
 
-    modImplementation ("mezz.jei:jei-1.18.2-forge:10.0.0.191")
+    implementation 'cn.hutool:hutool-cron:5.8.4'
+
+    modImplementation("mezz.jei:jei-1.18.2-forge:10.0.0.191")
 }
 
 // Example for how to get properties into the manifest for reading at runtime.
@@ -111,9 +118,28 @@ jar {
         ])
     }
 
-    archiveClassifier.set('')
+    archiveClassifier.set('original')
     from(sourceSets.api.output)
 }
+
+shadowJar {
+//    dependsOn(jar)
+
+    archiveClassifier.set('')
+
+    dependencies {
+        include(dependency('cn.hutool:hutool-core:5.8.4'))
+        include(dependency('cn.hutool:hutool-log:5.8.4'))
+        include(dependency('cn.hutool:hutool-setting:5.8.4'))
+        include(dependency('cn.hutool:hutool-cron:5.8.4'))
+
+        exclude("forge-client-extra.jar")
+    }
+
+    relocate 'cn.hutool', 'libs.cn.hutool'
+}
+
+tasks.remapJar.finalizedBy(shadowJar)
 
 tasks.create('apiJar', Jar) {
     dependsOn(apiClasses)

@@ -1,10 +1,14 @@
 {
   "sinocore.command.quiz.answer_marked": "%s. ",
-  "sinocore.command.quiz.fail": "Ah-oh, the answer is wrong.",
+  "sinocore.command.quiz.answer_right": "Good answer.",
+  "sinocore.command.quiz.answer_wrong": "Ah-oh, the answer is wrong.",
+  "sinocore.command.quiz.fail": "You failed the quiz.",
+  "sinocore.command.quiz.not_enabled": "Quiz is not enabled!",
   "sinocore.command.quiz.not_player": "Please use this command with a player!",
   "sinocore.command.quiz.not_started": "Quiz is not started!",
   "sinocore.command.quiz.question": "Now listen to the question: %s",
   "sinocore.command.quiz.question_last": "Please step on the corresponding pressure plate.",
+  "sinocore.command.quiz.started": "Quiz started!",
   "sinocore.command.quiz.succeed": "Congratulations! You have passed the quiz.",
   "sinocore.command.quiz.wrong_state": "Wrong game state!"
 }

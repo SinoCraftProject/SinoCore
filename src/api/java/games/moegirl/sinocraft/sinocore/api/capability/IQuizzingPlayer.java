@@ -2,6 +2,7 @@ package games.moegirl.sinocraft.sinocore.api.capability;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.common.util.INBTSerializable;
+import oshi.util.tuples.Pair;
 
 import java.util.List;
 
@@ -24,10 +25,10 @@ public interface IQuizzingPlayer extends INBTSerializable<CompoundTag> {
     String getQuestion();
     void setQuestion(String question);
 
-    List<String> getAnswers();
-    void addAnswer(String answer, boolean isCorrect);
+    List<Pair<String, String>> getAnswers();
+    void addAnswer(String answer, String mark, boolean isCorrect);
     void clearAnswers();
 
-    String getCorrectAnswer();
-    boolean isCorrect(String answer);
+    String getCorrectMark();
+    boolean isCorrect(String mark);
 }

@@ -19,8 +19,7 @@ public class AnswerTrigger extends SimpleCriterionTrigger<AnswerTrigger.TriggerI
 
     @Override
     protected TriggerInstance createInstance(JsonObject json, EntityPredicate.Composite player, DeserializationContext context) {
-
-        return null;
+        return new TriggerInstance(getId(), player, json.get("answer").getAsString());
     }
 
     public static class TriggerInstance extends AbstractCriterionTriggerInstance {
