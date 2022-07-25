@@ -15,6 +15,7 @@ public class LanguageProviderENUS extends I18nProviderBase {
         add(QuizCommand.MESSAGE_NOT_STARTED, "Quiz is not started!");
         add(QuizCommand.MESSAGE_NOT_ENABLED, "Quiz is not enabled!");
         add(QuizCommand.MESSAGE_SUCCEED, "Congratulations! You have passed the quiz.");
+        add(QuizCommand.MESSAGE_BROADCAST_SUCCEED, "Player %s passed the quiz！");
         add(QuizCommand.MESSAGE_FAIL, "You failed the quiz.");
         add(QuizCommand.MESSAGE_WRONG_STATE, "Wrong game state!");
         add(QuizCommand.MESSAGE_STARTED, "Quiz started!");

@@ -28,6 +28,11 @@ loom {
     }
 
     launches {
+        it.getAsMap().forEach((s, l) -> {
+            var arg = l.arguments.stream().findFirst(a -> a.startsWith("-cp"))
+            println arg
+        })
+
         data {
             arg "--existing", file("src/main/resources").absolutePath
         }
@@ -118,14 +123,20 @@ jar {
         ])
     }
 
-    archiveClassifier.set('original')
     from(sourceSets.api.output)
 }
 
-shadowJar {
-//    dependsOn(jar)
+classes.finalizedBy(shadowJar)
 
+remapJar {
+    dependsOn(shadowJar)
+    inputFile.set(shadowJar.archiveFile)
     archiveClassifier.set('')
+}
+
+shadowJar {
+    from(sourceSets.main.output)
+    archiveClassifier.set('shaded')
 
     dependencies {
         include(dependency('cn.hutool:hutool-core:5.8.4'))
@@ -138,8 +149,6 @@ shadowJar {
 
     relocate 'cn.hutool', 'libs.cn.hutool'
 }
-
-tasks.remapJar.finalizedBy(shadowJar)
 
 tasks.create('apiJar', Jar) {
     dependsOn(apiClasses)

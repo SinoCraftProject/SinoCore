@@ -53,6 +53,12 @@ public class QuizCommand {
 
     public static int reFetch(CommandContext<CommandSourceStack> context) {
         context.getSource().sendSuccess(new TextComponent("ReFetching..."), true);
+
+        if (!QuizQuestionsConfig.ENABLED.get()) {
+            context.getSource().sendSuccess(new TextComponent("Not enabled feature."), true);
+            return 0;
+        }
+
         QuizQuestionsConfig.QUESTIONS.doReFetch();
         return 1;
     }
@@ -193,9 +199,10 @@ public class QuizCommand {
     public static void doNext(Player player, IQuizzingPlayer quiz, String answer) {
         if (!quiz.isQuizzing()) {
             makeWrongState(player);
+            return;
         }
 
-        if (!isCorrect(player, quiz, answer)) {
+        if (!isCorrect(player, quiz, answer) && !isEnded(player, quiz)) {
             makeWrongAnswer(player);
 
             player.getCommandSenderWorld()
@@ -229,9 +236,8 @@ public class QuizCommand {
     }
 
     public static boolean doFail(Player player, IQuizzingPlayer quiz) {
-        if (!isEnded(player, quiz)) {
+        if (isEnded(player, quiz)) {
             makeNotStarted(player);
-
             return false;
         }
 
@@ -240,6 +246,7 @@ public class QuizCommand {
 
         if (quiz.isSucceed()) {
             makeWrongState(player);
+            return false;
         }
 
         makeFail(player);
@@ -258,6 +265,7 @@ public class QuizCommand {
 
         if (!quiz.isSucceed()) {
             makeWrongState(player);
+            return false;
         }
 
         makeSucceed(player);
@@ -292,8 +300,8 @@ public class QuizCommand {
     }
 
     public static void makeSucceed(Player player) {
-        broadcast(player, new TranslatableComponent(MESSAGE_BROADCAST_SUCCEED, player.getDisplayName()));
-        player.createCommandSourceStack().sendSuccess(new TranslatableComponent(MESSAGE_SUCCEED), true);
+        broadcast(player, new TranslatableComponent(MESSAGE_BROADCAST_SUCCEED, player.getDisplayName()).withStyle(ChatFormatting.GREEN));
+        player.createCommandSourceStack().sendSuccess(new TranslatableComponent(MESSAGE_SUCCEED).withStyle(ChatFormatting.GREEN), true);
     }
 
     public static void makeFail(Player player) {
@@ -340,7 +348,7 @@ public class QuizCommand {
     }
 
     public static void broadcast(Player player, Component message) {
-        if (!player.level.isClientSide) {
+        if (player.level.isClientSide) {
             return;
         }
 

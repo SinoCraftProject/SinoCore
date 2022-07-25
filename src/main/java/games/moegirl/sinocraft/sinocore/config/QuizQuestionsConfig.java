@@ -27,6 +27,10 @@ public class QuizQuestionsConfig {
 
         CONFIG = builder.build();
 
-        QUESTIONS = QuizModel.fetch();
+        if (ENABLED.get()) {
+            QUESTIONS = QuizModel.fetch();
+        } else {
+            QUESTIONS = new QuizModel();
+        }
     }
 }

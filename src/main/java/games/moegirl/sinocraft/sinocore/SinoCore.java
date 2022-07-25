@@ -21,6 +21,10 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.ArrayList;
+
 @Mod(SinoCore.MODID)
 public class SinoCore {
     private static final Logger logger = LogManager.getLogger("SinoCore");
@@ -43,6 +47,16 @@ public class SinoCore {
         bus.addListener(this::onSetup);
         SinoCoreAPI._loadCoreApi(this::registerApi);
 
+        try {
+            var urls = new ArrayList<URL>();
+            urls.add(new URL("."));
+            var cl = new URLClassLoader(urls.toArray(new URL[0]));
+            var clazz = cl.loadClass(("cn.hutool.cron.CronUtil"));
+            System.out.println(clazz);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, QuizQuestionsConfig.CONFIG, "sinoseries/sinocore/quiz.toml");
     }
 
@@ -51,5 +65,9 @@ public class SinoCore {
 
     private void registerApi(ApiLoader loader) {
         loader.loadAll(MODID, Crafting.INSTANCE, Network.INSTANCE);
+    }
+
+    public static Logger getLogger() {
+        return logger;
     }
 }

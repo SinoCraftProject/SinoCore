@@ -112,7 +112,7 @@ public class QuizzingPlayer implements IQuizzingPlayer {
 
     @Override
     public boolean isCorrect(String mark) {
-        return answers.get(mark).getB();
+        return answers.get(mark.toUpperCase()).getB();
     }
 
     @Override

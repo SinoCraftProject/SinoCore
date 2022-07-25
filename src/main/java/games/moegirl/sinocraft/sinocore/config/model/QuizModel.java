@@ -2,6 +2,7 @@ package games.moegirl.sinocraft.sinocore.config.model;
 
 import cn.hutool.cron.CronUtil;
 import com.google.gson.Gson;
+import games.moegirl.sinocraft.sinocore.SinoCore;
 import games.moegirl.sinocraft.sinocore.config.QuizQuestionsConfig;
 import org.apache.commons.io.IOUtils;
 
@@ -73,6 +74,8 @@ public class QuizModel {
     }
 
     public void doReFetch() {
+        SinoCore.getLogger().info("Fetching quiz data.");
+
         try {
             var dataUrl = QuizQuestionsConfig.DATA_URL;
             var url = new URL(dataUrl.get());

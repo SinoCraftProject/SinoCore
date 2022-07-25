@@ -15,6 +15,7 @@ public class LanguageProviderZHCN extends I18nProviderBase {
         add(QuizCommand.MESSAGE_NOT_STARTED, "问答还没有开始！");
         add(QuizCommand.MESSAGE_NOT_ENABLED, "问答挑战没有在本服务器启用。");
         add(QuizCommand.MESSAGE_SUCCEED, "恭喜你已经通过了问答挑战！");
+        add(QuizCommand.MESSAGE_BROADCAST_SUCCEED, "玩家 %s 已经通过了问答挑战！");
         add(QuizCommand.MESSAGE_FAIL, "挑战失败！");
         add(QuizCommand.MESSAGE_WRONG_STATE, "错误的游戏状态！");
         add(QuizCommand.MESSAGE_STARTED, "问~答~开始！");
