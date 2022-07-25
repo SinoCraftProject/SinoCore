@@ -121,7 +121,7 @@ public class QuizCommand {
         var quiz = player.getCapability(SCCapabilities.QUIZZING_PLAYER_CAPABILITY).orElse(new QuizzingPlayer());
 
         var result = doFail(player, quiz);
-        return result ? Command.SINGLE_SUCCESS : 0;
+        return result ? 0 : Command.SINGLE_SUCCESS;
     }
 
     private static int onSucceed(CommandContext<CommandSourceStack> context) {
@@ -305,8 +305,8 @@ public class QuizCommand {
     }
 
     public static void makeFail(Player player) {
-        player.createCommandSourceStack().sendSuccess(new TranslatableComponent(MESSAGE_FAIL)
-                .withStyle(ChatFormatting.RED), true);
+        player.createCommandSourceStack().sendFailure(new TranslatableComponent(MESSAGE_FAIL)
+                .withStyle(ChatFormatting.RED));
     }
 
     public static void makeWrongState(Player player) {
@@ -354,6 +354,9 @@ public class QuizCommand {
 
         var players = player.level.getServer().getPlayerList().getPlayers();
         for (var p : players) {
+            if (p.getUUID().equals(player.getUUID())) {
+                continue;
+            }
             p.sendMessage(message, Util.NIL_UUID);
         }
     }

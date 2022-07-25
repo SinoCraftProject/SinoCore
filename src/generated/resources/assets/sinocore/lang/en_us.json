@@ -2,6 +2,7 @@
   "sinocore.command.quiz.answer_marked": "%s. ",
   "sinocore.command.quiz.answer_right": "Good answer.",
   "sinocore.command.quiz.answer_wrong": "Ah-oh, the answer is wrong.",
+  "sinocore.command.quiz.broadcast_succeed": "Player %s passed the quiz\uFF01",
   "sinocore.command.quiz.fail": "You failed the quiz.",
   "sinocore.command.quiz.not_enabled": "Quiz is not enabled!",
   "sinocore.command.quiz.not_player": "Please use this command with a player!",

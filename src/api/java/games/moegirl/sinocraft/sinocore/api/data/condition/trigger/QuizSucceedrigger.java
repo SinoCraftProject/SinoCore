@@ -3,12 +3,11 @@ package games.moegirl.sinocraft.sinocore.api.data.condition.trigger;
 import com.google.gson.JsonObject;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.player.Player;
 
-public class AnswerTrigger extends SimpleCriterionTrigger<AnswerTrigger.TriggerInstance> {
+public class QuizSucceedrigger extends SimpleCriterionTrigger<QuizSucceedrigger.TriggerInstance> {
     private ResourceLocation id;
 
-    public AnswerTrigger(ResourceLocation idIn) {
+    public QuizSucceedrigger(ResourceLocation idIn) {
         id = idIn;
     }
 
