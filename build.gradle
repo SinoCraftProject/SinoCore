@@ -65,6 +65,10 @@ sourceSets {
     }
 }
 
+processResources {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE;
+}
+
 repositories {
     maven {
         name = 'ParchmentMC'
@@ -120,12 +124,14 @@ tasks.create('apiJar', Jar) {
 
 tasks.create('sourcesJar', Jar) {
     archiveClassifier.set('sources')
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE;
     from(sourceSets.main.allJava)
     from(sourceSets.api.allJava)
 }
 
 tasks.create('apiSourcesJar', Jar) {
     archiveClassifier.set('api-sources')
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE;
     from(sourceSets.api.allJava)
 }
 
