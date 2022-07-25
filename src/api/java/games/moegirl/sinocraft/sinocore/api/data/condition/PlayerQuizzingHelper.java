@@ -21,7 +21,11 @@ public class PlayerQuizzingHelper {
                 return false;
             }
         } else {
-            return isEnded(quiz);
+            if (isEnded(quiz)) {
+                return isFailed(quiz);
+            } else {
+                return false;
+            }
         }
     }
 
@@ -35,5 +39,9 @@ public class PlayerQuizzingHelper {
 
     public static boolean isSuccessful(IQuizzingPlayer quiz) {
         return quiz.isSucceed();
+    }
+
+    public static boolean isFailed(IQuizzingPlayer quiz) {
+        return !quiz.isSucceed();
     }
 }

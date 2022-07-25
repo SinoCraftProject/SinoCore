@@ -163,7 +163,6 @@ public class QuizCommand {
         quiz.clearAnswers();
 
         var question = nextQuestion();
-        quiz.setQuizStage(quiz.getQuizStage() + 1);
         quiz.setQuestion(question.question());
 
         var res = shuffle(player, question.answers());
@@ -202,6 +201,8 @@ public class QuizCommand {
             return;
         }
 
+        quiz.setQuizStage(quiz.getQuizStage() + 1);
+
         if (!isCorrect(player, quiz, answer) && !isEnded(player, quiz)) {
             makeWrongAnswer(player);
 
@@ -213,18 +214,16 @@ public class QuizCommand {
             return;
         }
 
-        if (isEnded(player, quiz)) {
+        makeCorrectAnswer(player);
+
+        if (hasReachedMaxStage(player, quiz)) {
             player.getCommandSenderWorld()
                     .getServer()
                     .getCommands()
                     .performCommand(player.createCommandSourceStack(), "/sinocore quiz succeed");
-
-            return;
+        } else {
+            doNext(player, quiz);
         }
-
-        makeCorrectAnswer(player);
-
-        doNext(player, quiz);
     }
 
     public static boolean hasReachedMaxStage(Player player, IQuizzingPlayer quiz) {
@@ -236,11 +235,6 @@ public class QuizCommand {
     }
 
     public static boolean doFail(Player player, IQuizzingPlayer quiz) {
-        if (isEnded(player, quiz)) {
-            makeNotStarted(player);
-            return false;
-        }
-
         quiz.setSucceed(false);
         quiz.setQuizzing(false);
 

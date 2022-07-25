@@ -2,6 +2,7 @@ package games.moegirl.sinocraft.sinocore.event;
 
 import games.moegirl.sinocraft.sinocore.SinoCore;
 import games.moegirl.sinocraft.sinocore.api.capability.SCCapabilities;
+import games.moegirl.sinocraft.sinocore.capability.QuizzingPlayer;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -24,7 +25,7 @@ public class ReSyncDataOnPlayerClone {
             return;
         }
 
-        var nbt = original.resolve().get().serializeNBT();
-        cap.resolve().get().deserializeNBT(nbt);
+        var nbt = original.orElse(new QuizzingPlayer()).serializeNBT();
+        cap.orElse(new QuizzingPlayer()).deserializeNBT(nbt);
     }
 }
