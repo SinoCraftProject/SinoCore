@@ -3,7 +3,7 @@ package games.moegirl.sinocraft.sinocore.config.model;
 import cn.hutool.cron.CronUtil;
 import com.google.gson.Gson;
 import games.moegirl.sinocraft.sinocore.SinoCore;
-import games.moegirl.sinocraft.sinocore.config.QuizQuestionsConfig;
+import games.moegirl.sinocraft.sinocore.config.QuizModelConfig;
 import org.apache.commons.io.IOUtils;
 
 import java.net.URL;
@@ -12,11 +12,24 @@ import java.util.*;
 
 public class QuizModel {
     private static final Gson GSON = new Gson();
+    private static QuizModel INSTANCE = null;
+
+    public String url = QuizConstants.URL;
+
     public Calendar lastUpdated = Calendar.getInstance();
 
     public String date = "";
 
     public List<Question> questions = new ArrayList<>();
+
+    public QuizModel() {
+        INSTANCE = this;
+    }
+
+    public static QuizModel getInstance() {
+        System.out.println(INSTANCE.url);
+        return INSTANCE;
+    }
 
     public static class Question {
         public String question;
@@ -46,22 +59,29 @@ public class QuizModel {
     }
 
     public static QuizModel fetch() {
+        var urlStr = QuizModelConfig.DATA_URL.get();
+
         try {
-            var dataUrl = QuizQuestionsConfig.DATA_URL;
-            var url = new URL(dataUrl.get());
+            var url = new URL(urlStr);
 
             var data = IOUtils.toString(url.toURI(), StandardCharsets.UTF_8);
 
             var ret = GSON.fromJson(data, QuizModel.class);
-            ret.reFetch();
+            INSTANCE = ret;
+
+            ret.reFetch(false);
             return ret;
         } catch (Exception ex) {
-            ex.printStackTrace();
+            SinoCore.getLogger().warn("Cannot fetch URL from config file, don't forget to use /sinocore quiz load <URL> to set a new URL.");
+        } finally {
+            if (INSTANCE == null) {
+                INSTANCE = new QuizModel();
+            }
+
+            CronUtil.schedule("* 2 * * *", (Runnable) () -> INSTANCE.reFetch(true));
         }
 
-        var q = new QuizModel();
-        q.reFetch();
-        return q;
+        return INSTANCE;
     }
 
     public Question random() {
@@ -69,16 +89,29 @@ public class QuizModel {
         return questions.get(rand);
     }
 
-    public void reFetch() {
-        CronUtil.schedule("* 2 * * *", (Runnable) this::doReFetch);
+    public void reFetch(boolean reload) {
+        url = QuizConstants.URL;
+
+        if (!QuizModelConfig.ENABLED.get()) {
+            SinoCore.getLogger().warn("Quiz is not enabled!");
+            return;
+        }
+
+        SinoCore.getInstance().getPool().execute(() -> INSTANCE.doReFetch(reload));
     }
 
-    public void doReFetch() {
-        SinoCore.getLogger().info("Fetching quiz data.");
+    public void doReFetch(boolean reload) {
+        SinoCore.getLogger().info("Re-fetching quiz data.");
+
+        if (!reload) {
+            if (url == null || url.equals("")) {
+                url = QuizModelConfig.DATA_URL.get();
+            }
+        }
 
         try {
-            var dataUrl = QuizQuestionsConfig.DATA_URL;
-            var url = new URL(dataUrl.get());
+            var dataUrl = url;
+            var url = new URL(dataUrl);
 
             var data = IOUtils.toString(url.toURI(), StandardCharsets.UTF_8);
 
@@ -87,7 +120,10 @@ public class QuizModel {
             lastUpdated = Calendar.getInstance();
             date = model.date;
             questions = model.questions;
+
+            SinoCore.getLogger().info("Fetch successfully!");
         } catch (Exception ex) {
+            SinoCore.getLogger().warn("Re-fetch failed, did you set the URL?");
             ex.printStackTrace();
         }
     }

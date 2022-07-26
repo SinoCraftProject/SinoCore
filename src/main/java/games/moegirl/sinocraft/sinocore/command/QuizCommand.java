@@ -10,7 +10,8 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 import games.moegirl.sinocraft.sinocore.api.capability.IQuizzingPlayer;
 import games.moegirl.sinocraft.sinocore.api.capability.SCCapabilities;
 import games.moegirl.sinocraft.sinocore.capability.QuizzingPlayer;
-import games.moegirl.sinocraft.sinocore.config.QuizQuestionsConfig;
+import games.moegirl.sinocraft.sinocore.config.QuizModelConfig;
+import games.moegirl.sinocraft.sinocore.config.model.QuizConstants;
 import games.moegirl.sinocraft.sinocore.config.model.QuizModel;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
@@ -29,11 +30,8 @@ import static net.minecraft.commands.Commands.literal;
 public class QuizCommand {
     public static LiteralCommandNode<CommandSourceStack> QUIZ = literal("quiz")
             .requires(s -> s.hasPermission(2))
-            .then(literal("refetch")
-                    .executes(QuizCommand::reFetch)
-            )
             .then(literal("start")
-                    .then(argument("max_stage", IntegerArgumentType.integer(1, QuizQuestionsConfig.MAX_STAGE.get()))
+                    .then(argument("max_stage", IntegerArgumentType.integer(1, QuizModelConfig.MAX_STAGE.get()))
                             .suggests(QuizCommand::onStartSuggest)
                             .executes(QuizCommand::onStart)
                     ))
@@ -49,20 +47,15 @@ public class QuizCommand {
             .then(literal("fail")
                     .executes(QuizCommand::onFail)
             )
+            .then(literal("reload")
+                    .executes(QuizCommand::onReload)
+            )
+            .then(literal("load")
+                    .then(argument("url", StringArgumentType.greedyString())
+                            .executes(QuizCommand::onLoad)
+                    )
+            )
             .build();
-
-    public static int reFetch(CommandContext<CommandSourceStack> context) {
-        context.getSource().sendSuccess(new TextComponent("ReFetching..."), true);
-
-        if (!QuizQuestionsConfig.ENABLED.get()) {
-            context.getSource().sendSuccess(new TextComponent("Not enabled feature."), true);
-            return 0;
-        }
-
-        QuizQuestionsConfig.QUESTIONS.doReFetch();
-        return 1;
-    }
-
 
     public static CompletableFuture<Suggestions> onStartSuggest(CommandContext<CommandSourceStack> context, SuggestionsBuilder builder) {
         builder.suggest("<Max stages>");
@@ -77,7 +70,7 @@ public class QuizCommand {
             return 0;
         }
 
-        if (!QuizQuestionsConfig.ENABLED.get()) {
+        if (!QuizModelConfig.ENABLED.get()) {
             makeNotEnabled(player);
             return 0;
         }
@@ -124,7 +117,7 @@ public class QuizCommand {
         return result ? 0 : Command.SINGLE_SUCCESS;
     }
 
-    private static int onSucceed(CommandContext<CommandSourceStack> context) {
+    public static int onSucceed(CommandContext<CommandSourceStack> context) {
         var source = context.getSource().getEntity();
 
         if (!(source instanceof Player player)) {
@@ -138,8 +131,32 @@ public class QuizCommand {
         return result ? Command.SINGLE_SUCCESS : 0;
     }
 
+    public static int onReload(CommandContext<CommandSourceStack> context) {
+        context.getSource().sendSuccess(new TextComponent("Reloading...")
+                .withStyle(ChatFormatting.DARK_AQUA), true);
+
+        if (!QuizModelConfig.ENABLED.get()) {
+            context.getSource().sendSuccess(new TextComponent("Not enabled feature."), true);
+            return 0;
+        }
+
+        QuizModel.getInstance().reFetch(true);
+        return 1;
+    }
+
+    public static int onLoad(CommandContext<CommandSourceStack> context) {
+        var url = context.getArgument("url", String.class);
+
+        context.getSource().sendSuccess(new TextComponent("Temporarily set Quiz URL to: " + url)
+                        .withStyle(ChatFormatting.DARK_AQUA), true);
+
+        QuizConstants.URL = url;
+
+        return onReload(context);
+    }
+
     public static QuizModel.Question nextQuestion() {
-        return QuizQuestionsConfig.QUESTIONS.random();
+        return QuizModel.getInstance().random();
     }
 
     public static void doStart(Player player, IQuizzingPlayer quiz, int maxStage) {
@@ -294,8 +311,12 @@ public class QuizCommand {
     }
 
     public static void makeSucceed(Player player) {
-        broadcast(player, new TranslatableComponent(MESSAGE_BROADCAST_SUCCEED, player.getDisplayName()).withStyle(ChatFormatting.GREEN));
-        player.createCommandSourceStack().sendSuccess(new TranslatableComponent(MESSAGE_SUCCEED).withStyle(ChatFormatting.GREEN), true);
+        broadcast(player, new TranslatableComponent(MESSAGE_BROADCAST_SUCCEED, player.getDisplayName())
+                .withStyle(ChatFormatting.GREEN)
+                .withStyle(ChatFormatting.BOLD));
+        player.createCommandSourceStack().sendSuccess(new TranslatableComponent(MESSAGE_SUCCEED)
+                .withStyle(ChatFormatting.GREEN)
+                .withStyle(ChatFormatting.BOLD), true);
     }
 
     public static void makeFail(Player player) {
@@ -341,14 +362,17 @@ public class QuizCommand {
         player.createCommandSourceStack().sendSuccess(component, true);
     }
 
-    public static void broadcast(Player player, Component message) {
-        if (player.level.isClientSide) {
+    public static void broadcast(Player self, Component message) {
+        if (self.level.isClientSide) {
             return;
         }
 
-        var players = player.level.getServer().getPlayerList().getPlayers();
+        var server = self.level.getServer();
+        server.createCommandSourceStack().sendSuccess(message, true);
+
+        var players = server.getPlayerList().getPlayers();
         for (var p : players) {
-            if (p.getUUID().equals(player.getUUID())) {
+            if (p.getUUID().equals(self.getUUID())) {
                 continue;
             }
             p.sendMessage(message, Util.NIL_UUID);

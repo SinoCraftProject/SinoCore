@@ -15,9 +15,11 @@ public class QuizSucceedCondition implements LootItemCondition {
             new LootItemConditionType(new ConditionSerializer());
 
     private final boolean isSucceed;
+    private final boolean lastCorrect;
 
-    protected QuizSucceedCondition(boolean succeed) {
+    protected QuizSucceedCondition(boolean succeed, boolean last) {
         isSucceed = succeed;
+        lastCorrect = last;
     }
 
     @Override
@@ -33,23 +35,25 @@ public class QuizSucceedCondition implements LootItemCondition {
             return false;
         }
 
-        return PlayerQuizzingHelper.isCompleteSuccessfully(player, isSucceed);
+        return PlayerQuizzingHelper.isCompleteSuccessfully(player, isSucceed, lastCorrect);
     }
 
-    public static QuizSucceedCondition.Builder builder(boolean succeed) {
-        return new QuizSucceedCondition.Builder(succeed);
+    public static QuizSucceedCondition.Builder builder(boolean succeed, boolean last) {
+        return new QuizSucceedCondition.Builder(succeed, last);
     }
 
     public static class Builder implements LootItemCondition.Builder {
         private final boolean isSucceed;
+        private final boolean lastCorrect;
 
-        public Builder(boolean succeed) {
+        protected Builder(boolean succeed, boolean last) {
             isSucceed = succeed;
+            lastCorrect = last;
         }
 
         @Override
         public LootItemCondition build() {
-            return new QuizSucceedCondition(isSucceed);
+            return new QuizSucceedCondition(isSucceed, lastCorrect);
         }
     }
 
@@ -57,11 +61,15 @@ public class QuizSucceedCondition implements LootItemCondition {
         @Override
         public void serialize(JsonObject json, QuizSucceedCondition value, JsonSerializationContext serializationContext) {
             json.addProperty("isSucceed", value.isSucceed);
+            json.addProperty("lastCorrect", value.lastCorrect);
         }
 
         @Override
         public QuizSucceedCondition deserialize(JsonObject json, JsonDeserializationContext serializationContext) {
-            return new QuizSucceedCondition(json.get("isSucceed").getAsBoolean());
+            var isSucceed = json.get("isSucceed").getAsBoolean();
+            var lastCorrect = json.get("lastCorrect").getAsBoolean();
+
+            return new QuizSucceedCondition(isSucceed, lastCorrect);
         }
     }
 }

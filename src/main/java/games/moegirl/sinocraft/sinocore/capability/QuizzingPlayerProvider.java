@@ -1,6 +1,7 @@
 package games.moegirl.sinocraft.sinocore.capability;
 
 import games.moegirl.sinocraft.sinocore.api.capability.IQuizzingPlayer;
+import games.moegirl.sinocraft.sinocore.api.capability.SCCapabilities;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.common.capabilities.Capability;
@@ -20,7 +21,11 @@ public class QuizzingPlayerProvider implements ICapabilitySerializable<CompoundT
     @NotNull
     @Override
     public <T> LazyOptional<T> getCapability(@NotNull Capability<T> capability, @Nullable Direction arg) {
-        return quizzingPlayerOptional.cast();
+        if (capability == SCCapabilities.QUIZZING_PLAYER_CAPABILITY) {
+            return quizzingPlayerOptional.cast();
+        }
+
+        return LazyOptional.empty();
     }
 
     @Override
