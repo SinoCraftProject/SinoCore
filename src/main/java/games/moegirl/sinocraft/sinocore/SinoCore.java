@@ -9,10 +9,12 @@ import games.moegirl.sinocraft.sinocore.block.SCBlockItems;
 import games.moegirl.sinocraft.sinocore.block.SCBlocks;
 import games.moegirl.sinocraft.sinocore.block.blockentity.SCBlockEntities;
 import games.moegirl.sinocraft.sinocore.config.QuizModelConfig;
+import games.moegirl.sinocraft.sinocore.config.model.QuizModel;
 import games.moegirl.sinocraft.sinocore.gui.SCMenus;
 import games.moegirl.sinocraft.sinocore.item.SCItems;
 import games.moegirl.sinocraft.sinocore.network.SCNetworks;
 import net.minecraftforge.event.server.ServerStoppingEvent;
+import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -57,7 +59,7 @@ public class SinoCore {
         bus.addListener(this::onSetup);
         SinoCoreAPI._loadCoreApi(this::registerApi);
 
-        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, QuizModelConfig.CONFIG, "sinoseries/sinocore/quiz.toml");
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, QuizModelConfig.SPEC, "sinoseries/sinocore/quiz.toml");
     }
 
     public static SinoCore getInstance() {
@@ -69,6 +71,9 @@ public class SinoCore {
     }
 
     private void onSetup(FMLCommonSetupEvent event) {
+        if (QuizModelConfig.CONFIG.ENABLED.get()) {
+            QuizModel.fetch();
+        }
     }
 
     private void registerApi(ApiLoader loader) {

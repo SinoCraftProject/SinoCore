@@ -1,33 +1,34 @@
 package games.moegirl.sinocraft.sinocore.config;
 
-import games.moegirl.sinocraft.sinocore.SinoCore;
 import games.moegirl.sinocraft.sinocore.config.model.QuizModel;
 import net.minecraftforge.common.ForgeConfigSpec;
 import org.apache.commons.lang3.tuple.Pair;
 
 public class QuizModelConfig {
-    public static ForgeConfigSpec CONFIG;
+    public static final Config CONFIG;
+    public static final ForgeConfigSpec SPEC;
 
-    public static final Pair<QuizModelConfig, ForgeConfigSpec> PAIR = new ForgeConfigSpec.Builder()
-            .configure(QuizModelConfig::new);
+    static {
+        final Pair<Config, ForgeConfigSpec> pair = new ForgeConfigSpec.Builder()
+                .configure(Config::new);
 
-    public static ForgeConfigSpec.IntValue MAX_STAGE;
-    public static ForgeConfigSpec.BooleanValue ENABLED;
-    public static ForgeConfigSpec.ConfigValue<String> DATA_URL;
+        CONFIG = pair.getLeft();
+        SPEC = pair.getRight();
+    }
 
-    QuizModelConfig(ForgeConfigSpec.Builder builder) {
-        builder.push("quiz");
+    public static class Config {
+        public final ForgeConfigSpec.IntValue MAX_STAGE;
+        public final ForgeConfigSpec.BooleanValue ENABLED;
+        public final ForgeConfigSpec.ConfigValue<String> DATA_URL;
 
-        MAX_STAGE = builder.defineInRange("maxStage", 15, 3, 50);
-        ENABLED = builder.define("enabled", true);
-        DATA_URL = builder.define("url", "https://quiz.sino.moegirl.games/api/quiz/something");
+        Config(ForgeConfigSpec.Builder builder) {
+            builder.push("quiz");
 
-        builder.pop();
+            MAX_STAGE = builder.worldRestart().defineInRange("maxStage", 15, 3, 50);
+            ENABLED = builder.worldRestart().define("enabled", false);
+            DATA_URL = builder.worldRestart().define("url", "https://quiz.sino.moegirl.games/api/quiz/something");
 
-        CONFIG = builder.build();
-
-        if (ENABLED.get()) {
-            QuizModel.fetch();
+            builder.pop();
         }
     }
 }

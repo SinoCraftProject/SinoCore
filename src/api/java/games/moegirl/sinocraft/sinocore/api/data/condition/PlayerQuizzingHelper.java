@@ -22,7 +22,7 @@ public class PlayerQuizzingHelper {
             }
         } else {
             if (lastCorrect) {
-                return !isEnded(quiz);
+                return !isEnded(quiz) && !isSuccessful(quiz);
             } else {
                 if (isEnded(quiz)) {
                     return isFailed(quiz);

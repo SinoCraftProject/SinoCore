@@ -4,6 +4,7 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import com.mojang.brigadier.tree.LiteralCommandNode;
@@ -16,6 +17,8 @@ import games.moegirl.sinocraft.sinocore.config.model.QuizModel;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.commands.arguments.selector.EntitySelector;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -31,21 +34,26 @@ public class QuizCommand {
     public static LiteralCommandNode<CommandSourceStack> QUIZ = literal("quiz")
             .requires(s -> s.hasPermission(2))
             .then(literal("start")
-                    .then(argument("max_stage", IntegerArgumentType.integer(1, QuizModelConfig.MAX_STAGE.get()))
+                    .then(argument("max_stage", IntegerArgumentType.integer(1, QuizModelConfig.CONFIG.MAX_STAGE.get()))
                             .suggests(QuizCommand::onStartSuggest)
                             .executes(QuizCommand::onStart)
                     ))
             .then(literal("next")
                     .then(argument("answer", StringArgumentType.string())
-                            .suggests(QuizCommand::onNextSuggest)
-                            .executes(QuizCommand::onNext)
+                            .then(argument("player", EntityArgument.player())
+                                    .executes(QuizCommand::onNext)
+                            )
                     )
             )
             .then(literal("succeed")
-                    .executes(QuizCommand::onSucceed)
+                    .then(argument("player", EntityArgument.player())
+                            .executes(QuizCommand::onSucceed)
+                    )
             )
             .then(literal("fail")
-                    .executes(QuizCommand::onFail)
+                    .then(argument("player", EntityArgument.player())
+                            .executes(QuizCommand::onFail)
+                    )
             )
             .then(literal("reload")
                     .executes(QuizCommand::onReload)
@@ -70,7 +78,7 @@ public class QuizCommand {
             return 0;
         }
 
-        if (!QuizModelConfig.ENABLED.get()) {
+        if (!QuizModelConfig.CONFIG.ENABLED.get()) {
             makeNotEnabled(player);
             return 0;
         }
@@ -82,18 +90,9 @@ public class QuizCommand {
         return Command.SINGLE_SUCCESS;
     }
 
-    public static CompletableFuture<Suggestions> onNextSuggest(CommandContext<CommandSourceStack> context, SuggestionsBuilder builder) {
-        builder.suggest("<Answer>");
-        return builder.buildFuture();
-    }
-
-    public static int onNext(CommandContext<CommandSourceStack> context) {
-        var source = context.getSource().getEntity();
-
-        if (!(source instanceof Player player)) {
-            makeNotPlayer(context.getSource());
-            return 0;
-        }
+    public static int onNext(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+        var selector = context.getArgument("player", EntitySelector.class);
+        var player = selector.findSinglePlayer(context.getSource());
 
         var quiz = player.getCapability(SCCapabilities.QUIZZING_PLAYER_CAPABILITY).orElse(new QuizzingPlayer());
         var answer = context.getArgument("answer", String.class);
@@ -103,13 +102,9 @@ public class QuizCommand {
         return Command.SINGLE_SUCCESS;
     }
 
-    public static int onFail(CommandContext<CommandSourceStack> context) {
-        var source = context.getSource().getEntity();
-
-        if (!(source instanceof Player player)) {
-            makeNotPlayer(context.getSource());
-            return 0;
-        }
+    public static int onFail(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+        var selector = context.getArgument("player", EntitySelector.class);
+        var player = selector.findSinglePlayer(context.getSource());
 
         var quiz = player.getCapability(SCCapabilities.QUIZZING_PLAYER_CAPABILITY).orElse(new QuizzingPlayer());
 
@@ -117,13 +112,9 @@ public class QuizCommand {
         return result ? 0 : Command.SINGLE_SUCCESS;
     }
 
-    public static int onSucceed(CommandContext<CommandSourceStack> context) {
-        var source = context.getSource().getEntity();
-
-        if (!(source instanceof Player player)) {
-            makeNotPlayer(context.getSource());
-            return 0;
-        }
+    public static int onSucceed(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+        var selector = context.getArgument("player", EntitySelector.class);
+        var player = selector.findSinglePlayer(context.getSource());
 
         var quiz = player.getCapability(SCCapabilities.QUIZZING_PLAYER_CAPABILITY).orElse(new QuizzingPlayer());
 
@@ -135,7 +126,7 @@ public class QuizCommand {
         context.getSource().sendSuccess(new TextComponent("Reloading...")
                 .withStyle(ChatFormatting.DARK_AQUA), true);
 
-        if (!QuizModelConfig.ENABLED.get()) {
+        if (!QuizModelConfig.CONFIG.ENABLED.get()) {
             context.getSource().sendSuccess(new TextComponent("Not enabled feature."), true);
             return 0;
         }
@@ -252,6 +243,12 @@ public class QuizCommand {
     }
 
     public static boolean doFail(Player player, IQuizzingPlayer quiz) {
+        if (!quiz.isQuizzing()) {
+            makeWrongState(player);
+
+            return false;
+        }
+
         quiz.setSucceed(false);
         quiz.setQuizzing(false);
 
@@ -265,9 +262,13 @@ public class QuizCommand {
     }
 
     public static boolean doSucceed(Player player, IQuizzingPlayer quiz) {
-        if (!isEnded(player, quiz)) {
-            makeNotStarted(player);
+        if (!isEnded(player, quiz) && !quiz.isQuizzing()) {
+            makeWrongState(player);
+            return false;
+        }
 
+        if (!quiz.isQuizzing()) {
+            makeWrongState(player);
             return false;
         }
 

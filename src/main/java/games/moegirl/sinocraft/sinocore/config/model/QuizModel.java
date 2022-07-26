@@ -27,6 +27,7 @@ public class QuizModel {
     }
 
     public static QuizModel getInstance() {
+        // Todo.
         System.out.println(INSTANCE.url);
         return INSTANCE;
     }
@@ -59,7 +60,7 @@ public class QuizModel {
     }
 
     public static QuizModel fetch() {
-        var urlStr = QuizModelConfig.DATA_URL.get();
+        var urlStr = QuizModelConfig.CONFIG.DATA_URL.get();
 
         try {
             var url = new URL(urlStr);
@@ -92,7 +93,7 @@ public class QuizModel {
     public void reFetch(boolean reload) {
         url = QuizConstants.URL;
 
-        if (!QuizModelConfig.ENABLED.get()) {
+        if (!QuizModelConfig.CONFIG.ENABLED.get()) {
             SinoCore.getLogger().warn("Quiz is not enabled!");
             return;
         }
@@ -105,7 +106,7 @@ public class QuizModel {
 
         if (!reload) {
             if (url == null || url.equals("")) {
-                url = QuizModelConfig.DATA_URL.get();
+                url = QuizModelConfig.CONFIG.DATA_URL.get();
             }
         }
 
