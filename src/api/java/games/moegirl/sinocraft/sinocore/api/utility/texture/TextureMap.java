@@ -2,10 +2,8 @@ package games.moegirl.sinocraft.sinocore.api.utility.texture;
 
 import com.google.common.collect.Iterators;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.math.Matrix4f;
 import games.moegirl.sinocraft.sinocore.api.utility.GLSwitcher;
 import net.minecraft.client.Minecraft;
@@ -14,7 +12,6 @@ import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -23,7 +20,6 @@ import net.minecraft.world.Container;
 import net.minecraft.world.inventory.Slot;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.util.Lazy;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -40,70 +36,16 @@ public final class TextureMap {
     private final Entry<SlotsEntry> slots = new Entry<>();
     private final Entry<ProgressEntry> progress = new Entry<>();
     private final Entry<ButtonEntry> buttons = new Entry<>();
-    private final Lazy<RenderType> renderType,
-            renderTypeWithColor,
-            renderTypeWithTransparency,
-            renderTypeWithColorTransparency,
-            renderTypeWithColorLightmap,
-            renderTypeWithColorLightmapTransparency;
+
+    @Nullable
+    private RenderTypes render = null;
 
     TextureMap(ResourceLocation texture, boolean isClient) {
-        this(texture);
         this.texture = texture;
-    }
 
-    TextureMap(ResourceLocation texture) {
-        renderType = Lazy.of(() -> {
-            RenderType.CompositeState state = RenderType.CompositeState.builder()
-                    .setShaderState(RenderStateShard.POSITION_TEX_SHADER)
-                    .setTextureState(new RenderStateShard.TextureStateShard(texture, false, false))
-                    .createCompositeState(false);
-            return RenderType.create(texture.toString(), DefaultVertexFormat.POSITION_TEX, VertexFormat.Mode.QUADS,
-                    256, false, false, state);
-        });
-        renderTypeWithColor = Lazy.of(() -> {
-            RenderType.CompositeState state = RenderType.CompositeState.builder()
-                    .setShaderState(RenderStateShard.POSITION_COLOR_TEX_SHADER)
-                    .setTextureState(new RenderStateShard.TextureStateShard(texture, false, false))
-                    .createCompositeState(false);
-            return RenderType.create(texture.toString(), DefaultVertexFormat.POSITION_COLOR_TEX, VertexFormat.Mode.QUADS,
-                    256, false, false, state);
-        });
-        renderTypeWithTransparency = Lazy.of(() -> {
-            RenderType.CompositeState state = RenderType.CompositeState.builder()
-                    .setShaderState(RenderStateShard.POSITION_TEX_SHADER)
-                    .setTextureState(new RenderStateShard.TextureStateShard(texture, true, false))
-                    .setTransparencyState(RenderStateShard.TRANSLUCENT_TRANSPARENCY)
-                    .createCompositeState(false);
-            return RenderType.create(texture.toString(), DefaultVertexFormat.POSITION_TEX, VertexFormat.Mode.QUADS,
-                    256, false, false, state);
-        });
-        renderTypeWithColorTransparency = Lazy.of(() -> {
-            RenderType.CompositeState state = RenderType.CompositeState.builder()
-                    .setShaderState(RenderStateShard.POSITION_COLOR_TEX_SHADER)
-                    .setTextureState(new RenderStateShard.TextureStateShard(texture, true, false))
-                    .setTransparencyState(RenderStateShard.TRANSLUCENT_TRANSPARENCY)
-                    .createCompositeState(false);
-            return RenderType.create(texture.toString(), DefaultVertexFormat.POSITION_COLOR_TEX, VertexFormat.Mode.QUADS,
-                    256, false, false, state);
-        });
-        renderTypeWithColorLightmap = Lazy.of(() -> {
-            RenderType.CompositeState state = RenderType.CompositeState.builder()
-                    .setShaderState(RenderStateShard.POSITION_COLOR_TEX_LIGHTMAP_SHADER)
-                    .setTextureState(new RenderStateShard.TextureStateShard(texture, false, false))
-                    .createCompositeState(false);
-            return RenderType.create(texture.toString(), DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP, VertexFormat.Mode.QUADS,
-                    256, false, false, state);
-        });
-        renderTypeWithColorLightmapTransparency = Lazy.of(() -> {
-            RenderType.CompositeState state = RenderType.CompositeState.builder()
-                    .setShaderState(RenderStateShard.POSITION_COLOR_TEX_LIGHTMAP_SHADER)
-                    .setTextureState(new RenderStateShard.TextureStateShard(texture, true, false))
-                    .setTransparencyState(RenderStateShard.TRANSLUCENT_TRANSPARENCY)
-                    .createCompositeState(false);
-            return RenderType.create(texture.toString(), DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP, VertexFormat.Mode.QUADS,
-                    256, false, false, state);
-        });
+        if (isClient) {
+            render = new RenderTypes(texture);
+        }
     }
 
     public static TextureMap of(ResourceLocation texture) {
@@ -294,7 +236,7 @@ public final class TextureMap {
         textures.get(name).ifPresent(entry -> {
             bindTexture();
             Matrix4f matrix = poseStack.last().pose();
-            RenderType type = transparency ? renderTypeWithTransparency.get() : renderType.get();
+            RenderType type = transparency ? render.renderTypeWithTransparency.get() : render.renderType.get();
             VertexConsumer buffer = bufferSource.getBuffer(type);
             float[] uv = entry.normalized(width, height);
             buffer.vertex(matrix, rect.x0(), rect.y0(), rect.z0()).uv(uv[0], uv[2]).endVertex();
@@ -316,7 +258,7 @@ public final class TextureMap {
         textures.get(name).ifPresent(entry -> {
             bindTexture();
             Matrix4f matrix = poseStack.last().pose();
-            RenderType type = transparency ? renderTypeWithColorTransparency.get() : renderTypeWithColor.get();
+            RenderType type = transparency ? render.renderTypeWithColorTransparency.get() : render.renderTypeWithColor.get();
             VertexConsumer buffer = bufferSource.getBuffer(type);
             float[] uv = entry.normalized(width, height);
             buffer.vertex(matrix, rect.x0(), rect.y0(), rect.z0()).color(r, g, b, a).uv(uv[0], uv[2]).endVertex();
@@ -332,7 +274,7 @@ public final class TextureMap {
         textures.get(name).ifPresent(entry -> {
             bindTexture();
             Matrix4f matrix = poseStack.last().pose();
-            RenderType type = transparency ? renderTypeWithColorLightmapTransparency.get() : renderTypeWithColorLightmap.get();
+            RenderType type = transparency ? render.renderTypeWithColorLightmapTransparency.get() : render.renderTypeWithColorLightmap.get();
             VertexConsumer buffer = bufferSource.getBuffer(type);
             float[] uv = entry.normalized(width, height);
             buffer.vertex(matrix, rect.x0(), rect.y0(), rect.z0()).color(r, g, b, a).uv(uv[0], uv[2]).uv2(packedLight).endVertex();
