@@ -34,7 +34,7 @@ loom {
     }
 }
 
-version = '1.18.2-1.2.6'
+version = '1.18.2-1.2.7'
 group = 'games.moegirl.sinocraft.sinocore' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'sinocore'
 
@@ -110,7 +110,7 @@ jar {
         attributes([
                 "Specification-Title"     : "sinocore",
                 "Specification-Vendor"    : "SinoCraft Project Team",
-                "Specification-Version"   : "8",
+                "Specification-Version"   : "9",
                 "Implementation-Title"    : project.name,
                 "Implementation-Version"  : project.jar.archiveVersion,
                 "Implementation-Vendor"   : "MoeGirl Games",
