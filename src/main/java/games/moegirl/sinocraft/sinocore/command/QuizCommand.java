@@ -97,9 +97,9 @@ public class QuizCommand {
         var quiz = player.getCapability(SCCapabilities.QUIZZING_PLAYER_CAPABILITY).orElse(new QuizzingPlayer());
         var answer = context.getArgument("answer", String.class);
 
-        doNext(player, quiz, answer);
+        return doNext(player, quiz, answer) ? 0 : Command.SINGLE_SUCCESS;
 
-        return Command.SINGLE_SUCCESS;
+//        return Command.SINGLE_SUCCESS;
     }
 
     public static int onFail(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
@@ -203,10 +203,10 @@ public class QuizCommand {
         return answers;
     }
 
-    public static void doNext(Player player, IQuizzingPlayer quiz, String answer) {
+    public static boolean doNext(Player player, IQuizzingPlayer quiz, String answer) {
         if (!quiz.isQuizzing()) {
             makeWrongState(player);
-            return;
+            return false;
         }
 
         quiz.setQuizStage(quiz.getQuizStage() + 1);
@@ -214,23 +214,25 @@ public class QuizCommand {
         if (!isCorrect(player, quiz, answer) && !isEnded(player, quiz)) {
             makeWrongAnswer(player);
 
-            player.getCommandSenderWorld()
-                    .getServer()
-                    .getCommands()
-                    .performCommand(player.createCommandSourceStack(), "/sinocore quiz fail");
+            return doFail(player, quiz);
+//            player.getCommandSenderWorld()
+//                    .getServer()
+//                    .getCommands()
+//                    .performCommand(player.createCommandSourceStack(), "/sinocore quiz fail @s");
 
-            return;
         }
 
         makeCorrectAnswer(player);
 
         if (hasReachedMaxStage(player, quiz)) {
-            player.getCommandSenderWorld()
-                    .getServer()
-                    .getCommands()
-                    .performCommand(player.createCommandSourceStack(), "/sinocore quiz succeed");
+            return doSucceed(player, quiz);
+//            player.getCommandSenderWorld()
+//                    .getServer()
+//                    .getCommands()
+//                    .performCommand(player.createCommandSourceStack(), "/sinocore quiz succeed @s");
         } else {
             doNext(player, quiz);
+            return true;
         }
     }
 
