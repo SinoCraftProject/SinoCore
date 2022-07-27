@@ -30,7 +30,7 @@ import java.util.*;
 import java.util.function.Function;
 
 public final class TextureMap {
-    private final ResourceLocation texture;
+    private ResourceLocation texture;
     int width = 0;
     int height = 0;
     private final Entry<PointEntry> points = new Entry<>();
@@ -47,8 +47,12 @@ public final class TextureMap {
             renderTypeWithColorLightmap,
             renderTypeWithColorLightmapTransparency;
 
-    TextureMap(ResourceLocation texture) {
+    TextureMap(ResourceLocation texture, boolean isClient) {
+        this(texture);
         this.texture = texture;
+    }
+
+    TextureMap(ResourceLocation texture) {
         renderType = Lazy.of(() -> {
             RenderType.CompositeState state = RenderType.CompositeState.builder()
                     .setShaderState(RenderStateShard.POSITION_TEX_SHADER)
@@ -103,11 +107,15 @@ public final class TextureMap {
     }
 
     public static TextureMap of(ResourceLocation texture) {
-        return TextureParser.parse(texture);
+        return TextureParser.parse(texture, true);
+    }
+
+    public static TextureMap of(ResourceLocation texture, boolean isClient) {
+        return TextureParser.parse(texture, isClient);
     }
 
     public static TextureMap of(String modid, String path, String name) {
-        return TextureParser.parse(new ResourceLocation(modid, "textures/" + path + "/" + name + ".png"));
+        return TextureParser.parse(new ResourceLocation(modid, "textures/" + path + "/" + name + ".png"), true);
     }
 
     public <T extends Slot, C extends Container> Optional<T> placeSlot(C container, String name, int index, Function<Slot, Slot> addSlot, SlotStrategy<T, C> slot) {

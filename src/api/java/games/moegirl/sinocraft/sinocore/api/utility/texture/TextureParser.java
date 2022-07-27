@@ -27,8 +27,8 @@ public class TextureParser {
         return MAPS.get(name);
     }
 
-    public static TextureMap parse(ResourceLocation texture) {
-        TextureMap map = new TextureMap(texture);
+    public static TextureMap parse(ResourceLocation texture, boolean isClient) {
+        TextureMap map = new TextureMap(texture, isClient);
         reload(map);
         MAPS.put(texture, map);
         NAMES.add(texture);
