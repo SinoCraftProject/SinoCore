@@ -60,6 +60,8 @@ public class SinoCore {
         SinoCoreAPI._loadCoreApi(this::registerApi);
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, QuizModelConfig.SPEC, "sinoseries/sinocore/quiz.toml");
+
+        logger.info("SinoCore loaded!");
     }
 
     public static SinoCore getInstance() {
