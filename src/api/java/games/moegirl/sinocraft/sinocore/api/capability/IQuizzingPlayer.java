@@ -1,7 +1,5 @@
 package games.moegirl.sinocraft.sinocore.api.capability;
 
-import net.minecraft.nbt.CompoundTag;
-import net.minecraftforge.common.util.INBTSerializable;
 import oshi.util.tuples.Pair;
 
 import java.util.List;
@@ -11,7 +9,7 @@ import java.util.List;
  *
  * @author qyl27
  */
-public interface IQuizzingPlayer extends INBTSerializable<CompoundTag> {
+public interface IQuizzingPlayer extends IPlayerCapability {
     boolean isQuizzing();
     void setQuizzing(boolean quizzing);
     boolean isSucceed();
