@@ -46,7 +46,14 @@ public class CapabilityHelper {
         if (newCap == null) {
             return;
         }
-        
+
         newCap.deserializeNBT(cap.serializeNBT());
+    }
+
+
+    public static void clone(Player newPlayer, Player original,
+                             ICapabilityProvider provider,
+                             Capability<IPlayerCapability> capability) {
+        clone(newPlayer, original, LazyOptional.empty(), provider, capability);
     }
 }
