@@ -213,8 +213,8 @@ public class QuizCommand {
 
         if (!isCorrect(player, quiz, answer) && !isEnded(player, quiz)) {
             makeWrongAnswer(player);
-
-            return doFail(player, quiz);
+//            return doFail(player, quiz);
+            return true;
 //            player.getCommandSenderWorld()
 //                    .getServer()
 //                    .getCommands()
@@ -225,7 +225,8 @@ public class QuizCommand {
         makeCorrectAnswer(player);
 
         if (hasReachedMaxStage(player, quiz)) {
-            return doSucceed(player, quiz);
+//            return doSucceed(player, quiz);
+            return true;
 //            player.getCommandSenderWorld()
 //                    .getServer()
 //                    .getCommands()
