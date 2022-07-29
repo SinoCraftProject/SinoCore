@@ -34,7 +34,7 @@ loom {
     }
 }
 
-version = '1.18.2-1.2.11'
+version = '1.18.2-1.2.12'
 group = 'games.moegirl.sinocraft.sinocore' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'sinocore'
 
