@@ -32,11 +32,12 @@ import static net.minecraft.commands.Commands.literal;
 
 public class QuizCommand {
     public static LiteralCommandNode<CommandSourceStack> QUIZ = literal("quiz")
-            .requires(s -> s.hasPermission(2))
             .then(literal("start")
-                    .then(argument("max_stage", IntegerArgumentType.integer(1, QuizModelConfig.CONFIG.MAX_STAGE.get()))
-                            .suggests(QuizCommand::onStartSuggest)
-                            .executes(QuizCommand::onStart)
+                    .requires(s -> s.hasPermission(2))
+                    .then(argument("max_stage", IntegerArgumentType.integer(1, 50))
+                            .then(argument("player", EntityArgument.player())
+                                    .executes(QuizCommand::onStart))
+//                            .suggests(QuizCommand::onStartSuggest)
                     ))
             .then(literal("next")
                     .then(argument("answer", StringArgumentType.string())
@@ -45,38 +46,38 @@ public class QuizCommand {
                             )
                     )
             )
-            .then(literal("succeed")
-                    .then(argument("player", EntityArgument.player())
-                            .executes(QuizCommand::onSucceed)
-                    )
-            )
-            .then(literal("fail")
-                    .then(argument("player", EntityArgument.player())
-                            .executes(QuizCommand::onFail)
-                    )
-            )
+//            .then(literal("succeed")
+//                    .requires(s -> s.hasPermission(2))
+//                    .then(argument("player", EntityArgument.player())
+//                            .executes(QuizCommand::onSucceed)
+//                    )
+//            )
+//            .then(literal("fail")
+//                    .requires(s -> s.hasPermission(2))
+//                    .then(argument("player", EntityArgument.player())
+//                            .executes(QuizCommand::onFail)
+//                    )
+//            )
             .then(literal("reload")
+                    .requires(s -> s.hasPermission(2))
                     .executes(QuizCommand::onReload)
             )
             .then(literal("load")
+                    .requires(s -> s.hasPermission(2))
                     .then(argument("url", StringArgumentType.greedyString())
                             .executes(QuizCommand::onLoad)
                     )
             )
             .build();
 
-    public static CompletableFuture<Suggestions> onStartSuggest(CommandContext<CommandSourceStack> context, SuggestionsBuilder builder) {
-        builder.suggest("<Max stages>");
-        return builder.buildFuture();
-    }
+//    public static CompletableFuture<Suggestions> onStartSuggest(CommandContext<CommandSourceStack> context, SuggestionsBuilder builder) {
+//        builder.suggest("<Max stages>");
+//        return builder.buildFuture();
+//    }
 
-    public static int onStart(CommandContext<CommandSourceStack> context) {
-        var source = context.getSource().getEntity();
-
-        if (!(source instanceof Player player)) {
-            makeNotPlayer(context.getSource());
-            return 0;
-        }
+    public static int onStart(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+        var selector = context.getArgument("player", EntitySelector.class);
+        var player = selector.findSinglePlayer(context.getSource());
 
         if (!QuizModelConfig.CONFIG.ENABLED.get()) {
             makeNotEnabled(player);
@@ -97,30 +98,30 @@ public class QuizCommand {
         var quiz = player.getCapability(SCCapabilities.QUIZZING_PLAYER_CAPABILITY).orElse(new QuizzingPlayer());
         var answer = context.getArgument("answer", String.class);
 
-        return doNext(player, quiz, answer) ? 0 : Command.SINGLE_SUCCESS;
+        doNext(player, quiz, answer);
 
-//        return Command.SINGLE_SUCCESS;
+        return Command.SINGLE_SUCCESS;
     }
 
-    public static int onFail(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
-        var selector = context.getArgument("player", EntitySelector.class);
-        var player = selector.findSinglePlayer(context.getSource());
-
-        var quiz = player.getCapability(SCCapabilities.QUIZZING_PLAYER_CAPABILITY).orElse(new QuizzingPlayer());
-
-        var result = doFail(player, quiz);
-        return result ? 0 : Command.SINGLE_SUCCESS;
-    }
-
-    public static int onSucceed(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
-        var selector = context.getArgument("player", EntitySelector.class);
-        var player = selector.findSinglePlayer(context.getSource());
-
-        var quiz = player.getCapability(SCCapabilities.QUIZZING_PLAYER_CAPABILITY).orElse(new QuizzingPlayer());
-
-        var result = doSucceed(player, quiz);
-        return result ? Command.SINGLE_SUCCESS : 0;
-    }
+//    public static int onFail(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+//        var selector = context.getArgument("player", EntitySelector.class);
+//        var player = selector.findSinglePlayer(context.getSource());
+//
+//        var quiz = player.getCapability(SCCapabilities.QUIZZING_PLAYER_CAPABILITY).orElse(new QuizzingPlayer());
+//
+//        var result = doFail(player, quiz);
+//        return result ? 0 : Command.SINGLE_SUCCESS;
+//    }
+//
+//    public static int onSucceed(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+//        var selector = context.getArgument("player", EntitySelector.class);
+//        var player = selector.findSinglePlayer(context.getSource());
+//
+//        var quiz = player.getCapability(SCCapabilities.QUIZZING_PLAYER_CAPABILITY).orElse(new QuizzingPlayer());
+//
+//        var result = doSucceed(player, quiz);
+//        return result ? Command.SINGLE_SUCCESS : 0;
+//    }
 
     public static int onReload(CommandContext<CommandSourceStack> context) {
         context.getSource().sendSuccess(new TextComponent("Reloading...")
@@ -213,24 +214,23 @@ public class QuizCommand {
 
         if (!isCorrect(player, quiz, answer) && !isEnded(player, quiz)) {
             makeWrongAnswer(player);
-//            return doFail(player, quiz);
-            return true;
 //            player.getCommandSenderWorld()
 //                    .getServer()
 //                    .getCommands()
 //                    .performCommand(player.createCommandSourceStack(), "/sinocore quiz fail @s");
-
+            doFail(player, quiz);
+            return true;
         }
 
         makeCorrectAnswer(player);
 
         if (hasReachedMaxStage(player, quiz)) {
-//            return doSucceed(player, quiz);
-            return true;
 //            player.getCommandSenderWorld()
 //                    .getServer()
 //                    .getCommands()
 //                    .performCommand(player.createCommandSourceStack(), "/sinocore quiz succeed @s");
+            doSucceed(player, quiz);
+            return true;
         } else {
             doNext(player, quiz);
             return true;
