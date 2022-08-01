@@ -1,5 +1,6 @@
 package games.moegirl.sinocraft.sinocore.command;
 
+import com.google.gson.Gson;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
@@ -8,10 +9,12 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import com.mojang.brigadier.tree.LiteralCommandNode;
+import games.moegirl.sinocraft.sinocore.SinoCore;
 import games.moegirl.sinocraft.sinocore.api.capability.IQuizzingPlayer;
 import games.moegirl.sinocraft.sinocore.api.capability.SCCapabilities;
 import games.moegirl.sinocraft.sinocore.capability.QuizzingPlayer;
 import games.moegirl.sinocraft.sinocore.config.QuizModelConfig;
+import games.moegirl.sinocraft.sinocore.config.model.LeaderboardModel;
 import games.moegirl.sinocraft.sinocore.config.model.QuizConstants;
 import games.moegirl.sinocraft.sinocore.config.model.QuizModel;
 import net.minecraft.ChatFormatting;
@@ -23,7 +26,11 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.player.Player;
+import org.apache.commons.io.IOUtils;
 
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -31,13 +38,14 @@ import static net.minecraft.commands.Commands.argument;
 import static net.minecraft.commands.Commands.literal;
 
 public class QuizCommand {
+    public static final Gson GSON = new Gson();
+
     public static LiteralCommandNode<CommandSourceStack> QUIZ = literal("quiz")
             .then(literal("start")
                     .requires(s -> s.hasPermission(2))
                     .then(argument("max_stage", IntegerArgumentType.integer(1, 50))
                             .then(argument("player", EntityArgument.player())
                                     .executes(QuizCommand::onStart))
-//                            .suggests(QuizCommand::onStartSuggest)
                     ))
             .then(literal("next")
                     .then(argument("answer", StringArgumentType.string())
@@ -46,18 +54,6 @@ public class QuizCommand {
                             )
                     )
             )
-//            .then(literal("succeed")
-//                    .requires(s -> s.hasPermission(2))
-//                    .then(argument("player", EntityArgument.player())
-//                            .executes(QuizCommand::onSucceed)
-//                    )
-//            )
-//            .then(literal("fail")
-//                    .requires(s -> s.hasPermission(2))
-//                    .then(argument("player", EntityArgument.player())
-//                            .executes(QuizCommand::onFail)
-//                    )
-//            )
             .then(literal("reload")
                     .requires(s -> s.hasPermission(2))
                     .executes(QuizCommand::onReload)
@@ -68,12 +64,97 @@ public class QuizCommand {
                             .executes(QuizCommand::onLoad)
                     )
             )
+            .then(literal("rank")
+                    .executes(stack -> onRank(stack, false, false, false))
+                    .then(argument("count", IntegerArgumentType.integer(1, 10))
+                            .executes(stack -> onRank(stack, true, false, false))
+                    )
+                    .then(literal("me")
+                            .executes(QuizCommand::onRankMe)
+                    )
+                    .then(literal("best")
+                            .executes(QuizCommand::onRankWithTried)
+                    )
+            )
             .build();
 
-//    public static CompletableFuture<Suggestions> onStartSuggest(CommandContext<CommandSourceStack> context, SuggestionsBuilder builder) {
-//        builder.suggest("<Max stages>");
-//        return builder.buildFuture();
-//    }
+    public static int onRankWithTried(CommandContext<CommandSourceStack> context) {
+        return 0;
+    }
+
+    public static int onRankMe(CommandContext<CommandSourceStack> context) {
+        var source = context.getSource();
+
+        if (source.getEntity() instanceof Player player) {
+            if (!QuizModelConfig.CONFIG.RANK_ENABLED.get()) {
+                makeNotEnabled(player);
+            }
+
+            return 0;
+        } else {
+            makeNotPlayer(context.getSource());
+            return 0;
+        }
+    }
+
+    public static int onRank(CommandContext<CommandSourceStack> context, boolean withCount, boolean me, boolean withBest) {
+        if (!QuizModelConfig.CONFIG.RANK_ENABLED.get()) {
+            makeNotEnabled(context.getSource());
+        }
+
+        var source = context.getSource();
+
+        try {
+            SinoCore.getLogger().info("Fetching rank list.");
+
+            var model = doFetchRank(null, withBest);
+
+            var msg = new TranslatableComponent(MESSAGE_RANK_TITLE).withStyle(ChatFormatting.AQUA);
+            var count = 5;
+            if (withCount) {
+                count = context.getArgument("count", Integer.class);
+            }
+
+            if (count > model.leaderboard.length) {
+                count = model.leaderboard.length;
+            }
+
+            for (var i = 1; i <= count; i++) {
+                var m = model.leaderboard[i - 1];
+                msg.append(new TranslatableComponent(MESSAGE_RANK_BODY, m.rank, m.player.id,
+                        m.timeUsed, m.triedTimes)).withStyle(ChatFormatting.GREEN);
+            }
+            msg.append(new TranslatableComponent(MESSAGE_RANK_FOOTER).withStyle(ChatFormatting.AQUA));
+
+            source.sendSuccess(msg, true);
+
+            SinoCore.getLogger().info("Fetch rank list successfully!");
+        } catch (Exception ex) {
+            SinoCore.getLogger().warn("Fetch rank list failed, did the URL is correct?");
+            ex.printStackTrace();
+
+            return 0;
+        }
+
+        return 1;
+    }
+
+    private static LeaderboardModel doFetchRank(String me, boolean withBest) throws Exception {
+        var dataUrl = QuizModelConfig.CONFIG.RANK_URL.get();
+        var url = dataUrl + "?";
+        if (me != null) {
+            url += "me=" + me + "&";
+        } else {
+            if (withBest) {
+                url += "best=true";
+            }
+        }
+
+        var data = IOUtils.toString(new URL(url).toURI(), StandardCharsets.UTF_8);
+        var model = GSON.fromJson(data, LeaderboardModel.class);
+
+        return model;
+    }
 
     public static int onStart(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         var selector = context.getArgument("player", EntitySelector.class);
@@ -102,26 +183,6 @@ public class QuizCommand {
 
         return Command.SINGLE_SUCCESS;
     }
-
-//    public static int onFail(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
-//        var selector = context.getArgument("player", EntitySelector.class);
-//        var player = selector.findSinglePlayer(context.getSource());
-//
-//        var quiz = player.getCapability(SCCapabilities.QUIZZING_PLAYER_CAPABILITY).orElse(new QuizzingPlayer());
-//
-//        var result = doFail(player, quiz);
-//        return result ? 0 : Command.SINGLE_SUCCESS;
-//    }
-//
-//    public static int onSucceed(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
-//        var selector = context.getArgument("player", EntitySelector.class);
-//        var player = selector.findSinglePlayer(context.getSource());
-//
-//        var quiz = player.getCapability(SCCapabilities.QUIZZING_PLAYER_CAPABILITY).orElse(new QuizzingPlayer());
-//
-//        var result = doSucceed(player, quiz);
-//        return result ? Command.SINGLE_SUCCESS : 0;
-//    }
 
     public static int onReload(CommandContext<CommandSourceStack> context) {
         context.getSource().sendSuccess(new TextComponent("Reloading...")
@@ -212,12 +273,8 @@ public class QuizCommand {
 
         quiz.setQuizStage(quiz.getQuizStage() + 1);
 
-        if (!isCorrect(player, quiz, answer) && !isEnded(player, quiz)) {
+        if (!isCorrect(player, quiz, answer)) {
             makeWrongAnswer(player);
-//            player.getCommandSenderWorld()
-//                    .getServer()
-//                    .getCommands()
-//                    .performCommand(player.createCommandSourceStack(), "/sinocore quiz fail @s");
             doFail(player, quiz);
             return true;
         }
@@ -225,10 +282,6 @@ public class QuizCommand {
         makeCorrectAnswer(player);
 
         if (hasReachedMaxStage(player, quiz)) {
-//            player.getCommandSenderWorld()
-//                    .getServer()
-//                    .getCommands()
-//                    .performCommand(player.createCommandSourceStack(), "/sinocore quiz succeed @s");
             doSucceed(player, quiz);
             return true;
         } else {
@@ -255,11 +308,6 @@ public class QuizCommand {
         quiz.setSucceed(false);
         quiz.setQuizzing(false);
 
-        if (quiz.isSucceed()) {
-            makeWrongState(player);
-            return false;
-        }
-
         makeFail(player);
         return true;
     }
@@ -277,11 +325,6 @@ public class QuizCommand {
 
         quiz.setSucceed(true);
         quiz.setQuizzing(false);
-
-        if (!quiz.isSucceed()) {
-            makeWrongState(player);
-            return false;
-        }
 
         makeSucceed(player);
         return true;
@@ -304,6 +347,10 @@ public class QuizCommand {
     public static final String MESSAGE_ANSWER_B = "sinocore.command.quiz.answer_b";
     public static final String MESSAGE_ANSWER_C = "sinocore.command.quiz.answer_c";
     public static final String MESSAGE_ANSWER_D = "sinocore.command.quiz.answer_d";
+    public static final String MESSAGE_RANK_FETCH_FAILED = "sinocore.command.quiz.rank_fetch_failed";
+    public static final String MESSAGE_RANK_TITLE = "sinocore.command.quiz.rank_title";
+    public static final String MESSAGE_RANK_FOOTER = "sinocore.command.quiz.rank_footer";
+    public static final String MESSAGE_RANK_BODY = "sinocore.command.quiz.rank_body";
 
     public static void makeNotPlayer(CommandSourceStack source) {
         source.sendFailure(new TranslatableComponent(MESSAGE_NOT_PLAYER));
@@ -340,6 +387,11 @@ public class QuizCommand {
 
     public static void makeNotEnabled(Player player) {
         player.createCommandSourceStack().sendSuccess(new TranslatableComponent(MESSAGE_NOT_ENABLED)
+                .withStyle(ChatFormatting.RED), true);
+    }
+
+    public static void makeNotEnabled(CommandSourceStack stack) {
+        stack.sendSuccess(new TranslatableComponent(MESSAGE_NOT_ENABLED)
                 .withStyle(ChatFormatting.RED), true);
     }
 

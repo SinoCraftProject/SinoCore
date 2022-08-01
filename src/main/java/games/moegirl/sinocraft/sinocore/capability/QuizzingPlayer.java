@@ -121,6 +121,8 @@ public class QuizzingPlayer implements IQuizzingPlayer {
 
         var quiz = new CompoundTag();
         quiz.putBoolean("inQuiz", inQuiz);
+        quiz.putBoolean("succeed", succeed);
+
         quiz.putInt("stage", quizStage);
         quiz.putInt("maxStage", maxStage);
         quiz.putString("question", question);
@@ -150,6 +152,10 @@ public class QuizzingPlayer implements IQuizzingPlayer {
 
         if (quiz.contains("inQuiz")) {
             inQuiz = quiz.getBoolean("inQuiz");
+        }
+
+        if (quiz.contains("succeed")) {
+            succeed = quiz.getBoolean("succeed");
         }
 
         if (quiz.contains("stage")) {

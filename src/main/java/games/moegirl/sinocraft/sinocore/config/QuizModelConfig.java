@@ -1,6 +1,5 @@
 package games.moegirl.sinocraft.sinocore.config;
 
-import games.moegirl.sinocraft.sinocore.config.model.QuizModel;
 import net.minecraftforge.common.ForgeConfigSpec;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -20,13 +19,18 @@ public class QuizModelConfig {
         public final ForgeConfigSpec.IntValue MAX_STAGE;
         public final ForgeConfigSpec.BooleanValue ENABLED;
         public final ForgeConfigSpec.ConfigValue<String> DATA_URL;
+        public final ForgeConfigSpec.BooleanValue RANK_ENABLED;
+        public final ForgeConfigSpec.ConfigValue<String> RANK_URL;
 
         Config(ForgeConfigSpec.Builder builder) {
             builder.push("quiz");
 
             MAX_STAGE = builder.worldRestart().defineInRange("maxStage", 15, 3, 50);
             ENABLED = builder.worldRestart().define("enabled", false);
-            DATA_URL = builder.worldRestart().define("url", "https://quiz.sino.moegirl.games/api/quiz/something");
+            DATA_URL = builder.worldRestart().define("url", "https://example.com/api/quiz/something");
+
+            RANK_ENABLED = builder.worldRestart().define("rank_enabled", false);
+            RANK_URL = builder.worldRestart().define("rank_url", "https://example.com/api/rank/something");
 
             builder.pop();
         }

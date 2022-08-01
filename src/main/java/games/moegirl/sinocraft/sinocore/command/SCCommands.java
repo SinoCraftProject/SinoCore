@@ -13,7 +13,8 @@ import static net.minecraft.commands.Commands.literal;
 public class SCCommands {
     public static LiteralArgumentBuilder<CommandSourceStack> SINOCORE_ROOT = literal("sinocore")
             .then(ReloadTextureCommand.RELOAD)
-            .then(QuizCommand.QUIZ);
+            .then(QuizCommand.QUIZ)
+            .then(VersionCommand.VERSION);
 
     @SubscribeEvent
     public static void onRegisterCommands(RegisterCommandsEvent event) {
