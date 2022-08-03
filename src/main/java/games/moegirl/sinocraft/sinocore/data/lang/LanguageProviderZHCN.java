@@ -24,5 +24,11 @@ public class LanguageProviderZHCN extends I18nProviderBase {
         add(QuizCommand.MESSAGE_ANSWER_MARKED, "选项 %s、");
         add(QuizCommand.MESSAGE_ANSWER_WRONG, "回~答~错误！");
         add(QuizCommand.MESSAGE_ANSWER_RIGHT, "回答正确！");
+        add(QuizCommand.MESSAGE_RANK_TITLE, "===== 答题数据排行榜 =====");
+        add(QuizCommand.MESSAGE_RANK_BODY, "第 %s 名：%s  用时 %s 秒，失败次数：%s");
+        add(QuizCommand.MESSAGE_RANK_FOOTER, "=======================");
+        add(QuizCommand.MESSAGE_RANK_FETCH_FAILED, "获取排行榜信息失败！请联系服务器管理员。");
+        add(QuizCommand.MESSAGE_RANK_MY_BEST, "你最好的答题成绩是：%s 秒！");
+        add(QuizCommand.MESSAGE_FETCHING, "获取排行榜信息中，请稍候……");
     }
 }

@@ -24,5 +24,11 @@ public class LanguageProviderENUS extends I18nProviderBase {
         add(QuizCommand.MESSAGE_ANSWER_MARKED, "%s. ");
         add(QuizCommand.MESSAGE_ANSWER_WRONG, "Ah-oh, the answer is wrong.");
         add(QuizCommand.MESSAGE_ANSWER_RIGHT, "Good answer.");
+        add(QuizCommand.MESSAGE_RANK_TITLE, "===== Rank of the quiz =====");
+        add(QuizCommand.MESSAGE_RANK_BODY, "No.%s: %s Used %s second(s). Fail %s times.");
+        add(QuizCommand.MESSAGE_RANK_FOOTER, "============================");
+        add(QuizCommand.MESSAGE_RANK_FETCH_FAILED, "Error while fetch rank information, contract the server owner!");
+        add(QuizCommand.MESSAGE_RANK_MY_BEST, "Your best result is %s second(s).");
+        add(QuizCommand.MESSAGE_FETCHING, "Getting rank list information, please wait...");
     }
 }

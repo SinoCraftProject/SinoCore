@@ -4,10 +4,12 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import games.moegirl.sinocraft.sinocore.api.capability.IQuizzingPlayer;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.IntArrayTag;
 import net.minecraft.nbt.ListTag;
 import oshi.util.tuples.Pair;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -23,6 +25,9 @@ public class QuizzingPlayer implements IQuizzingPlayer {
     protected int maxStage = -1;
     protected String question = "";
     protected BiMap<String, Pair<String, Boolean>> answers = HashBiMap.create(new HashMap<>());
+
+    protected List<Integer> questionUsed = new ArrayList<>();
+    protected long startTime = -1;
 
     @Override
     public boolean isQuizzing() {
@@ -70,8 +75,14 @@ public class QuizzingPlayer implements IQuizzingPlayer {
     }
 
     @Override
-    public void setQuestion(String questionIn) {
+    public void setQuestion(int id, String questionIn) {
+        questionUsed.add(id);
         question = questionIn;
+    }
+
+    @Override
+    public boolean questionHasUsed(int id) {
+        return questionUsed.contains(id);
     }
 
     /**
@@ -116,12 +127,25 @@ public class QuizzingPlayer implements IQuizzingPlayer {
     }
 
     @Override
+    public long getStartTime() {
+        return startTime;
+    }
+
+    @Override
+    public void setStartTime(long time) {
+        startTime = time;
+    }
+
+    @Override
     public CompoundTag serializeNBT() {
         var nbt = new CompoundTag();
 
         var quiz = new CompoundTag();
         quiz.putBoolean("inQuiz", inQuiz);
         quiz.putBoolean("succeed", succeed);
+
+        quiz.putLong("start", startTime);
+        quiz.putIntArray("used", questionUsed);
 
         quiz.putInt("stage", quizStage);
         quiz.putInt("maxStage", maxStage);
@@ -156,6 +180,14 @@ public class QuizzingPlayer implements IQuizzingPlayer {
 
         if (quiz.contains("succeed")) {
             succeed = quiz.getBoolean("succeed");
+        }
+
+        if (quiz.contains("start")) {
+            startTime = quiz.getLong("start");
+        }
+
+        if (quiz.contains("used")) {
+            questionUsed.addAll(Arrays.stream(quiz.getIntArray("used")).boxed().toList());
         }
 
         if (quiz.contains("stage")) {

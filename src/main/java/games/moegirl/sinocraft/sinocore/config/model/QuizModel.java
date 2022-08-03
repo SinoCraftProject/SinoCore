@@ -33,6 +33,7 @@ public class QuizModel {
     }
 
     public static class Question {
+        public int id;
         public String question;
         public List<Answer> answers;
 

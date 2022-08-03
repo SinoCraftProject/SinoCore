@@ -6,17 +6,13 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mojang.brigadier.suggestion.Suggestions;
-import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import games.moegirl.sinocraft.sinocore.SinoCore;
 import games.moegirl.sinocraft.sinocore.api.capability.IQuizzingPlayer;
 import games.moegirl.sinocraft.sinocore.api.capability.SCCapabilities;
 import games.moegirl.sinocraft.sinocore.capability.QuizzingPlayer;
 import games.moegirl.sinocraft.sinocore.config.QuizModelConfig;
-import games.moegirl.sinocraft.sinocore.config.model.LeaderboardModel;
-import games.moegirl.sinocraft.sinocore.config.model.QuizConstants;
-import games.moegirl.sinocraft.sinocore.config.model.QuizModel;
+import games.moegirl.sinocraft.sinocore.config.model.*;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.commands.CommandSourceStack;
@@ -27,12 +23,16 @@ import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.player.Player;
 import org.apache.commons.io.IOUtils;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.Calendar;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 import static net.minecraft.commands.Commands.argument;
 import static net.minecraft.commands.Commands.literal;
@@ -65,71 +65,32 @@ public class QuizCommand {
                     )
             )
             .then(literal("rank")
-                    .executes(stack -> onRank(stack, false, false, false))
+                    .executes(stack -> onRank(stack, false, false))
                     .then(argument("count", IntegerArgumentType.integer(1, 10))
-                            .executes(stack -> onRank(stack, true, false, false))
+                            .executes(stack -> onRank(stack, true, false))
                     )
-                    .then(literal("me")
-                            .executes(QuizCommand::onRankMe)
-                    )
-                    .then(literal("best")
-                            .executes(QuizCommand::onRankWithTried)
+                    .then(literal("player")
+                            .then(argument("player", EntityArgument.player())
+                                    .executes(QuizCommand::onRankPlayer))
                     )
             )
             .build();
 
-    public static int onRankWithTried(CommandContext<CommandSourceStack> context) {
-        return 0;
-    }
+    public static int onRankPlayer(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+        var selector = context.getArgument("player", EntitySelector.class);
+        var player = selector.findSinglePlayer(context.getSource());
 
-    public static int onRankMe(CommandContext<CommandSourceStack> context) {
-        var source = context.getSource();
-
-        if (source.getEntity() instanceof Player player) {
-            if (!QuizModelConfig.CONFIG.RANK_ENABLED.get()) {
-                makeNotEnabled(player);
-            }
-
-            return 0;
-        } else {
-            makeNotPlayer(context.getSource());
-            return 0;
-        }
-    }
-
-    public static int onRank(CommandContext<CommandSourceStack> context, boolean withCount, boolean me, boolean withBest) {
-        if (!QuizModelConfig.CONFIG.RANK_ENABLED.get()) {
-            makeNotEnabled(context.getSource());
-        }
-
-        var source = context.getSource();
-
+        context.getSource().sendSuccess(new TranslatableComponent(MESSAGE_FETCHING)
+                .withStyle(ChatFormatting.AQUA), true);
         try {
-            SinoCore.getLogger().info("Fetching rank list.");
+            var model = doFetchRank(player.getGameProfile().getName());
 
-            var model = doFetchRank(null, withBest);
-
-            var msg = new TranslatableComponent(MESSAGE_RANK_TITLE).withStyle(ChatFormatting.AQUA);
-            var count = 5;
-            if (withCount) {
-                count = context.getArgument("count", Integer.class);
-            }
-
-            if (count > model.leaderboard.length) {
-                count = model.leaderboard.length;
-            }
-
-            for (var i = 1; i <= count; i++) {
-                var m = model.leaderboard[i - 1];
-                msg.append(new TranslatableComponent(MESSAGE_RANK_BODY, m.rank, m.player.id,
-                        m.timeUsed, m.triedTimes)).withStyle(ChatFormatting.GREEN);
-            }
-            msg.append(new TranslatableComponent(MESSAGE_RANK_FOOTER).withStyle(ChatFormatting.AQUA));
-
-            source.sendSuccess(msg, true);
-
-            SinoCore.getLogger().info("Fetch rank list successfully!");
+            context.getSource().sendSuccess(new TranslatableComponent(MESSAGE_RANK_MY_BEST,
+                    model.best).withStyle(ChatFormatting.GREEN), true);
         } catch (Exception ex) {
+            context.getSource().sendFailure(new TranslatableComponent(MESSAGE_RANK_FETCH_FAILED)
+                    .withStyle(ChatFormatting.AQUA));
+
             SinoCore.getLogger().warn("Fetch rank list failed, did the URL is correct?");
             ex.printStackTrace();
 
@@ -139,20 +100,78 @@ public class QuizCommand {
         return 1;
     }
 
-    private static LeaderboardModel doFetchRank(String me, boolean withBest) throws Exception {
-        var dataUrl = QuizModelConfig.CONFIG.RANK_URL.get();
-        var url = dataUrl + "?";
-        if (me != null) {
-            url += "me=" + me + "&";
-        } else {
-            if (withBest) {
-                url += "best=true";
-            }
+    public static int onRank(CommandContext<CommandSourceStack> context, boolean withCount, boolean withBest) {
+        if (!QuizModelConfig.CONFIG.RANK_ENABLED.get()) {
+            makeNotEnabled(context.getSource());
         }
 
-        var data = IOUtils.toString(new URL(url).toURI(), StandardCharsets.UTF_8);
-        var model = GSON.fromJson(data, LeaderboardModel.class);
+        var source = context.getSource();
 
+        context.getSource().sendSuccess(new TranslatableComponent(MESSAGE_FETCHING)
+                .withStyle(ChatFormatting.AQUA), true);
+
+        try {
+            var model = doFetchRank(withBest);
+
+            var msg = new TranslatableComponent(MESSAGE_RANK_TITLE).withStyle(ChatFormatting.AQUA).append("\n");
+            var count = 5;
+            if (withCount) {
+                count = context.getArgument("count", Integer.class);
+            }
+
+            if (count > model.ranks.length) {
+                count = model.ranks.length;
+            }
+
+            for (var i = 1; i <= count; i++) {
+                var m = model.ranks[i - 1];
+                msg.append(new TranslatableComponent(MESSAGE_RANK_BODY, m.rank, m.player.id,
+                        m.timeUsed, m.tries)).withStyle(ChatFormatting.GREEN).append("\n");
+            }
+            msg.append(new TranslatableComponent(MESSAGE_RANK_FOOTER).withStyle(ChatFormatting.AQUA));
+
+            source.sendSuccess(msg, true);
+
+        } catch (Exception ex) {
+            context.getSource().sendFailure(new TranslatableComponent(MESSAGE_RANK_FETCH_FAILED)
+                    .withStyle(ChatFormatting.AQUA));
+
+            SinoCore.getLogger().warn("Fetch rank list failed, did the URL is correct?");
+            ex.printStackTrace();
+
+            return 0;
+        }
+
+        return 1;
+    }
+
+    private static RankBoardModel.BestModel doFetchRank(String me) throws Exception {
+        SinoCore.getLogger().info("Fetching rank list.");
+
+        var dataUrl = QuizModelConfig.CONFIG.RANK_URL.get();
+        if (me != null) {
+            dataUrl += "?player=" + me + "&best=true";
+        }
+
+        var data = IOUtils.toString(new URL(dataUrl).toURI(), StandardCharsets.UTF_8);
+        var model = GSON.fromJson(data, RankBoardModel.BestModel.class);
+
+        SinoCore.getLogger().info("Fetch best rank successfully!");
+        return model;
+    }
+
+    private static RankBoardModel doFetchRank(boolean withBest) throws Exception {
+        SinoCore.getLogger().info("Fetching rank list.");
+
+        var dataUrl = QuizModelConfig.CONFIG.RANK_URL.get();
+        if (withBest) {
+            dataUrl += "?best=true";
+        }
+
+        var data = IOUtils.toString(new URL(dataUrl).toURI(), StandardCharsets.UTF_8);
+        var model = GSON.fromJson(data, RankBoardModel.class);
+
+        SinoCore.getLogger().info("Fetch rank list successfully!");
         return model;
     }
 
@@ -215,6 +234,8 @@ public class QuizCommand {
     public static void doStart(Player player, IQuizzingPlayer quiz, int maxStage) {
         quiz.deserializeNBT(new QuizzingPlayer().serializeNBT());
 
+        quiz.setStartTime(System.currentTimeMillis() / 1000L);
+
         quiz.setQuizzing(true);
         quiz.setSucceed(false);
         quiz.setMaxQuizStage(maxStage);
@@ -233,7 +254,11 @@ public class QuizCommand {
         quiz.clearAnswers();
 
         var question = nextQuestion();
-        quiz.setQuestion(question.question());
+        while (quiz.questionHasUsed(question.id)) {
+            question = nextQuestion();
+        }
+
+        quiz.setQuestion(question.id, question.question());
 
         var res = shuffle(player, question.answers());
 
@@ -276,6 +301,7 @@ public class QuizCommand {
         if (!isCorrect(player, quiz, answer)) {
             makeWrongAnswer(player);
             doFail(player, quiz);
+            postRecord(player, quiz);
             return true;
         }
 
@@ -283,6 +309,7 @@ public class QuizCommand {
 
         if (hasReachedMaxStage(player, quiz)) {
             doSucceed(player, quiz);
+            postRecord(player, quiz);
             return true;
         } else {
             doNext(player, quiz);
@@ -310,6 +337,42 @@ public class QuizCommand {
 
         makeFail(player);
         return true;
+    }
+
+    private static boolean postRecord(Player player, IQuizzingPlayer quiz) {
+        var client = HttpClients.createDefault();
+        var post = new HttpPost(QuizModelConfig.CONFIG.RANK_URL.get());
+
+        var data = new PostRankModel();
+        data.key = QuizModelConfig.CONFIG.RANK_KEY.get();
+        var span = new NewRankRecordModel.TimeSpan();
+        span.start = quiz.getStartTime();
+        span.end = System.currentTimeMillis() / 1000L;
+        data.time = span;
+        data.successful = quiz.isSucceed();
+        var pd = new RankBoardModel.PlayerData();
+        pd.id = player.getGameProfile().getName();
+        pd.uuid = player.getUUID();
+        data.player = pd;
+
+        var json = GSON.toJson(data);
+        var entity = new StringEntity(json, ContentType.APPLICATION_JSON);
+        post.setEntity(entity);
+        CloseableHttpResponse response = null;
+
+        try {
+            response = client.execute(post);
+
+            if (response.getStatusLine().getStatusCode() == 200) {
+                var resp = EntityUtils.toString(response.getEntity());
+                var isBest = GSON.fromJson(resp, PostRankModel.Response.class);
+                return isBest.best;
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return false;
     }
 
     public static boolean doSucceed(Player player, IQuizzingPlayer quiz) {
@@ -351,9 +414,12 @@ public class QuizCommand {
     public static final String MESSAGE_RANK_TITLE = "sinocore.command.quiz.rank_title";
     public static final String MESSAGE_RANK_FOOTER = "sinocore.command.quiz.rank_footer";
     public static final String MESSAGE_RANK_BODY = "sinocore.command.quiz.rank_body";
+    public static final String MESSAGE_RANK_MY_BEST = "sinocore.command.quiz.rank_my_best";
+    public static final String MESSAGE_FETCHING = "sinocore.command.quiz.rank_fetching";
+
 
     public static void makeNotPlayer(CommandSourceStack source) {
-        source.sendFailure(new TranslatableComponent(MESSAGE_NOT_PLAYER));
+        source.sendFailure(new TranslatableComponent(MESSAGE_NOT_PLAYER).withStyle(ChatFormatting.RED));
     }
 
     public static void makeNotStarted(Player player) {
@@ -368,6 +434,10 @@ public class QuizCommand {
         player.createCommandSourceStack().sendSuccess(new TranslatableComponent(MESSAGE_SUCCEED)
                 .withStyle(ChatFormatting.GREEN)
                 .withStyle(ChatFormatting.BOLD), true);
+    }
+
+    public static void makeFetchError(CommandSourceStack source) {
+        source.sendFailure(new TranslatableComponent(MESSAGE_RANK_FETCH_FAILED).withStyle(ChatFormatting.RED));
     }
 
     public static void makeFail(Player player) {

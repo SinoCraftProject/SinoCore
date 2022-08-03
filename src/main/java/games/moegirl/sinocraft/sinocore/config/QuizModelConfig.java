@@ -21,6 +21,7 @@ public class QuizModelConfig {
         public final ForgeConfigSpec.ConfigValue<String> DATA_URL;
         public final ForgeConfigSpec.BooleanValue RANK_ENABLED;
         public final ForgeConfigSpec.ConfigValue<String> RANK_URL;
+        public final ForgeConfigSpec.ConfigValue<String> RANK_KEY;
 
         Config(ForgeConfigSpec.Builder builder) {
             builder.push("quiz");
@@ -31,6 +32,7 @@ public class QuizModelConfig {
 
             RANK_ENABLED = builder.worldRestart().define("rank_enabled", false);
             RANK_URL = builder.worldRestart().define("rank_url", "https://example.com/api/rank/something");
+            RANK_KEY = builder.worldRestart().define("rank_key", "exampleKey");
 
             builder.pop();
         }

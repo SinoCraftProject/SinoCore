@@ -21,7 +21,8 @@ public interface IQuizzingPlayer extends IPlayerCapability {
     void setMaxQuizStage(int count);
 
     String getQuestion();
-    void setQuestion(String question);
+    void setQuestion(int id, String question);
+    boolean questionHasUsed(int id);
 
     List<Pair<String, String>> getAnswers();
     void addAnswer(String answer, String mark, boolean isCorrect);
@@ -29,4 +30,7 @@ public interface IQuizzingPlayer extends IPlayerCapability {
 
     String getCorrectMark();
     boolean isCorrect(String mark);
+
+    long getStartTime();
+    void setStartTime(long time);
 }

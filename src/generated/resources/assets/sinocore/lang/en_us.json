@@ -9,6 +9,11 @@
   "sinocore.command.quiz.not_started": "Quiz is not started!",
   "sinocore.command.quiz.question": "Now listen to the question: %s",
   "sinocore.command.quiz.question_last": "Please step on the corresponding pressure plate.",
+  "sinocore.command.quiz.rank_body": "No.%s: %s Used %s second(s). Fail %s times.",
+  "sinocore.command.quiz.rank_fetch_failed": "Error while fetch rank information, contract the server owner!",
+  "sinocore.command.quiz.rank_footer": "============================",
+  "sinocore.command.quiz.rank_my_best": "Your best result is %s second(s).",
+  "sinocore.command.quiz.rank_title": "===== Rank of the quiz =====",
   "sinocore.command.quiz.started": "Quiz started!",
   "sinocore.command.quiz.succeed": "Congratulations! You have passed the quiz.",
   "sinocore.command.quiz.wrong_state": "Wrong game state!"
