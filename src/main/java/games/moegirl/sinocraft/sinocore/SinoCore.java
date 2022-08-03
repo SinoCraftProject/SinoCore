@@ -31,7 +31,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 public class SinoCore {
     private static final Logger logger = LogManager.getLogger("SinoCore");
     public static final String MODID = "sinocore";
-    public static final String VERSION = "1.2.12";
+    public static final String VERSION = "1.2.13";
 
     private static SinoCore INSTANCE = null;
 
