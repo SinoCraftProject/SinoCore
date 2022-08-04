@@ -54,6 +54,11 @@ public class QuizCommand {
                             )
                     )
             )
+            .then(literal("giveup")
+                    .then(argument("player", EntityArgument.player())
+                            .executes(QuizCommand::onGiveUp)
+                    )
+            )
             .then(literal("reload")
                     .requires(s -> s.hasPermission(2))
                     .executes(QuizCommand::onReload)
@@ -199,6 +204,17 @@ public class QuizCommand {
         var answer = context.getArgument("answer", String.class);
 
         doNext(player, quiz, answer);
+
+        return Command.SINGLE_SUCCESS;
+    }
+
+    public static int onGiveUp(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+        var selector = context.getArgument("player", EntitySelector.class);
+        var player = selector.findSinglePlayer(context.getSource());
+        var quiz = player.getCapability(SCCapabilities.QUIZZING_PLAYER_CAPABILITY).orElse(new QuizzingPlayer());
+
+        doFail(player, quiz);
+        postRecord(player, quiz);
 
         return Command.SINGLE_SUCCESS;
     }
