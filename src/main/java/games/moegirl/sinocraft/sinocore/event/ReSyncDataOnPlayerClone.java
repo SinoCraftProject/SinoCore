@@ -11,9 +11,9 @@ import net.minecraftforge.fml.common.Mod;
 public class ReSyncDataOnPlayerClone {
     @SubscribeEvent
     public static void onPlayerClone(PlayerEvent.Clone event) {
-        if (!event.isWasDeath()) {
-            return;
-        }
+//        if (!event.isWasDeath()) {
+//            return;
+//        }
 
         var cap = event.getPlayer().getCapability(SCCapabilities.QUIZZING_PLAYER_CAPABILITY);
         if (!cap.isPresent()) {

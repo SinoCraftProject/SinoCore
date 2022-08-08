@@ -10,50 +10,30 @@ import net.minecraftforge.common.util.LazyOptional;
 
 public class CapabilityHelper {
     public static void clone(Player newPlayer, Player original,
-                             LazyOptional<IPlayerCapability> optional,
                              ICapabilityProvider provider,
                              Capability<IPlayerCapability> capability) {
-        var capOptional = original
+        var originalCap = getCap(original, provider, capability);
+        var newCap = getCap(original, provider, capability);
+
+        if (originalCap != null && newCap != null) {
+            newCap.deserializeNBT(newCap.serializeNBT());
+        }
+    }
+
+    private static IPlayerCapability getCap(Player player,
+                                     ICapabilityProvider provider,
+                                     Capability<IPlayerCapability> capability) {
+        var capOptional = player
                 .getCapability(capability);
         if (!capOptional.isPresent()) {
             capOptional = provider.getCapability(capability);
 
             if (!capOptional.isPresent()) {
                 SinoCoreAPI.LOGGER.warn("Cannot get capability for " + capability.getName());
-                return;
+                return null;
             }
         }
 
-        var cap = capOptional.orElseThrow(null);
-
-        if (cap == null) {
-            return;
-        }
-
-        var newCapOptional = newPlayer
-                .getCapability(capability);
-        if (!newCapOptional.isPresent()) {
-            newCapOptional = provider.getCapability(capability);
-
-            if (!capOptional.isPresent()) {
-                SinoCoreAPI.LOGGER.warn("Cannot get capability for " + capability.getName());
-                return;
-            }
-        }
-
-        var newCap = capOptional.orElseThrow(null);
-
-        if (newCap == null) {
-            return;
-        }
-
-        newCap.deserializeNBT(cap.serializeNBT());
-    }
-
-
-    public static void clone(Player newPlayer, Player original,
-                             ICapabilityProvider provider,
-                             Capability<IPlayerCapability> capability) {
-        clone(newPlayer, original, LazyOptional.empty(), provider, capability);
+        return capOptional.orElseThrow(null);
     }
 }
