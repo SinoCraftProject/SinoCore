@@ -34,7 +34,8 @@ credits="SinoCraft Project Team" #optional
 authors="qyl27" #optional
 # The description text for the mod (multi line!) (#mandatory)
 description='''
-Core library of Sino Series Mods.
+Core library of SinoSeries Mods.
+华夏系列核心代码库。
 '''
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
 [[dependencies.sinocore]] #optional
