@@ -34,7 +34,19 @@ loom {
     }
 }
 
-version = '1.18.2-1.3.0'    // Todo: qyl27: developing.
+// qyl27: for developing and release.
+version = '1.18.2-1.3.0'
+if (System.getenv("JITPACK") == "true") {
+    version += "-${System.getenv("VERSION")}"
+}
+
+var release = false
+if (release || project.hasProperty("SINOSERIES_RELEASE")) {
+    version += '-release'
+} else {
+    version += '-dev'
+}
+
 group = 'games.moegirl.sinocraft.sinocore' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'sinocore'
 
@@ -44,6 +56,8 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 println('Java: ' + System.getProperty('java.version') +
         ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ')' +
         ' Arch: ' + System.getProperty('os.arch'))
+
+println("Building SinoCore. Ver: $version.")
 
 sourceSets {
     api {
