@@ -10,13 +10,17 @@ import games.moegirl.sinocraft.sinocore.block.SCBlocks;
 import games.moegirl.sinocraft.sinocore.block.blockentity.SCBlockEntities;
 import games.moegirl.sinocraft.sinocore.config.QuizModelConfig;
 import games.moegirl.sinocraft.sinocore.config.model.QuizModel;
+import games.moegirl.sinocraft.sinocore.event.DebugBlockHighlighter;
 import games.moegirl.sinocraft.sinocore.gui.SCMenus;
 import games.moegirl.sinocraft.sinocore.item.SCItems;
 import games.moegirl.sinocraft.sinocore.network.SCNetworks;
+import games.moegirl.sinocraft.sinocore.utility.SCConstants;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
@@ -54,6 +58,7 @@ public class SinoCore {
         SCMenus.register(bus);
 
         bus.addListener(this::onSetup);
+        bus.addListener(this::onClientSetup);
         SinoCoreAPI._loadCoreApi(this::registerApi);
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, QuizModelConfig.SPEC, "sinoseries/sinocore/quiz.toml");
@@ -72,6 +77,13 @@ public class SinoCore {
     private void onSetup(FMLCommonSetupEvent event) {
         if (QuizModelConfig.CONFIG.ENABLED.get()) {
             QuizModel.fetch();
+        }
+    }
+
+    private void onClientSetup(FMLClientSetupEvent event) {
+        if (SCConstants.IS_DEV) {
+            // Fixme: qyl27: Not working for debug show highlighted block shape box.
+//            MinecraftForge.EVENT_BUS.register(new DebugBlockHighlighter());
         }
     }
 
