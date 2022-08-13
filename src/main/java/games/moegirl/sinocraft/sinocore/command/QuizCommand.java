@@ -1,5 +1,6 @@
 package games.moegirl.sinocraft.sinocore.command;
 
+import cn.hutool.core.thread.ThreadUtil;
 import com.google.gson.Gson;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
@@ -33,6 +34,7 @@ import org.apache.http.util.EntityUtils;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static net.minecraft.commands.Commands.argument;
 import static net.minecraft.commands.Commands.literal;
@@ -86,12 +88,12 @@ public class QuizCommand {
         var player = selector.findSinglePlayer(context.getSource());
 
         context.getSource().sendSuccess(new TranslatableComponent(MESSAGE_FETCHING)
-                .withStyle(ChatFormatting.AQUA), true);
+                .withStyle(ChatFormatting.AQUA), false);
         try {
             var model = doFetchRank(player.getGameProfile().getName());
 
             context.getSource().sendSuccess(new TranslatableComponent(MESSAGE_RANK_MY_BEST,
-                    model.best).withStyle(ChatFormatting.GREEN), true);
+                    model.best).withStyle(ChatFormatting.GREEN), false);
         } catch (Exception ex) {
             context.getSource().sendFailure(new TranslatableComponent(MESSAGE_RANK_FETCH_FAILED)
                     .withStyle(ChatFormatting.AQUA));
@@ -113,7 +115,7 @@ public class QuizCommand {
         var source = context.getSource();
 
         context.getSource().sendSuccess(new TranslatableComponent(MESSAGE_FETCHING)
-                .withStyle(ChatFormatting.AQUA), true);
+                .withStyle(ChatFormatting.AQUA), false);
 
         try {
             var model = doFetchRank(withBest);
@@ -135,7 +137,7 @@ public class QuizCommand {
             }
             msg.append(new TranslatableComponent(MESSAGE_RANK_FOOTER).withStyle(ChatFormatting.AQUA));
 
-            source.sendSuccess(msg, true);
+            source.sendSuccess(msg, false);
 
         } catch (Exception ex) {
             context.getSource().sendFailure(new TranslatableComponent(MESSAGE_RANK_FETCH_FAILED)
@@ -316,21 +318,20 @@ public class QuizCommand {
 
         if (!isCorrect(player, quiz, answer)) {
             makeWrongAnswer(player);
-            doFail(player, quiz);
             postRecord(player, quiz);
+            doFail(player, quiz);
             return true;
         }
 
         makeCorrectAnswer(player);
 
         if (hasReachedMaxStage(player, quiz)) {
-            doSucceed(player, quiz);
             postRecord(player, quiz);
-            return true;
+            doSucceed(player, quiz);
         } else {
             doNext(player, quiz);
-            return true;
         }
+        return true;
     }
 
     public static boolean hasReachedMaxStage(Player player, IQuizzingPlayer quiz) {
@@ -374,21 +375,23 @@ public class QuizCommand {
         var json = GSON.toJson(data);
         var entity = new StringEntity(json, ContentType.APPLICATION_JSON);
         post.setEntity(entity);
-        CloseableHttpResponse response = null;
 
-        try {
-            response = client.execute(post);
+        AtomicBoolean isBest = new AtomicBoolean(false);
+        ThreadUtil.execute(() -> {
+            try {
+                CloseableHttpResponse response = client.execute(post);
 
-            if (response.getStatusLine().getStatusCode() == 200) {
-                var resp = EntityUtils.toString(response.getEntity());
-                var isBest = GSON.fromJson(resp, PostRankModel.Response.class);
-                return isBest.best;
+                if (response.getStatusLine().getStatusCode() == 200) {
+                    var resp = EntityUtils.toString(response.getEntity());
+                    isBest.set(GSON.fromJson(resp, PostRankModel.Response.class).best);
+                }
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
+        });
 
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return false;
+        return isBest.get();
     }
 
     public static boolean doSucceed(Player player, IQuizzingPlayer quiz) {
@@ -440,7 +443,7 @@ public class QuizCommand {
 
     public static void makeNotStarted(Player player) {
         player.createCommandSourceStack().sendSuccess(new TranslatableComponent(MESSAGE_NOT_STARTED)
-                .withStyle(ChatFormatting.RED), true);
+                .withStyle(ChatFormatting.RED), false);
     }
 
     public static void makeSucceed(Player player) {
@@ -449,7 +452,7 @@ public class QuizCommand {
                 .withStyle(ChatFormatting.BOLD));
         player.createCommandSourceStack().sendSuccess(new TranslatableComponent(MESSAGE_SUCCEED)
                 .withStyle(ChatFormatting.GREEN)
-                .withStyle(ChatFormatting.BOLD), true);
+                .withStyle(ChatFormatting.BOLD), false);
     }
 
     public static void makeFetchError(CommandSourceStack source) {
@@ -463,32 +466,32 @@ public class QuizCommand {
 
     public static void makeWrongState(Player player) {
         player.createCommandSourceStack().sendSuccess(new TranslatableComponent(MESSAGE_WRONG_STATE)
-                .withStyle(ChatFormatting.RED), true);
+                .withStyle(ChatFormatting.RED), false);
     }
 
     public static void makeWrongAnswer(Player player) {
         player.createCommandSourceStack().sendSuccess(new TranslatableComponent(MESSAGE_ANSWER_WRONG)
-                .withStyle(ChatFormatting.RED), true);
+                .withStyle(ChatFormatting.RED), false);
     }
 
     public static void makeNotEnabled(Player player) {
         player.createCommandSourceStack().sendSuccess(new TranslatableComponent(MESSAGE_NOT_ENABLED)
-                .withStyle(ChatFormatting.RED), true);
+                .withStyle(ChatFormatting.RED), false);
     }
 
     public static void makeNotEnabled(CommandSourceStack stack) {
         stack.sendSuccess(new TranslatableComponent(MESSAGE_NOT_ENABLED)
-                .withStyle(ChatFormatting.RED), true);
+                .withStyle(ChatFormatting.RED), false);
     }
 
     public static void makeCorrectAnswer(Player player) {
         player.createCommandSourceStack().sendSuccess(new TranslatableComponent(MESSAGE_ANSWER_RIGHT)
-                .withStyle(ChatFormatting.LIGHT_PURPLE), true);
+                .withStyle(ChatFormatting.LIGHT_PURPLE), false);
     }
 
     public static void makeStarted(Player player) {
         player.createCommandSourceStack().sendSuccess(new TranslatableComponent(MESSAGE_STARTED)
-                .withStyle(ChatFormatting.LIGHT_PURPLE), true);
+                .withStyle(ChatFormatting.LIGHT_PURPLE), false);
     }
 
     public static void makeQuestion(Player player, IQuizzingPlayer quiz) {
@@ -501,7 +504,7 @@ public class QuizCommand {
 
         component.append(new TranslatableComponent(MESSAGE_QUESTION_LAST).withStyle(ChatFormatting.AQUA));
 
-        player.createCommandSourceStack().sendSuccess(component, true);
+        player.createCommandSourceStack().sendSuccess(component, false);
     }
 
     public static void broadcast(Player self, Component message) {

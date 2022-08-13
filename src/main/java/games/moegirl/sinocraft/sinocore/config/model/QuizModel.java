@@ -27,8 +27,6 @@ public class QuizModel {
     }
 
     public static QuizModel getInstance() {
-        // Todo.
-        System.out.println(INSTANCE.url);
         return INSTANCE;
     }
 
