@@ -85,6 +85,11 @@ public class QuizzingPlayer implements IQuizzingPlayer {
         return questionUsed.contains(id);
     }
 
+    @Override
+    public void clearQuestionUsed() {
+        questionUsed.clear();
+    }
+
     /**
      * Get all answers available.
      *

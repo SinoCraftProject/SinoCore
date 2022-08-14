@@ -277,6 +277,8 @@ public class QuizCommand {
         quiz.setSucceed(false);
         quiz.setMaxQuizStage(maxStage);
         quiz.setQuizStage(0);
+        quiz.clearQuestionUsed();
+        quiz.clearAnswers();
 
         makeStarted(player);
 
@@ -291,8 +293,13 @@ public class QuizCommand {
         quiz.clearAnswers();
 
         var question = nextQuestion();
+        var var1 = 0;
         while (quiz.questionHasUsed(question.id)) {
+            var1 += 1;
             question = nextQuestion();
+            if (var1 >= 100) {
+                throw new RuntimeException("Do not hit me.");
+            }
         }
 
         quiz.setQuestion(question.id, question.question());
@@ -301,7 +308,7 @@ public class QuizCommand {
 
         // Todo: qyl27: we have 4 answers for now.
         if (res.size() != 4) {
-            throw new RuntimeException("Not 4 answers!");
+            throw new RuntimeException("No more answer!");
         }
 
         quiz.addAnswer(res.get(0).answer(), "A", res.get(0).isCorrect());
