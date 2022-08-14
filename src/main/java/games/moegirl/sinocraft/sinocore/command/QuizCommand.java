@@ -35,6 +35,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static net.minecraft.commands.Commands.argument;
 import static net.minecraft.commands.Commands.literal;
@@ -160,8 +161,17 @@ public class QuizCommand {
             dataUrl += "?player=" + me + "&best=true";
         }
 
-        var data = IOUtils.toString(new URL(dataUrl).toURI(), StandardCharsets.UTF_8);
-        var model = GSON.fromJson(data, RankBoardModel.BestModel.class);
+        AtomicReference<String> data = new AtomicReference<>();
+        String finalDataUrl = dataUrl;
+        ThreadUtil.execute(() -> {
+            try {
+                data.set(IOUtils.toString(new URL(finalDataUrl).toURI(), StandardCharsets.UTF_8));
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
+
+        var model = GSON.fromJson(data.get(), RankBoardModel.BestModel.class);
 
         SinoCore.getLogger().info("Fetch best rank successfully!");
         return model;
@@ -175,8 +185,17 @@ public class QuizCommand {
             dataUrl += "?best=true";
         }
 
-        var data = IOUtils.toString(new URL(dataUrl).toURI(), StandardCharsets.UTF_8);
-        var model = GSON.fromJson(data, RankBoardModel.class);
+        AtomicReference<String> data = new AtomicReference<>();
+        String finalDataUrl = dataUrl;
+        ThreadUtil.execute(() -> {
+            try {
+                data.set(IOUtils.toString(new URL(finalDataUrl).toURI(), StandardCharsets.UTF_8));
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
+
+        var model = GSON.fromJson(data.get(), RankBoardModel.class);
 
         SinoCore.getLogger().info("Fetch rank list successfully!");
         return model;

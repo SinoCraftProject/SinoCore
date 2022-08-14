@@ -1,5 +1,6 @@
 package games.moegirl.sinocraft.sinocore.config.model;
 
+import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.cron.CronUtil;
 import com.google.gson.Gson;
 import games.moegirl.sinocraft.sinocore.SinoCore;
@@ -9,6 +10,7 @@ import org.apache.commons.io.IOUtils;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class QuizModel {
     private static final Gson GSON = new Gson();
@@ -113,9 +115,16 @@ public class QuizModel {
             var dataUrl = url;
             var url = new URL(dataUrl);
 
-            var data = IOUtils.toString(url.toURI(), StandardCharsets.UTF_8);
+            AtomicReference<String> data = new AtomicReference<>();
+            ThreadUtil.execute(() -> {
+                try {
+                    data.set(IOUtils.toString(url.toURI(), StandardCharsets.UTF_8));
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            });
 
-            var model = GSON.fromJson(data, QuizModel.class);
+            var model = GSON.fromJson(data.get(), QuizModel.class);
 
             lastUpdated = Calendar.getInstance();
             date = model.date;
