@@ -3,17 +3,18 @@ package games.moegirl.sinocraft.sinocore.api;
 import games.moegirl.sinocraft.sinocore.api.crafting.CraftingApi;
 import games.moegirl.sinocraft.sinocore.api.network.NetworkApi;
 import net.minecraftforge.fml.ModLoadingContext;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.function.Consumer;
 
 /**
  * SinoCore Public API
  */
+@SuppressWarnings("unused")
 public class SinoCoreAPI {
     public static final String MODID = "sinocore";
-    public static final Logger LOGGER = LogManager.getLogger();
+    public static final Logger LOGGER = LoggerFactory.getLogger("SinoCore");
     public static final boolean DEBUG = "true".equalsIgnoreCase(System.getProperty("forge.enableGameTest", "false"));
 
     private static String scId;

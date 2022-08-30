@@ -8,8 +8,6 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,7 +15,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-@OnlyIn(Dist.CLIENT)
+@SuppressWarnings("unused")
 public record ReplacedModel(BakedModel model, ItemTransforms.TransformType... replaced) implements BakedModel {
 
     @Override

@@ -1,10 +1,13 @@
-package games.moegirl.sinocraft.sinocore.api.woodwork;
+package games.moegirl.sinocraft.sinocore.api.client.render;
 
 import com.google.common.collect.ImmutableMap;
 import com.mojang.blaze3d.platform.NativeImage;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Vector3f;
+import games.moegirl.sinocraft.sinocore.api.woodwork.ModSignBlockEntity;
+import games.moegirl.sinocraft.sinocore.api.woodwork.ModSignBlockStanding;
+import games.moegirl.sinocraft.sinocore.api.woodwork.Woodwork;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.model.Model;
@@ -32,8 +35,6 @@ import net.minecraft.world.level.block.SignBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.WoodType;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 
 import java.util.List;
@@ -43,7 +44,6 @@ import java.util.function.Function;
 import static net.minecraft.world.level.block.StandingSignBlock.ROTATION;
 import static net.minecraft.world.level.block.WallSignBlock.FACING;
 
-@OnlyIn(Dist.CLIENT)
 public class ModSignRenderer implements BlockEntityRenderer<ModSignBlockEntity> {
     private static final int OUTLINE_RENDER_DISTANCE = Mth.square(16);
     private final Map<WoodType, SignModel> signModels;
@@ -153,7 +153,6 @@ public class ModSignRenderer implements BlockEntityRenderer<ModSignBlockEntity> 
         return layer;
     }
 
-    @OnlyIn(Dist.CLIENT)
     public static final class SignModel extends Model {
         public final ModelPart root;
         public final ModelPart stick;

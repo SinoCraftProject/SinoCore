@@ -15,17 +15,13 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.SaplingBlock;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSet;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.client.model.generators.ModelProvider;
 import net.minecraftforge.common.data.LanguageProvider;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.registries.RegistryObject;
 
 import javax.annotation.Nullable;
@@ -38,21 +34,8 @@ import java.util.function.Supplier;
 /**
  * * RegisterXxx methods means you must call in the mod, but addXxx is optional.
  */
-@SuppressWarnings("JavadocReference")
+@SuppressWarnings({"JavadocReference", "unused"})
 public record TreeRegister(Tree tree) {
-
-    /**
-     * Register all block's render types, call in {@link FMLClientSetupEvent}
-     */
-    @OnlyIn(Dist.CLIENT)
-    public void registerRenderType() {
-        net.minecraft.client.renderer.RenderType cutoutMipped = net.minecraft.client.renderer.RenderType.cutoutMipped();
-        net.minecraft.client.renderer.RenderType cutout = net.minecraft.client.renderer.RenderType.cutout();
-
-        net.minecraft.client.renderer.ItemBlockRenderTypes.setRenderLayer(tree.leaves(), cutoutMipped);
-        net.minecraft.client.renderer.ItemBlockRenderTypes.setRenderLayer(tree.sapling(), cutout);
-        net.minecraft.client.renderer.ItemBlockRenderTypes.setRenderLayer(tree.pottedSapling(), cutout);
-    }
 
     /**
      * call this method in {@link LanguageProvider#addTranslations()} or other equivalent method, add chinese name

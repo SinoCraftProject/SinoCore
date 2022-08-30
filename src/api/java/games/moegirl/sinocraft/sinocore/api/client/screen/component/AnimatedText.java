@@ -1,8 +1,8 @@
-package games.moegirl.sinocraft.sinocore.api.client.component;
+package games.moegirl.sinocraft.sinocore.api.client.screen.component;
 
 import com.google.common.base.Verify;
 import com.mojang.blaze3d.vertex.PoseStack;
-import games.moegirl.sinocraft.sinocore.api.utility.GLSwitcher;
+import games.moegirl.sinocraft.sinocore.api.client.GLSwitcher;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -12,12 +12,10 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.util.FastColor;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.time.Duration;
 
-@OnlyIn(Dist.CLIENT)
+@SuppressWarnings("unused")
 public class AnimatedText extends AbstractWidget {
 
     private long beginTime;

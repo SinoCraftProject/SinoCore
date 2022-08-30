@@ -40,8 +40,8 @@ import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
 import net.minecraft.world.level.levelgen.synth.NormalNoise;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -51,11 +51,11 @@ import java.util.function.Supplier;
 import static net.minecraft.world.level.levelgen.SurfaceRules.ifTrue;
 import static net.minecraft.world.level.levelgen.SurfaceRules.verticalGradient;
 
-@SuppressWarnings({"rawtypes", "unchecked"})
+@SuppressWarnings({"rawtypes", "unchecked", "unused"})
 public abstract class WorldGenProvider implements DataProvider {
 
     private final Gson gson = (new GsonBuilder()).setPrettyPrinting().create();
-    private final Logger logger = LogManager.getLogger();
+    private final Logger logger = LoggerFactory.getLogger(WorldGenProvider.class);
 
     protected final RegistryAccess registryAccess;
     protected final DynamicOps<JsonElement> ops;

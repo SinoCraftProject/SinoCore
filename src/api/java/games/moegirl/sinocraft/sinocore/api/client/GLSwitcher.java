@@ -1,11 +1,9 @@
-package games.moegirl.sinocraft.sinocore.api.utility;
+package games.moegirl.sinocraft.sinocore.api.client;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.opengl.GL11;
 
-@OnlyIn(Dist.CLIENT)
+@SuppressWarnings("unused")
 public abstract class GLSwitcher {
 
     private final boolean isEnabled;

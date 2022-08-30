@@ -1,5 +1,6 @@
 package games.moegirl.sinocraft.sinocore.api.woodwork;
 
+import games.moegirl.sinocraft.sinocore.api.client.screen.ModSignEditScreen;
 import net.minecraft.core.BlockPos;
 
 public class SignEditHelper {

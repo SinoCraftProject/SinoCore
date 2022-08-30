@@ -1,10 +1,12 @@
-package games.moegirl.sinocraft.sinocore.api.woodwork;
+package games.moegirl.sinocraft.sinocore.api.client.screen;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Matrix4f;
+import games.moegirl.sinocraft.sinocore.api.client.render.ModSignRenderer;
+import games.moegirl.sinocraft.sinocore.api.woodwork.*;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.font.TextFieldHelper;
 import net.minecraft.client.gui.screens.Screen;
@@ -19,13 +21,10 @@ import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.WoodType;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.stream.IntStream;
 
-@OnlyIn(Dist.CLIENT)
 @SuppressWarnings("NotNullFieldNotInitialized")
 public class ModSignEditScreen extends Screen {
 
