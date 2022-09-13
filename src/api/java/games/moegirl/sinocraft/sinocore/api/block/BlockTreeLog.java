@@ -51,6 +51,7 @@ public class BlockTreeLog extends RotatedPillarBlock implements ITreeBlock {
 
     @Nullable
     @Override
+    @SuppressWarnings("removal")
     public BlockState getToolModifiedState(BlockState state, Level level, BlockPos pos, Player player, ItemStack stack, ToolAction toolAction) {
         if (!isStripped && ToolActions.AXE_STRIP.equals(toolAction)) {
             return tree.strippedLog().defaultBlockState();

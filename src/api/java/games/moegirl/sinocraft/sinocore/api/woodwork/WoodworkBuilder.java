@@ -15,7 +15,7 @@ import java.util.function.Function;
 
 /**
  * If you use custom block, and need custom drop loot table, you should
- * implement {@link WoodworkBlockLoot.ILootable} interface to the custom block.
+ * implement {@link games.moegirl.sinocraft.sinocore.api.block.ILootableBlock} interface to the custom block.
  */
 public class WoodworkBuilder {
 
