@@ -6,29 +6,21 @@ import net.minecraft.world.entity.player.Player;
 
 public class PlayerQuizzingHelper {
     public static boolean isCompleteSuccessfully(Player player, boolean detectSuccess, boolean lastCorrect) {
-        var cap = player.getCapability(SCCapabilities.QUIZZING_PLAYER_CAPABILITY);
+        var cap = player.getCapability(SCCapabilities.QUIZZING_PLAYER_CAPABILITY).resolve();
 
-        if (!cap.isPresent()) {
+        if (cap.isEmpty()) {
             return false;
         }
 
-        var quiz = cap.resolve().get();
+        var quiz = cap.get();
 
         if (detectSuccess) {
-            if (isEnded(quiz)) {
-                return isSuccessful(quiz);
-            } else {
-                return false;
-            }
+            return isEnded(quiz) && isSuccessful(quiz);
         } else {
             if (lastCorrect) {
                 return !isEnded(quiz) && !isSuccessful(quiz);
             } else {
-                if (isEnded(quiz)) {
-                    return isFailed(quiz);
-                } else {
-                    return false;
-                }
+                return isEnded(quiz) && isFailed(quiz);
             }
         }
     }

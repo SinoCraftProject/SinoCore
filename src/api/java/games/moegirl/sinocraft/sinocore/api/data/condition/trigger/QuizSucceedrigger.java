@@ -5,7 +5,7 @@ import net.minecraft.advancements.critereon.*;
 import net.minecraft.resources.ResourceLocation;
 
 public class QuizSucceedrigger extends SimpleCriterionTrigger<QuizSucceedrigger.TriggerInstance> {
-    private ResourceLocation id;
+    private final ResourceLocation id;
 
     public QuizSucceedrigger(ResourceLocation idIn) {
         id = idIn;

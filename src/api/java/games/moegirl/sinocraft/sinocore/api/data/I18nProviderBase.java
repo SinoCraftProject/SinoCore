@@ -11,7 +11,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.common.data.LanguageProvider;
 import org.apache.commons.lang3.text.translate.JavaUnicodeEscaper;
 
 import java.io.BufferedWriter;
@@ -62,7 +61,9 @@ public abstract class I18nProviderBase implements DataProvider {
 
     protected void save(HashCache cache, Object object, Path target) throws IOException {
         String data = GSON.toJson(object);
-        data = JavaUnicodeEscaper.outsideOf(0, 0x7f).translate(data); // Escape unicode after the fact so that it's not double escaped by GSON
+        // Escape unicode after the fact so that it's not double escaped by GSON
+        //noinspection deprecation
+        data = JavaUnicodeEscaper.outsideOf(0, 0x7f).translate(data);
         String hash = DataProvider.SHA1.hashUnencodedChars(data).toString();
         if (!Objects.equals(cache.getHash(target), hash) || !Files.exists(target)) {
             Files.createDirectories(target.getParent());

@@ -5,8 +5,6 @@ import games.moegirl.sinocraft.sinocore.api.capability.IPlayerCapability;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.util.LazyOptional;
-
 
 public class CapabilityHelper {
     public static void clone(Player newPlayer, Player original,
@@ -23,8 +21,7 @@ public class CapabilityHelper {
     private static IPlayerCapability getCap(Player player,
                                      ICapabilityProvider provider,
                                      Capability<IPlayerCapability> capability) {
-        var capOptional = player
-                .getCapability(capability);
+        var capOptional = player.getCapability(capability);
         if (!capOptional.isPresent()) {
             capOptional = provider.getCapability(capability);
 
@@ -34,6 +31,6 @@ public class CapabilityHelper {
             }
         }
 
-        return capOptional.orElseThrow(null);
+        return capOptional.orElseThrow(NullPointerException::new);
     }
 }

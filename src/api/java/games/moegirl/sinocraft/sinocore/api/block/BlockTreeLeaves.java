@@ -3,8 +3,6 @@ package games.moegirl.sinocraft.sinocore.api.block;
 import games.moegirl.sinocraft.sinocore.api.tree.Tree;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.LeavesBlock;
-import net.minecraft.world.level.block.RenderShape;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 
 /**

@@ -1,8 +1,7 @@
-// qyl: Use FooBase for our base data providers.
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 @FieldsAreNonnullByDefault
-package games.moegirl.sinocraft.sinocore.api.data;
+package games.moegirl.sinocraft.sinocore.capability;
 
 import net.minecraft.FieldsAreNonnullByDefault;
 import net.minecraft.MethodsReturnNonnullByDefault;

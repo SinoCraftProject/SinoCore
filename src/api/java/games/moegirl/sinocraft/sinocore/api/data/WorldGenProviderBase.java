@@ -52,10 +52,10 @@ import static net.minecraft.world.level.levelgen.SurfaceRules.ifTrue;
 import static net.minecraft.world.level.levelgen.SurfaceRules.verticalGradient;
 
 @SuppressWarnings({"rawtypes", "unchecked", "unused"})
-public abstract class WorldGenProvider implements DataProvider {
+public abstract class WorldGenProviderBase implements DataProvider {
 
     private final Gson gson = (new GsonBuilder()).setPrettyPrinting().create();
-    private final Logger logger = LoggerFactory.getLogger(WorldGenProvider.class);
+    private final Logger logger = LoggerFactory.getLogger(WorldGenProviderBase.class);
 
     protected final RegistryAccess registryAccess;
     protected final DynamicOps<JsonElement> ops;
@@ -80,7 +80,7 @@ public abstract class WorldGenProvider implements DataProvider {
 
     protected final Map<ResourceKey<Registry<?>>, Map<ResourceLocation, Object>> objects = new HashMap<>();
 
-    public WorldGenProvider(DataGenerator generator, String modid, boolean dump) {
+    public WorldGenProviderBase(DataGenerator generator, String modid, boolean dump) {
         this.generator = generator;
         this.modid = modid;
         this.dump = dump;

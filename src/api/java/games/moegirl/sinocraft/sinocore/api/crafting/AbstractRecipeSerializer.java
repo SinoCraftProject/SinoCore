@@ -9,7 +9,7 @@ import java.lang.reflect.ParameterizedType;
 
 public abstract class AbstractRecipeSerializer<T extends Recipe<?>> extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<T> {
 
-    protected Class<T> type = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+    protected final Class<T> type = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
 
     public abstract void toJson(JsonObject pJson, T pRecipe);
 

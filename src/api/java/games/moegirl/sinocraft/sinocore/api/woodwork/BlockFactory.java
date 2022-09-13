@@ -14,7 +14,7 @@ import java.util.function.Function;
 
 public class BlockFactory<B extends Block, I extends BlockItem, E extends BlockEntity> {
 
-    WoodworkBuilder builder;
+    final WoodworkBuilder builder;
     String name;
     Function<Woodwork, BlockBehaviour.Properties> properties;
     @Nullable

@@ -7,7 +7,7 @@ import net.minecraft.resources.ResourceLocation;
 import java.util.Calendar;
 
 public class ParityDaysTrigger extends SimpleCriterionTrigger<ParityDaysTrigger.TriggerInstance> {
-    private ResourceLocation id;
+    private final ResourceLocation id;
 
     private int even = -1;
 
@@ -17,11 +17,7 @@ public class ParityDaysTrigger extends SimpleCriterionTrigger<ParityDaysTrigger.
 
     public ParityDaysTrigger(ResourceLocation idIn, boolean isEven) {
         id = idIn;
-        if (isEven) {
-            even = 1;
-        } else {
-            even = 0;
-        }
+        even = isEven ? 1 : 0;
     }
 
     @Override

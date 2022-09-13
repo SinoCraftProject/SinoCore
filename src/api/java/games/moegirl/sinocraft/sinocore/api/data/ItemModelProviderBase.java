@@ -28,14 +28,14 @@ import java.util.stream.Stream;
  *
  * @author skyinr
  */
-public abstract class ItemModelProviderBase extends WarnItemModelProvider {  // qyl: Use FooBase for our base data providers.
+public abstract class ItemModelProviderBase extends WarnItemModelProvider {
     public static final ResourceLocation GENERATED = new ResourceLocation("item/generated");
     public static final ResourceLocation HANDHELD = new ResourceLocation("item/handheld");
 
     private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().create();
 
-    protected Set<Item> skipItems = new HashSet<>();
-    protected Set<String> addedItems = new HashSet<>();
+    protected final Set<Item> skipItems = new HashSet<>();
+    protected final Set<String> addedItems = new HashSet<>();
     protected boolean adding;
 
     private final DeferredRegister<? extends Item> deferredRegister;

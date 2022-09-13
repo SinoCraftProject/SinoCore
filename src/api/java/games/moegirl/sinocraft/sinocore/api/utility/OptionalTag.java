@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 
 import static net.minecraft.nbt.Tag.*;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "ConstantConditions"})
 public final class OptionalTag<T extends Tag> {
 
     // Optional ========================================================================================================

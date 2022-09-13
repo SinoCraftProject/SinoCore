@@ -43,9 +43,8 @@ public interface BlockFamilyRegister {
             BiFunction<ItemLike, ItemLike, RecipeBuilder> function = shapeBuilders.get(variant);
             if (function != null) {
                 RecipeBuilder recipebuilder = function.apply(block, item);
-                family.getRecipeGroupPrefix().ifPresent((p_176601_) -> {
-                    recipebuilder.group(p_176601_ + (variant == BlockFamily.Variant.CUT ? "" : "_" + variant.getName()));
-                });
+                family.getRecipeGroupPrefix().ifPresent(pre ->
+                        recipebuilder.group(pre + (variant == BlockFamily.Variant.CUT ? "" : "_" + variant.getName())));
                 recipebuilder.unlockedBy(family.getRecipeUnlockedBy().orElseGet(() -> getHasName(item)), has(item));
                 recipebuilder.save(consumer);
             }
