@@ -1,18 +1,19 @@
-package games.moegirl.sinocraft.sinocore.api.utility.texture;
+package games.moegirl.sinocraft.sinocore.api.client.screen.component;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import games.moegirl.sinocraft.sinocore.api.utility.GLSwitcher;
+import games.moegirl.sinocraft.sinocore.api.client.GLSwitcher;
+import games.moegirl.sinocraft.sinocore.api.utility.texture.ButtonEntry;
+import games.moegirl.sinocraft.sinocore.api.utility.texture.TextureEntry;
+import games.moegirl.sinocraft.sinocore.api.utility.texture.TextureMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.MouseHandler;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
 
-@OnlyIn(Dist.CLIENT)
 public class ImageButton extends net.minecraft.client.gui.components.Button {
 
     @Nullable
@@ -75,7 +76,7 @@ public class ImageButton extends net.minecraft.client.gui.components.Button {
             Optional<TextureEntry> optional = map.textures().get(texture);
             if (optional.isPresent()) {
                 TextureEntry entry = optional.get();
-                map.bindTexture();
+                RenderSystem.setShaderTexture(0, map.texture());
                 GLSwitcher d = GLSwitcher.depth().enable();
                 GLSwitcher b = GLSwitcher.blend().enable();
                 GuiComponent.blit(pPoseStack, x, y, width, height, entry.u(), entry.v(), entry.tw(), entry.th(), map.width, map.height);

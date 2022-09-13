@@ -11,16 +11,17 @@ import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class WarnItemModelProvider extends ItemModelProvider {
 
-    private static final Logger LOGGER = LogManager.getLogger();
+    private static final Logger LOGGER = LoggerFactory.getLogger(WarnItemModelProvider.class);
 
     private final List<Pair<ResourceLocation, ResourceLocation>> notExistingModel = new ArrayList<>();
 
@@ -65,6 +66,7 @@ public abstract class WarnItemModelProvider extends ItemModelProvider {
     }
 
     @Override
+    @Nonnull
     public String getName() {
         return "ItemModels: " + modid;
     }

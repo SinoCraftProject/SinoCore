@@ -22,9 +22,6 @@ import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSet;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.client.model.generators.ModelFile;
@@ -32,12 +29,9 @@ import net.minecraftforge.client.model.generators.ModelProvider;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.common.data.LanguageProvider;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.forgespi.Environment;
 import net.minecraftforge.registries.RegistryObject;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
@@ -48,51 +42,10 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+@SuppressWarnings({"JavadocReference", "unused"})
 public record WoodworkRegisterHelper(Woodwork woodwork) {
 
-    private static final Logger LOGGER = LogManager.getLogger();
-
-    public void register(IEventBus bus) {
-        WoodworkRegisterEvents events = new WoodworkRegisterEvents(this);
-        bus.addListener(events::onSetup);
-        bus.addListener(events::onClient);
-        if (Environment.get().getDist().isClient()) {
-            bus.register(events.client());
-        }
-    }
-
-    /**
-     * Call when {@link FMLClientSetupEvent} event fired
-     */
-    @OnlyIn(Dist.CLIENT)
-    public void registerRender() {
-        net.minecraft.client.renderer.RenderType cutout = net.minecraft.client.renderer.RenderType.cutout();
-        net.minecraft.client.renderer.ItemBlockRenderTypes.setRenderLayer(woodwork.trapdoor(), cutout);
-        net.minecraft.client.renderer.ItemBlockRenderTypes.setRenderLayer(woodwork.door(), cutout);
-        net.minecraft.client.renderer.Sheets.addWoodType(woodwork.type);
-    }
-
-    /**
-     * Call when {@link EntityRenderersEvent.RegisterLayerDefinitions} event fired
-     */
-    @OnlyIn(Dist.CLIENT)
-    public void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
-        // sign
-        // ModSignRenderer.registerLayer(woodwork, event);
-    }
-
-    /**
-     * Call when {@link EntityRenderersEvent.RegisterRenderers} event fired
-     */
-    @OnlyIn(Dist.CLIENT)
-    public void registerRenderer(EntityRenderersEvent.RegisterRenderers event) {
-        if (woodwork.useDefaultSignEntity()) {
-            event.registerBlockEntityRenderer(woodwork.signEntity(), ModSignRenderer::new);
-        }
-        if (woodwork.useDefaultWallSignEntity()) {
-            event.registerBlockEntityRenderer(woodwork.wallSignEntity(), ModSignRenderer::new);
-        }
-    }
+    private static final Logger LOGGER = LoggerFactory.getLogger(WoodworkRegisterHelper.class);
 
     // DataProvider ====================================================================================================
 
@@ -102,7 +55,6 @@ public record WoodworkRegisterHelper(Woodwork woodwork) {
      * @param provider language provider
      * @param chinese  tree chinese name
      */
-    @SuppressWarnings("JavadocReference")
     public void addLanguagesZh(LanguageProvider provider, String chinese) {
         provider.addBlock(woodwork.planks, chinese + "木板");
         provider.addBlock(woodwork.sign, chinese + "木告示牌");
@@ -122,7 +74,6 @@ public record WoodworkRegisterHelper(Woodwork woodwork) {
      *
      * @param provider language provider
      */
-    @SuppressWarnings("JavadocReference")
     public void addLanguagesEn(LanguageProvider provider) {
         addLanguagesEn(provider, defaultEnglishName());
     }
@@ -133,7 +84,6 @@ public record WoodworkRegisterHelper(Woodwork woodwork) {
      * @param provider language provider
      * @param english  english name
      */
-    @SuppressWarnings("JavadocReference")
     public void addLanguagesEn(LanguageProvider provider, String english) {
         provider.addBlock(woodwork.planks, english + " Planks");
         provider.addBlock(woodwork.sign, english + " Sign");
@@ -160,7 +110,6 @@ public record WoodworkRegisterHelper(Woodwork woodwork) {
      *
      * @param provider block model provider
      */
-    @SuppressWarnings("JavadocReference")
     public void addBlockModels(BlockStateProvider provider) {
         ExistingFileHelper helper = provider.models().existingFileHelper;
         ExistingFileHelper.ResourceType texType =
@@ -213,7 +162,6 @@ public record WoodworkRegisterHelper(Woodwork woodwork) {
      *
      * @param provider item model provider
      */
-    @SuppressWarnings("JavadocReference")
     public void addItemModels(ItemModelProvider provider) {
         addBlockItem(woodwork.planks, provider);
         addBlockItem(woodwork.slab, provider);
@@ -251,7 +199,6 @@ public record WoodworkRegisterHelper(Woodwork woodwork) {
      * @param consumer save consumer
      * @param log      log block, if not is null, add recipe: log -> planks * 4
      */
-    @SuppressWarnings("JavadocReference")
     public void addRecipes(Consumer<FinishedRecipe> consumer, @Nullable Block log) {
         InventoryChangeTrigger.TriggerInstance hasLogs = InventoryChangeTrigger.TriggerInstance
                 .hasItems(ItemPredicate.Builder.item().of(ItemTags.LOGS).build());
@@ -286,7 +233,6 @@ public record WoodworkRegisterHelper(Woodwork woodwork) {
      *
      * @param tag tag provider
      */
-    @SuppressWarnings("JavadocReference")
     public void addBlockTags(Function<TagKey<Block>, TagsProvider.TagAppender<Block>> tag) {
         tag.apply(BlockTags.PLANKS).add(woodwork.planks());
         tag.apply(BlockTags.WOODEN_BUTTONS).add(woodwork.button());
@@ -307,7 +253,6 @@ public record WoodworkRegisterHelper(Woodwork woodwork) {
      *
      * @param tag tag provider
      */
-    @SuppressWarnings("JavadocReference")
     public void addItemTags(Function<TagKey<Item>, TagsProvider.TagAppender<Item>> tag) {
         tag.apply(ItemTags.PLANKS).add(woodwork.planks().asItem());
         tag.apply(ItemTags.WOODEN_BUTTONS).add(woodwork.button().asItem());
@@ -326,7 +271,6 @@ public record WoodworkRegisterHelper(Woodwork woodwork) {
      * @param consumer consumer to collect table builder
      * @return block loot for add tree
      */
-    @SuppressWarnings("JavadocReference")
     public WoodworkBlockLoot addLoots(Consumer<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootContextParamSet>> consumer) {
         WoodworkBlockLoot loot = new WoodworkBlockLoot(woodwork);
         consumer.accept(Pair.of(() -> loot, LootContextParamSets.BLOCK));

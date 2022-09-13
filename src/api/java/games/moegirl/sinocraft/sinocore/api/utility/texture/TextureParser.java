@@ -27,8 +27,8 @@ public class TextureParser {
         return MAPS.get(name);
     }
 
-    public static TextureMap parse(ResourceLocation texture, boolean isClient) {
-        TextureMap map = new TextureMap(texture, isClient);
+    public static TextureMap parse(ResourceLocation texture) {
+        TextureMap map = new TextureMap(texture);
         reload(map);
         MAPS.put(texture, map);
         NAMES.add(texture);
@@ -165,8 +165,8 @@ public class TextureParser {
         String rawText = getString(data, "rawText");
         int[] position = getPoint(data, "position");
         int color = getInt(data, "color", 0x808080);
-        boolean shadow = getBool(data, "shadow", false);
-        boolean center = getBool(data, "center", false);
+        boolean shadow = getBool(data, "shadow");
+        boolean center = getBool(data, "center");
         TextEntry entry = new TextEntry(name, position[0], position[1], color, text, rawText, shadow, center);
         texts.add(entry);
         textMap.put(name, entry);
@@ -206,8 +206,8 @@ public class TextureParser {
         return data.get(name) instanceof Integer i ? i : defaultValue;
     }
 
-    private static boolean getBool(Config data, String name, boolean defaultValue) {
-        return data.get(name) instanceof Boolean b ? b : defaultValue;
+    private static boolean getBool(Config data, String name) {
+        return data.get(name) instanceof Boolean b ? b : false;
     }
 
     @Nullable

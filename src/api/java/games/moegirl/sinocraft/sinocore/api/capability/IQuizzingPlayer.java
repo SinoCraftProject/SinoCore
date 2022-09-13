@@ -23,6 +23,7 @@ public interface IQuizzingPlayer extends IPlayerCapability {
     String getQuestion();
     void setQuestion(int id, String question);
     boolean questionHasUsed(int id);
+    void clearQuestionUsed();
 
     List<Pair<String, String>> getAnswers();
     void addAnswer(String answer, String mark, boolean isCorrect);
