@@ -131,7 +131,7 @@ public abstract class I18nProviderBase implements DataProvider {
         add(key.getDescriptionId(), name);
     }
 
-    protected void addCreativeTab(CreativeModeTab tab, String value) {
+    public void addCreativeTab(CreativeModeTab tab, String value) {
         add("itemGroup." + tab.langId, value);
     }
 }
