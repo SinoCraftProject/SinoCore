@@ -44,7 +44,7 @@ if (System.getenv("JITPACK") == "true") {
 }
 
 var release = false
-if (release || project.hasProperty("SINOSERIES_RELEASE")) {
+if (release || (project.hasProperty("SINOSERIES_RELEASE") && project.property("SINOSERIES_RELEASE") == 'true')) {
     version += '-release'
 } else {
     version += '-dev'
