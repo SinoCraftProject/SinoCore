@@ -7,6 +7,7 @@ import net.minecraft.data.DataProvider;
 import net.minecraft.data.HashCache;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -128,5 +129,9 @@ public abstract class I18nProviderBase implements DataProvider {
 
     public void add(EntityType<?> key, String name) {
         add(key.getDescriptionId(), name);
+    }
+
+    public void addCreativeTab(CreativeModeTab tab, String value) {
+        add("itemGroup." + tab.langId, value);
     }
 }

@@ -10,12 +10,10 @@ import games.moegirl.sinocraft.sinocore.block.SCBlocks;
 import games.moegirl.sinocraft.sinocore.block.blockentity.SCBlockEntities;
 import games.moegirl.sinocraft.sinocore.config.QuizModelConfig;
 import games.moegirl.sinocraft.sinocore.config.model.QuizModel;
-import games.moegirl.sinocraft.sinocore.event.DebugBlockHighlighter;
 import games.moegirl.sinocraft.sinocore.gui.SCMenus;
 import games.moegirl.sinocraft.sinocore.item.SCItems;
 import games.moegirl.sinocraft.sinocore.network.SCNetworks;
 import games.moegirl.sinocraft.sinocore.utility.SCConstants;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -26,12 +24,11 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 
 @Mod(SinoCore.MODID)
 public class SinoCore {
-    private static final Logger logger = LoggerFactory.getLogger("SinoCore");
+    private static final Logger LOGGER = LoggerFactory.getLogger("SinoCore");
     public static final String MODID = "sinocore";
     public static final String VERSION = "@version@";
 
@@ -40,7 +37,7 @@ public class SinoCore {
     private final ThreadPoolExecutor EXECUTOR;
 
     public SinoCore() {
-        logger.info("Loading SinoCore. Ver: " + VERSION);
+        LOGGER.info("Loading SinoCore. Ver: " + VERSION);
 
         INSTANCE = this;
         EXECUTOR = ExecutorBuilder.create()
@@ -64,7 +61,7 @@ public class SinoCore {
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, QuizModelConfig.SPEC, "sinoseries/sinocore/quiz.toml");
 
-        logger.info("SinoCore loaded!");
+        LOGGER.info("SinoCore loaded!");
     }
 
     public static SinoCore getInstance() {
@@ -93,6 +90,6 @@ public class SinoCore {
     }
 
     public static Logger getLogger() {
-        return logger;
+        return LOGGER;
     }
 }
