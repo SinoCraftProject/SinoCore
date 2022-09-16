@@ -121,6 +121,26 @@ public class TextureMapClient {
         resumeGL(configurations);
     }
 
+    public void blitTexture(PoseStack stack, String name, int x, int y, AbstractContainerScreen<?> gui, GLSwitcher... configurations) {
+        texture.textures().get(name).ifPresent(entry -> {
+            bindTexture();
+            blitTexture(stack, gui.getGuiLeft() + x, gui.getGuiTop() + y, entry.w(), entry.h(),
+                    entry.u(), entry.v(), entry.tw(), entry.th());
+        });
+        resumeGL(configurations);
+    }
+
+    public void blitTexture(PoseStack stack, String name, String position, AbstractContainerScreen<?> gui, GLSwitcher... configurations) {
+        texture.textures().get(name).ifPresent(entry -> {
+            texture.points().get(position).ifPresent(p -> {
+                bindTexture();
+                blitTexture(stack, gui.getGuiLeft() + p.x(), gui.getGuiTop() + p.y(), entry.w(), entry.h(),
+                        entry.u(), entry.v(), entry.tw(), entry.th());
+            });
+        });
+        resumeGL(configurations);
+    }
+
     public void blitProgress(PoseStack stack, String name,
                              AbstractContainerScreen<?> gui,
                              float progress, GLSwitcher... configurations) {
@@ -160,12 +180,6 @@ public class TextureMapClient {
     private void blitTexture(PoseStack stack, int x, int y, int w, int h, float tu, float tv, int tw, int th) {
         if (w > 0 && h > 0) {
             GuiComponent.blit(stack, x, y, w, h, tu, tv, tw, th, texture.width, texture.height);
-        }
-    }
-
-    private void resumeGL(GLSwitcher... configurations) {
-        for (var switcher : configurations) {
-            switcher.resume();
         }
     }
 
@@ -217,6 +231,12 @@ public class TextureMapClient {
             buffer.vertex(matrix, rect.x2(), rect.y2(), rect.z2()).color(r, g, b, a).uv(uv[1], uv[3]).uv2(packedLight).endVertex();
             buffer.vertex(matrix, rect.x3(), rect.y3(), rect.z3()).color(r, g, b, a).uv(uv[1], uv[2]).uv2(packedLight).endVertex();
         });
+    }
+
+    private void resumeGL(GLSwitcher... configurations) {
+        for (var switcher : configurations) {
+            switcher.resume();
+        }
     }
 
 }
