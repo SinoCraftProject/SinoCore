@@ -132,9 +132,9 @@ public class TextureMapClient {
 
     public void blitTexture(PoseStack stack, String name, String position, AbstractContainerScreen<?> gui, GLSwitcher... configurations) {
         texture.textures().get(name).ifPresent(entry -> {
-            texture.points().get(position).ifPresent(position -> {
+            texture.points().get(position).ifPresent(p -> {
                 bindTexture();
-                blitTexture(stack, gui.getGuiLeft() + position.x(), gui.getGuiTop() + position.y(), entry.w(), entry.h(),
+                blitTexture(stack, gui.getGuiLeft() + p.x(), gui.getGuiTop() + p.y(), entry.w(), entry.h(),
                         entry.u(), entry.v(), entry.tw(), entry.th());
             });
         });
