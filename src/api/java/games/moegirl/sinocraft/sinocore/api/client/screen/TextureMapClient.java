@@ -130,6 +130,17 @@ public class TextureMapClient {
         resumeGL(configurations);
     }
 
+    public void blitTexture(PoseStack stack, String name, String position, AbstractContainerScreen<?> gui, GLSwitcher... configurations) {
+        texture.textures().get(name).ifPresent(entry -> {
+            texture.points().get(position).ifPresent(position -> {
+                bindTexture();
+                blitTexture(stack, gui.getGuiLeft() + position.x(), gui.getGuiTop() + position.y(), entry.w(), entry.h(),
+                        entry.u(), entry.v(), entry.tw(), entry.th());
+            });
+        });
+        resumeGL(configurations);
+    }
+
     public void blitProgress(PoseStack stack, String name,
                              AbstractContainerScreen<?> gui,
                              float progress, GLSwitcher... configurations) {
