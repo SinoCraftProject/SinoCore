@@ -5,6 +5,7 @@ import games.moegirl.sinocraft.sinocore.api.ApiLoader;
 import games.moegirl.sinocraft.sinocore.api.SinoCoreAPI;
 import games.moegirl.sinocraft.sinocore.api.impl.Crafting;
 import games.moegirl.sinocraft.sinocore.api.impl.Network;
+import games.moegirl.sinocraft.sinocore.api.utility.json.JsonUtils;
 import games.moegirl.sinocraft.sinocore.block.SCBlockItems;
 import games.moegirl.sinocraft.sinocore.block.SCBlocks;
 import games.moegirl.sinocraft.sinocore.block.blockentity.SCBlockEntities;
@@ -14,7 +15,15 @@ import games.moegirl.sinocraft.sinocore.gui.SCMenus;
 import games.moegirl.sinocraft.sinocore.item.SCItems;
 import games.moegirl.sinocraft.sinocore.network.SCNetworks;
 import games.moegirl.sinocraft.sinocore.utility.SCConstants;
+import games.moegirl.sinocraft.sinocore.utility.json.serializer.FluidStackSerializer;
+import games.moegirl.sinocraft.sinocore.utility.json.serializer.IngredientSerializer;
+import games.moegirl.sinocraft.sinocore.utility.json.serializer.ItemStackSerializer;
+import games.moegirl.sinocraft.sinocore.utility.json.serializer.NonNullListSerializer;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -60,6 +69,12 @@ public class SinoCore {
         SinoCoreAPI._loadCoreApi(this::registerApi);
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, QuizModelConfig.SPEC, "sinoseries/sinocore/quiz.toml");
+
+        JsonUtils.INSTANCE
+                .registerAdapter(Ingredient.class, new IngredientSerializer())
+                .registerAdapter(ItemStack.class, new ItemStackSerializer())
+                .registerAdapter(FluidStack.class, new FluidStackSerializer())
+                .registerAdapter(NonNullList.class, new NonNullListSerializer());
 
         LOGGER.info("SinoCore loaded!");
     }

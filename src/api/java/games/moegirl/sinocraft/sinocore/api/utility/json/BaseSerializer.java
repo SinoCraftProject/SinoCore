@@ -1,4 +1,4 @@
-package games.moegirl.sinocraft.sinocore.utility.json.serializer;
+package games.moegirl.sinocraft.sinocore.api.utility.json;
 
 import com.google.common.reflect.TypeParameter;
 import com.google.common.reflect.TypeToken;

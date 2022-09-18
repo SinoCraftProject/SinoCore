@@ -2,6 +2,7 @@ package games.moegirl.sinocraft.sinocore.utility.json.serializer;
 
 import com.google.gson.*;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import games.moegirl.sinocraft.sinocore.api.utility.json.BaseSerializer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.TagParser;
 import net.minecraft.resources.ResourceLocation;

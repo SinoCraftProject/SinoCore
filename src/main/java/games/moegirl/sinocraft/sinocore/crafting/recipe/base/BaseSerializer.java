@@ -1,7 +1,7 @@
 package games.moegirl.sinocraft.sinocore.crafting.recipe.base;
 
 import com.google.gson.JsonObject;
-import games.moegirl.sinocraft.sinocore.utility.json.JsonUtils;
+import games.moegirl.sinocraft.sinocore.api.utility.json.JsonUtils;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
@@ -25,22 +25,22 @@ public class BaseSerializer<C extends Container, RECIPE extends BaseRecipe<C>>
     @Nullable
     @Override
     public RECIPE fromNetwork(ResourceLocation pRecipeId, FriendlyByteBuf pBuffer) {
-        return JsonUtils.INSTANCE.normal.fromJson(pBuffer.readUtf(), recipeClass)
+        return JsonUtils.INSTANCE.getNormal().fromJson(pBuffer.readUtf(), recipeClass)
                 .setId(pRecipeId).setSerializer(this);
     }
 
     @Override
     public void toNetwork(FriendlyByteBuf pBuffer, RECIPE pRecipe) {
-        pBuffer.writeUtf(JsonUtils.INSTANCE.normal.toJson(pRecipe));
+        pBuffer.writeUtf(JsonUtils.INSTANCE.getNormal().toJson(pRecipe));
     }
 
     @Override
     public RECIPE fromJson(ResourceLocation pRecipeId, JsonObject pSerializedRecipe) {
-        return JsonUtils.INSTANCE.normal.fromJson(pSerializedRecipe, recipeClass)
+        return JsonUtils.INSTANCE.getNormal().fromJson(pSerializedRecipe, recipeClass)
                 .setId(pRecipeId).setSerializer(this);
     }
 
     public JsonObject toJson(RECIPE pRecipe) {
-        return JsonUtils.INSTANCE.normal.toJsonTree(pRecipe).getAsJsonObject();
+        return JsonUtils.INSTANCE.getNormal().toJsonTree(pRecipe).getAsJsonObject();
     }
 }

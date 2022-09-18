@@ -1,6 +1,7 @@
 package games.moegirl.sinocraft.sinocore.utility.json.serializer;
 
 import com.google.gson.*;
+import games.moegirl.sinocraft.sinocore.api.utility.json.BaseSerializer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.crafting.CraftingHelper;
