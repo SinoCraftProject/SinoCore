@@ -1,0 +1,9 @@
+# 华夏核心 / SinoCore
+
+> 青，取之于蓝，而青于蓝；冰，水为之，而寒于水。
+> 
+> Although blue comes from the indigo plant, it is bluer than indigo;
+> and ice is made of water, but it is colder than water.
+
+华夏系列通用代码库。  
+Common library of SinoSeries Mods.
