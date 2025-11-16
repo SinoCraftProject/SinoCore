@@ -8,8 +8,8 @@ jobs:
   build:
     uses: ./.github/workflows/build.yml
     with:
-      mod-release: 'false'
-      upload-artifacts: 'true'
+      mod-release: false
+      upload-artifacts: true
 
   upload:
     runs-on: ubuntu-latest

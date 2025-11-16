@@ -14,5 +14,5 @@ jobs:
   build:
     uses: ./.github/workflows/build.yml
     with:
-      mod-release: 'false'
-      upload-artifacts: 'false'
+      mod-release: false
+      upload-artifacts: false
