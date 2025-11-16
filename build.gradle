@@ -113,7 +113,7 @@ allprojects {
 
     jar {
         from('LICENSE') {
-            rename { "${it}_${project.archivesBaseName}" }
+            rename { "${it}_${rootProject.archive_base_name}" }
         }
     }
 
@@ -167,6 +167,10 @@ allprojects {
 }
 
 subprojects {
+    if (it.name == 'test') {
+        return
+    }
+
     apply plugin: 'com.gradleup.shadow'
 
     base {
@@ -175,29 +179,6 @@ subprojects {
 
     loom {
         accessWidenerPath = project(':').loom.accessWidenerPath
-
-        runs {
-            client {
-                client()
-
-                runDir 'run/client'
-
-                // To support the Enhanced Class Redefinition in JBR.
-                vmArg '-XX:+IgnoreUnrecognizedVMOptions'
-                vmArg '-XX:+AllowEnhancedClassRedefinition'
-
-                // https://openjdk.org/jeps/400
-                property 'file.encoding', 'COMPAT'
-            }
-
-            server {
-                server()
-                runDir 'run/server'
-                vmArg '-XX:+IgnoreUnrecognizedVMOptions'
-                vmArg '-XX:+AllowEnhancedClassRedefinition'
-                property 'file.encoding', 'COMPAT'
-            }
-        }
     }
 
     configurations {
@@ -215,9 +196,6 @@ subprojects {
             canBeResolved = true
             canBeConsumed = false
         }
-    }
-
-    dependencies {
     }
 
     shadowJar {

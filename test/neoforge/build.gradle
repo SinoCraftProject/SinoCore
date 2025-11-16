@@ -5,20 +5,11 @@ architectury {
 
 loom {
     runs {
-        client {
-            ideConfigGenerated = false
-        }
-
-        server {
-            ideConfigGenerated = false
-        }
-
         data {
             data()
-
+            name 'Test Data'
             runDir 'run/data'
-
-            programArgs '--all', '--mod', "${project.mod_id}"
+            programArgs '--all', '--mod', "sinocore_test"
             programArgs '--output', file('../src/generated/resources').absolutePath
             programArgs '--existing', file('../src/main/resources').absolutePath
         }
@@ -28,11 +19,15 @@ loom {
 dependencies {
     neoForge "net.neoforged:neoforge:${rootProject.neoforge_version}"
 
+    api project(path: ':', configuration: 'namedElements')
+    api project(path: ':neoforge', configuration: 'namedElements')
+
     common(project(path: ':', configuration: 'namedElements')) { transitive false }
-    shadowBundle project(path: ':', configuration: 'transformProductionNeoForge')
+    common(project(path: ':test', configuration: 'namedElements')) { transitive false }
+    shadowBundle project(path: ':test', configuration: 'transformProductionNeoForge')
 }
 
 remapJar {
     // Remap aw to at.
-    atAccessWideners.add(loom.accessWidenerPath.get().asFile.name)
+//    atAccessWideners.add(loom.accessWidenerPath.get().asFile.name)
 }

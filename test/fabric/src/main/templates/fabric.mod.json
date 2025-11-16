@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "sinocore_test",
+  "version": "${mod_version}",
+  "name": "SinoCore Test Mod",
+  "description": "Test mod of SinoCore",
+  "authors": [
+    "${mod_authors}"
+  ],
+  "contributors": [
+    "${mod_credits}"
+  ],
+  "contact": {
+    "homepage": "${mod_homepage}",
+    "sources": "${mod_sources}",
+    "issues": "${mod_issues_page}"
+  },
+  "license": "${mod_license}",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "games.moegirl.sinocraft.sinocore_test.fabric.SinoTestFabric"
+    ]
+  },
+  "mixins": [
+    "sinocore-test-common.mixins.json",
+    "sinocore-test-fabric.mixins.json"
+  ],
+  "depends": {
+    "java": "${fabric_java_version_range}",
+    "minecraft": "${fabric_minecraft_version_range}",
+    "fabricloader": "${fabric_loader_version_range}",
+    "fabric": "${fabric_api_version_range}",
+    "sinocore": "*"
+  }
+}

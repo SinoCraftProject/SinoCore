@@ -1,0 +1,99 @@
+plugins {
+    id 'java'
+    id 'maven-publish'
+    id 'architectury-plugin'
+    id 'dev.architectury.loom'
+}
+
+// https://github.com/gradle/gradle/issues/847
+group = 'games.moegirl.sinocraft.test'
+
+base {
+    archivesName = "$rootProject.archive_base_name-test-common"
+}
+
+architectury {
+    common(rootProject.enabled_platforms.split(','))
+}
+
+loom {
+    runConfigs.configureEach {
+        ideConfigGenerated = false
+    }
+}
+
+dependencies {
+    // In order to use the @Environment and @EnvironmentInterface annotations from fabric loader.
+    modImplementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
+
+    api project(path: ':', configuration: 'namedElements')
+}
+
+sourceSets.main.resources.srcDir file('src/generated/resources')
+
+subprojects {
+    apply plugin: 'com.gradleup.shadow'
+
+    // XXX: Use another group name to preventing gradle path unintended behavior
+    // https://github.com/gradle/gradle/issues/847
+    group = 'games.moegirl.sinocraft.test'
+
+    base {
+        archivesName = "$rootProject.archive_base_name-test-${loom.getPlatform().get().id()}"
+    }
+
+    configurations {
+        common {
+            canBeResolved = true
+            canBeConsumed = false
+        }
+
+        compileClasspath.extendsFrom common
+        runtimeClasspath.extendsFrom common
+        developmentFabric.extendsFrom common
+        developmentNeoForge.extendsFrom common
+
+        shadowBundle {
+            canBeResolved = true
+            canBeConsumed = false
+        }
+    }
+
+    loom {
+//        accessWidenerPath = project(':test').loom.accessWidenerPath
+
+        runs {
+            client {
+                client()
+                name 'Test Client'
+                runDir 'run/client'
+                vmArg '-XX:+IgnoreUnrecognizedVMOptions'
+                vmArg '-XX:+AllowEnhancedClassRedefinition'
+                property 'file.encoding', 'COMPAT'
+            }
+
+            server {
+                server()
+                name 'Test Server'
+                runDir 'run/server'
+                vmArg '-XX:+IgnoreUnrecognizedVMOptions'
+                vmArg '-XX:+AllowEnhancedClassRedefinition'
+                property 'file.encoding', 'COMPAT'
+            }
+        }
+    }
+
+    shadowJar {
+        exclude 'architectury.common.json'
+        configurations = [project.configurations.shadowBundle]
+        archiveClassifier = 'dev-shadow'
+    }
+
+    remapJar {
+        input.set shadowJar.archiveFile
+    }
+
+    shadow {
+        addShadowVariantIntoJavaComponent = false
+    }
+}

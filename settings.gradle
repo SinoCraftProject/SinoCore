@@ -8,7 +8,8 @@ pluginManagement {
     }
 }
 
-rootProject.name = 'SinoCore'
-
 include(':fabric')
 include(':neoforge')
+include(':test')
+include(':test:fabric')
+include(':test:neoforge')
