@@ -29,13 +29,7 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
 }
 
-sourceSets {
-    main {
-        resources {
-            srcDir file('src/generated/resources')
-        }
-    }
-}
+sourceSets.main.resources.srcDir file('src/generated/resources')
 
 publishing {
     publications {
@@ -169,7 +163,7 @@ allprojects {
         into 'build/generated/sources/mod-metadata'
     }
     sourceSets.main.resources.srcDir generateModMetadata
-    ideaSyncTask.dependsOn generateModMetadata
+    processResources.dependsOn generateModMetadata
 }
 
 subprojects {
