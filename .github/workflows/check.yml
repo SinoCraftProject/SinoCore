@@ -2,9 +2,10 @@ name: Build check
 on:
   push:
     paths:
-      - src
-      - neoforge
-      - fabric
+      - src/**/*
+      - neoforge/**/*
+      - fabric/**/*
+      - test/**/*
       - build.gradle
       - gradle.properties
       - settings.gradle
