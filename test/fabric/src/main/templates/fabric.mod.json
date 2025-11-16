@@ -19,7 +19,7 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "games.moegirl.sinocraft.sinocore_test.fabric.SinoTestFabric"
+      "games.moegirl.sinocraft.sinocore_test.fabric.SinoCoreTestFabric"
     ]
   },
   "mixins": [

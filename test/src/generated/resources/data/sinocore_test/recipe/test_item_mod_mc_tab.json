@@ -1,0 +1,37 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "sinocore_test:test_item_mc_tab"
+    },
+    {
+      "item": "sinocore_test:test_item_mc_tab"
+    },
+    {
+      "item": "sinocore_test:test_item_mc_tab"
+    },
+    {
+      "item": "sinocore_test:test_item_mc_tab"
+    },
+    {
+      "item": "sinocore_test:test_item_mc_tab"
+    },
+    {
+      "item": "sinocore_test:test_item_mc_tab"
+    },
+    {
+      "item": "sinocore_test:test_item_mc_tab"
+    },
+    {
+      "item": "sinocore_test:test_item_mc_tab"
+    },
+    {
+      "item": "sinocore_test:test_item_mc_tab"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "sinocore_test:test_item_mod_mc_tab"
+  }
+}
