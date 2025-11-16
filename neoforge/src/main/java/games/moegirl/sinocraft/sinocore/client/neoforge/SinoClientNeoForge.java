@@ -13,7 +13,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 
 @SuppressWarnings("deprecation")
-@EventBusSubscriber(modid = SinoCore.MODID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+@EventBusSubscriber(modid = SinoCore.MODID, value = Dist.CLIENT)
 public class SinoClientNeoForge {
     private static ItemColors itemColors;
     private static BlockColors blockColors;

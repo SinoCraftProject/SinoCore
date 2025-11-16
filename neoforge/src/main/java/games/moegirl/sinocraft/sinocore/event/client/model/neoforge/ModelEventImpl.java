@@ -13,7 +13,7 @@ import net.neoforged.neoforge.client.event.ModelEvent;
 import java.util.HashMap;
 import java.util.Objects;
 
-@EventBusSubscriber(modid = SinoCore.MODID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+@EventBusSubscriber(modid = SinoCore.MODID, value = Dist.CLIENT)
 public class ModelEventImpl {
     @SubscribeEvent
     public static void onModelBake(ModelEvent.ModifyBakingResult event) {

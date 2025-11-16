@@ -8,7 +8,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RenderItemInFrameEvent;
 
-@EventBusSubscriber(modid = SinoCore.MODID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
+@EventBusSubscriber(modid = SinoCore.MODID, value = Dist.CLIENT)
 public class RenderEventImpl {
     @SubscribeEvent
     public static void onRenderInFrame(RenderItemInFrameEvent event) {
