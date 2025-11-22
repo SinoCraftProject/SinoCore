@@ -13,6 +13,7 @@ jobs:
       upload-artifacts: true
 
   upload:
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Download artifact
