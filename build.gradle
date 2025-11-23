@@ -173,18 +173,18 @@ allprojects {
             var mavenUser = System.getenv('MOD_MAVEN_USER')
             var mavenPass = System.getenv('MOD_MAVEN_PASS')
             if (mavenUser && mavenPass) {
-//                maven {
-//                    name = 'YuluoMaven'
-//
-//                    var releaseUrl = 'https://maven.yuluo.dev/repository/maven-releases/'
-//                    var snapshotUrl = 'https://maven.yuluo.dev/repository/maven-snapshots/'
-//                    url = release ? releaseUrl : snapshotUrl
-//
-//                    credentials {
-//                        username mavenUser
-//                        password mavenPass
-//                    }
-//                }
+                maven {
+                    name = 'YuluoMaven'
+
+                    var releaseUrl = 'https://maven.yuluo.dev/repository/maven-releases/'
+                    var snapshotUrl = 'https://maven.yuluo.dev/repository/maven-snapshots/'
+                    url = release ? releaseUrl : snapshotUrl
+
+                    credentials {
+                        username mavenUser
+                        password mavenPass
+                    }
+                }
             }
         }
     }
