@@ -3,7 +3,6 @@
   "item.sinocore_test.test_item_mc_tab": "测试物品：位于建筑物品标签",
   "item.sinocore_test.test_item_mod_mc_tab": "测试物品：位于两个标签",
   "item.sinocore_test.test_item_mod_tab": "测试物品：位于 Mod 标签",
-  "itemGroup.sinocore_test.sinocore_test": "SinoTest: 测试标签",
   "sinocore_test.test.block": "你点击的方块带有测试标签。",
   "sinocore_test.test.item": "你的副手物品携带了测试标签。"
 }

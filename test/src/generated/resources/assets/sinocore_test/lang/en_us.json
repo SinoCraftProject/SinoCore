@@ -3,7 +3,6 @@
   "item.sinocore_test.test_item_mc_tab": "Test Item: In building tab",
   "item.sinocore_test.test_item_mod_mc_tab": "Test Item: In mod and building tab",
   "item.sinocore_test.test_item_mod_tab": "Test Item: In mod tab",
-  "itemGroup.sinocore_test.sinocore_test": "SinoTest: Test Tab",
   "sinocore_test.test.block": "You clicked a block with test tag.",
   "sinocore_test.test.item": "Your offhand has item with test tag."
 }
