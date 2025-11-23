@@ -15,6 +15,7 @@ import net.minecraft.world.level.ItemLike;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+@Deprecated(forRemoval = true, since = "1.2.0")
 public abstract class AdvancementProviderDelegateBase extends ProviderDelegateBase<AdvancementProviderDelegateBase> {
 
     protected AdvancementProviderDelegateBase(DataProviderBuilderBase<?, ?> builder) {

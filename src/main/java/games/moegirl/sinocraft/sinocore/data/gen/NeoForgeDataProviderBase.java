@@ -15,6 +15,7 @@ import java.util.concurrent.CompletableFuture;
  *     <li>{@link ProviderDelegateBase}: 代理平台相关的 provider 实现，并负责收集数据</li>
  * </ul>
  */
+@Deprecated(forRemoval = true, since = "1.2.0")
 public abstract class NeoForgeDataProviderBase<T extends ProviderDelegateBase<T>> implements ISinoDataProvider {
 
     private final T delegate;

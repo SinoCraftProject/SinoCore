@@ -6,6 +6,7 @@ import games.moegirl.sinocraft.sinocore.data.gen.NeoForgeDataProviderBase;
 import games.moegirl.sinocraft.sinocore.data.gen.delegate.AdvancementProviderDelegateBase;
 import org.jetbrains.annotations.NotNull;
 
+@Deprecated(forRemoval = true, since = "1.2.0")
 public abstract class AbstractAdvancementProvider extends NeoForgeDataProviderBase<AdvancementProviderDelegateBase> {
 
     protected final String modId;

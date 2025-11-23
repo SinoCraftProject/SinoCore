@@ -1,4 +1,4 @@
-package games.moegirl.sinocraft.sinocore_test.datagen.gen;
+package games.moegirl.sinocraft.sinocore_test.neoforge.datagen.providers;
 
 import games.moegirl.sinocraft.sinocore.data.gen.AbstractDatapackBuiltinEntriesProvider;
 import games.moegirl.sinocraft.sinocore.data.gen.DataGenContext;

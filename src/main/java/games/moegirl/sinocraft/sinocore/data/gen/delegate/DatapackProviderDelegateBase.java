@@ -5,6 +5,7 @@ import net.minecraft.resources.ResourceKey;
 
 import java.util.function.Consumer;
 
+@Deprecated(forRemoval = true, since = "1.2.0")
 public abstract class DatapackProviderDelegateBase extends ProviderDelegateBase<DatapackProviderDelegateBase> {
 
     protected DatapackProviderDelegateBase(DataProviderBuilderBase<?, ?> builder) {

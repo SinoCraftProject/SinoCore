@@ -17,6 +17,7 @@ import net.minecraft.world.level.block.Block;
 
 import java.util.function.Supplier;
 
+@Deprecated(forRemoval = true, since = "1.2.0")
 public class NeoForgeLanguageProviderDelegate extends LanguageProviderDelegateBase {
 
     private final NeoForgeLanguageProviderImpl provider;

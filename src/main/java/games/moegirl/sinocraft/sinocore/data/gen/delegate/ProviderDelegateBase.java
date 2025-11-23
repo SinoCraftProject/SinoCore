@@ -10,6 +10,7 @@ import java.util.Objects;
 /**
  * 持有 Forge 的 DataProvider 实现，并负责收集数据
  */
+@Deprecated(forRemoval = true, since = "1.2.0")
 public abstract class ProviderDelegateBase<T extends ProviderDelegateBase<T>> {
 
     private NeoForgeDataProviderBase<T> provider;

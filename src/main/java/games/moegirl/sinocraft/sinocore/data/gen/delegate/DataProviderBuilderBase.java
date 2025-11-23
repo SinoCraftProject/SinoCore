@@ -2,6 +2,7 @@ package games.moegirl.sinocraft.sinocore.data.gen.delegate;
 
 import net.minecraft.data.DataProvider;
 
+@Deprecated(forRemoval = true, since = "1.2.0")
 public abstract class DataProviderBuilderBase<D extends ProviderDelegateBase<? super D>, P extends DataProvider> {
 
     protected D delegate;

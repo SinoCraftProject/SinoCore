@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+@Deprecated(forRemoval = true, since = "1.2.0")
 public class DataGenerator {
 
     protected final List<Function<DataGenContext, DataProvider>> providers = new ArrayList<>();

@@ -20,6 +20,7 @@ import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 
+@Deprecated(forRemoval = true, since = "1.2.0")
 public abstract class AbstractItemTagsProvider extends IntrinsicHolderTagsProvider<Item> implements ISinoRenamedProviderBridge, ISinoDataProvider {
 
     protected static final TagKey<Item> FORGE_CHESTS_WOODEN = forgeTag("chests/wooden");

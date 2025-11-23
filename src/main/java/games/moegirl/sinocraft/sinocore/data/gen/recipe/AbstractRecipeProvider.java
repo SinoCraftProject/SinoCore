@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
+@Deprecated(forRemoval = true, since = "1.2.0")
 public abstract class AbstractRecipeProvider extends RecipeProvider implements ISinoRenamedProviderBridge, ISinoDataProvider {
 
     protected final String modId;

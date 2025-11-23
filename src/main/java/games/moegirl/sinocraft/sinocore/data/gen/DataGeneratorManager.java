@@ -11,7 +11,9 @@ import java.util.function.Consumer;
 
 /**
  * SinoCore Data Generator
+ * Deprecated: use neoforge data-gen instead
  */
+@Deprecated(forRemoval = true, since = "1.2.0")
 public class DataGeneratorManager {
     private static final Map<String, List<DataGenerator>> DATA_GENERATORS = new ConcurrentHashMap<>();
 

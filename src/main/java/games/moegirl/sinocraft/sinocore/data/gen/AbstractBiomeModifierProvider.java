@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 // 明明有 CODEC，但搞不到 Holder，只能用这玩意，就很气
+// Todo: move to nf
 public abstract class AbstractBiomeModifierProvider implements ISinoDataProvider {
     protected static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
@@ -32,6 +33,7 @@ public abstract class AbstractBiomeModifierProvider implements ISinoDataProvider
         this.modId = modId;
     }
 
+    @Deprecated(forRemoval = true, since = "1.2.0")
     public AbstractBiomeModifierProvider(DataGenContext context) {
         this(context.getOutput(), context.getModId());
     }

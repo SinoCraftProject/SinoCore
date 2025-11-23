@@ -15,6 +15,7 @@ import net.minecraft.world.level.block.Block;
 
 import java.util.function.Supplier;
 
+@Deprecated(forRemoval = true, since = "1.2.0")
 public abstract class LanguageProviderDelegateBase extends ProviderDelegateBase<LanguageProviderDelegateBase> {
 
     protected LanguageProviderDelegateBase(DataProvider provider) {

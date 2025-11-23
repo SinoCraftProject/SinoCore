@@ -6,6 +6,7 @@ import net.minecraft.data.PackOutput;
 
 import java.util.concurrent.CompletableFuture;
 
+@Deprecated(forRemoval = true, since = "1.2.0")
 public class DataGenContext {
 
     private final String modId;

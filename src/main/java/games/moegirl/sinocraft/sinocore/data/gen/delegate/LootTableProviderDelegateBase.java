@@ -30,6 +30,7 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 
+@Deprecated(forRemoval = true, since = "1.2.0")
 public class LootTableProviderDelegateBase extends ProviderDelegateBase<LootTableProviderDelegateBase> {
 
     protected final IBlockLootTableSubProvider blocks;

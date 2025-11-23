@@ -8,6 +8,7 @@ import games.moegirl.sinocraft.sinocore.data.gen.delegate.ProviderDelegateBase;
 import games.moegirl.sinocraft.sinocore.registry.IRegistry;
 import net.minecraft.world.item.Item;
 
+@Deprecated(forRemoval = true, since = "1.2.0")
 public abstract class AbstractItemModelProvider extends NeoForgeDataProviderBase {
 
     protected final String modId;

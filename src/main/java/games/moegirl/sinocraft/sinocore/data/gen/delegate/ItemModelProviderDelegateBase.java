@@ -9,6 +9,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 
+@Deprecated(forRemoval = true, since = "1.2.0")
 public abstract class ItemModelProviderDelegateBase<T extends IItemModelBuilder<T>> 
         extends ProviderDelegateBase<ItemModelProviderDelegateBase<T>> implements IModelProvider<T> {
 

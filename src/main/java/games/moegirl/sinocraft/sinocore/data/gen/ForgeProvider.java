@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
  * <p></p>
  * 要求 Forge 部分需要存在实现 IForgeProviders 的类并存在无参构造
  */
+@Deprecated(forRemoval = true, since = "1.2.0")
 public class ForgeProvider implements ISinoDataProvider {
 
     protected final String modId;

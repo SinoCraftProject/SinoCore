@@ -7,6 +7,8 @@ import games.moegirl.sinocraft.sinocore.data.gen.delegate.LootTableProviderDeleg
 import net.minecraft.core.HolderLookup;
 import org.jetbrains.annotations.NotNull;
 
+@Deprecated(forRemoval = true, since = "1.2.0")
+// Todo: move to nf
 public abstract class AbstractLootTableProvider extends NeoForgeDataProviderBase<LootTableProviderDelegateBase> {
 
     protected final String modId;

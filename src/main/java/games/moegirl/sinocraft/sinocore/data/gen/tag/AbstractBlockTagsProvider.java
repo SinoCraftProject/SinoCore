@@ -18,6 +18,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
+@Deprecated(forRemoval = true, since = "1.2.0")
 public abstract class AbstractBlockTagsProvider extends IntrinsicHolderTagsProvider<Block> implements ISinoRenamedProviderBridge, ISinoDataProvider {
 
     protected static final TagKey<Block> FORGE_CHESTS_WOODEN = forgeTag("chests/wooden");

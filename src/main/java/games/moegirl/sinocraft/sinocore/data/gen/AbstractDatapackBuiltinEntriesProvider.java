@@ -3,6 +3,8 @@ package games.moegirl.sinocraft.sinocore.data.gen;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import games.moegirl.sinocraft.sinocore.data.gen.delegate.DatapackProviderDelegateBase;
 
+@Deprecated(forRemoval = true, since = "1.2.0")
+// Todo: move to nf
 public abstract class AbstractDatapackBuiltinEntriesProvider extends NeoForgeDataProviderBase<DatapackProviderDelegateBase> {
 
     protected final String modId;
