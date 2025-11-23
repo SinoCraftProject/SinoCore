@@ -11,6 +11,7 @@ jobs:
     with:
       mod-release: false
       upload-artifacts: true
+      publish-maven: true
 
   upload:
     needs: build
