@@ -1,0 +1,15 @@
+name: Mod Release
+on:
+  push:
+    tags:
+      - 'v**'
+  workflow_dispatch:
+
+jobs:
+  build:
+    uses: ./.github/workflows/build.yml
+    with:
+      mod-release: true
+      upload-artifacts: true
+      publish-maven: true
+      publish-mod: true
