@@ -2,6 +2,7 @@ package games.moegirl.sinocraft.sinocore.data.gen.blockstate;
 
 import games.moegirl.sinocraft.sinocore.data.gen.model.IModelFile;
 
+@Deprecated(forRemoval = true, since = "1.2.0")
 public interface IConfiguredModel {
 
     public interface Builder<T extends IBlockStateBuilder> {

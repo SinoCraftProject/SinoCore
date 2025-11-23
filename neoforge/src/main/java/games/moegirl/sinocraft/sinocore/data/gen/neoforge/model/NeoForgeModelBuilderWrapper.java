@@ -14,6 +14,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.BiConsumer;
 
+@Deprecated(forRemoval = true, since = "1.2.0")
 public class NeoForgeModelBuilderWrapper<F extends ModelBuilder<F>, T extends NeoForgeModelBuilderWrapper<F, T>>
         extends NeoForgeModelFileWrapper<F, T> implements IModelBuilder<T> {
 

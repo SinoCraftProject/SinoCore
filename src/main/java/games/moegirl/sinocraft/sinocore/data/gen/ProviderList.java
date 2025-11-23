@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 /**
  * 按顺序执行的 Provider
  */
+@Deprecated(forRemoval = true, since = "1.2.0")
 public final class ProviderList implements DataProvider {
 
     private static final Logger LOGGER = LogUtils.getLogger();

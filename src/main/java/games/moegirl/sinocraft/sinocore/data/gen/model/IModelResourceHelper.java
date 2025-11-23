@@ -3,6 +3,7 @@ package games.moegirl.sinocraft.sinocore.data.gen.model;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
 
+@Deprecated(forRemoval = true, since = "1.2.0")
 public interface IModelResourceHelper<T extends IModelBuilder<T>> {
 
     String getBlockFolder();

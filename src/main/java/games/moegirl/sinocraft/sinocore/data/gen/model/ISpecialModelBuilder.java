@@ -2,6 +2,7 @@ package games.moegirl.sinocraft.sinocore.data.gen.model;
 
 import net.minecraft.resources.ResourceLocation;
 
+@Deprecated(forRemoval = true, since = "1.2.0")
 public interface ISpecialModelBuilder<T extends IModelBuilder<T>> {
 
     IModelProvider<T> getModelProvider();

@@ -7,10 +7,12 @@ import java.util.Optional;
  */
 public interface EasyCast {
 
+    @SuppressWarnings("unchecked")
     static <T> T forceCast(Object o) {
         return (T) o;
     }
 
+    @SuppressWarnings("unchecked")
     static <T> Optional<T> safeCast(Object o, Class<? extends T> aClass) {
         return aClass.isInstance(o) ? Optional.of((T) o) : Optional.empty();
     }

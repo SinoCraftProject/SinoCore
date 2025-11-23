@@ -8,6 +8,7 @@ import java.util.SortedMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+@Deprecated(forRemoval = true, since = "1.2.0")
 public interface IVariantStateBuilder extends IBlockStateBuilder {
 
     IVariantStateBuilder addModels(IPartialState state, IConfiguredModel... models);

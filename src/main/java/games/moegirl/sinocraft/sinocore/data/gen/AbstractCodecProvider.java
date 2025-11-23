@@ -41,6 +41,7 @@ public abstract class AbstractCodecProvider implements ISinoDataProvider {
         this.modId = modId;
     }
 
+    @Deprecated(forRemoval = true, since = "1.2.0")
     public AbstractCodecProvider(DataGenContext context) {
         this(context.getOutput(), context.getRegistries(), context.getModId());
     }

@@ -6,6 +6,7 @@ import games.moegirl.sinocraft.sinocore.data.gen.NeoForgeDataProviderBase;
 import games.moegirl.sinocraft.sinocore.data.gen.delegate.BlockModelProviderDelegateBase;
 import games.moegirl.sinocraft.sinocore.data.gen.delegate.ProviderDelegateBase;
 
+@Deprecated(forRemoval = true, since = "1.2.0")
 public abstract class AbstractBlockModelProvider extends NeoForgeDataProviderBase {
     protected final String modId;
 

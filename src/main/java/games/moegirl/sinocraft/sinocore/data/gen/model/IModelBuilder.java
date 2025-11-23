@@ -10,6 +10,7 @@ import org.joml.Vector3f;
 
 import java.util.function.BiConsumer;
 
+@Deprecated(forRemoval = true, since = "1.2.0")
 public interface IModelBuilder<T extends IModelBuilder<T>> extends IModelFile {
 
     T parent(IModelFile parent);
