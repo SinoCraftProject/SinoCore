@@ -6,8 +6,6 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 
-import java.util.List;
-
 @EventBusSubscriber(modid = SinoCoreTest.MODID)
 public class ModDataGen {
 
@@ -18,7 +16,7 @@ public class ModDataGen {
         var output = generator.getPackOutput();
         var registries = event.getLookupProvider();
 
-        event.addProvider(new TestAdvancementProvider(output, registries, existingFileHelper, List.of()));  // Todo: advancement providers
+        event.addProvider(new TestAdvancementProvider(output, registries, existingFileHelper, SinoCoreTest.MODID));
         event.addProvider(new TestEnLanguageProvider(output, SinoCoreTest.MODID));
         event.addProvider(new TestZhLanguageProvider(output, SinoCoreTest.MODID));
         event.addProvider(new TestBiomeModifierProvider(output, SinoCoreTest.MODID));   // Todo: biome modifiers
