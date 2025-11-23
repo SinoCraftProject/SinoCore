@@ -5,12 +5,18 @@ import net.minecraft.client.color.block.BlockColor;
 import net.minecraft.client.color.block.BlockColors;
 import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.client.color.item.ItemColors;
+import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @SuppressWarnings("deprecation")
 @EventBusSubscriber(modid = SinoCore.MODID, value = Dist.CLIENT)
@@ -42,5 +48,15 @@ public class SinoClientNeoForge {
     @SubscribeEvent
     public static void onRegisterColorHandlersEvent(RegisterColorHandlersEvent.Block event) {
         blockColors = event.getBlockColors();
+    }
+
+    private static final Map<Item, BlockEntityWithoutLevelRenderer> itemCustomRenderers = new HashMap<>();
+
+    static void setItemCustomRenderer(Item item, BlockEntityWithoutLevelRenderer renderer) {
+        itemCustomRenderers.put(item, renderer);
+    }
+
+    public static @Nullable BlockEntityWithoutLevelRenderer getItemCustomRenderer(Item item) {
+        return itemCustomRenderers.get(item);
     }
 }

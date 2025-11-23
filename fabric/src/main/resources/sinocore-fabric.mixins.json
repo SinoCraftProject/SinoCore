@@ -6,7 +6,6 @@
     "mixins": [
     ],
     "client": [
-        "client.ItemMixin_Fabric_Client",
         "event.client.render.ItemFrameRendererMixin"
     ],
     "server": [
