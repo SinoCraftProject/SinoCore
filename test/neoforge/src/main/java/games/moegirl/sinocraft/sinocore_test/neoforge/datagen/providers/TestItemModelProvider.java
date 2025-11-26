@@ -1,13 +1,17 @@
 package games.moegirl.sinocraft.sinocore_test.neoforge.datagen.providers;
 
+import games.moegirl.sinocraft.sinocore.data.gen.neoforge.AbstractAutoGenItemModelProvider;
+import games.moegirl.sinocraft.sinocore.registry.IRegistry;
 import net.minecraft.data.PackOutput;
-import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
+import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
-public class TestItemModelProvider extends ItemModelProvider {
+public class TestItemModelProvider extends AbstractAutoGenItemModelProvider {
 
-    public TestItemModelProvider(PackOutput output, String modid, ExistingFileHelper existingFileHelper) {
-        super(output, modid, existingFileHelper);
+    @SafeVarargs
+    public TestItemModelProvider(PackOutput output, String modId, ExistingFileHelper existingFileHelper,
+                                 IRegistry<? extends Item>... autoGenRegistries) {
+        super(output, modId, existingFileHelper, autoGenRegistries);
     }
 
     @Override

@@ -9,6 +9,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.function.Supplier;
@@ -56,7 +57,7 @@ public class FabricRegistry<T> implements IRegistry<T> {
     }
 
     @Override
-    public Registry<T> getRegistry() {
+    public @NotNull Registry<T> getRegistry() {
         return sup.get();
     }
 

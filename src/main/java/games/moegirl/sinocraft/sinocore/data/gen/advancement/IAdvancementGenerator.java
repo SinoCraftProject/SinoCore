@@ -7,6 +7,7 @@ import net.minecraft.data.advancements.AdvancementSubProvider;
 
 import java.util.function.Consumer;
 
+@Deprecated(forRemoval = true, since = "1.2.0")
 public interface IAdvancementGenerator {
 
     void generate(HolderLookup.Provider registries, Consumer<AdvancementHolder> saver, DataGenContext context);

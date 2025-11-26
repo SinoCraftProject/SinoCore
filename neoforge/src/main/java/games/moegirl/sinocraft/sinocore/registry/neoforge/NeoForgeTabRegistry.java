@@ -13,6 +13,7 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -75,7 +76,7 @@ public class NeoForgeTabRegistry implements ITabRegistry {
     }
 
     @Override
-    public Registry<CreativeModeTab> getRegistry() {
+    public @NotNull Registry<CreativeModeTab> getRegistry() {
         return dr.getRegistry().get();
     }
 

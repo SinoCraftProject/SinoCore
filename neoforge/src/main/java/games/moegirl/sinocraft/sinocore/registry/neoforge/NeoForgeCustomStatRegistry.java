@@ -12,6 +12,7 @@ import net.minecraft.stats.StatFormatter;
 import net.minecraft.stats.Stats;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
@@ -46,7 +47,7 @@ public class NeoForgeCustomStatRegistry implements ICustomStatRegistry {
     }
 
     @Override
-    public Registry<ResourceLocation> getRegistry() {
+    public @NotNull Registry<ResourceLocation> getRegistry() {
         return reg.getRegistry();
     }
 

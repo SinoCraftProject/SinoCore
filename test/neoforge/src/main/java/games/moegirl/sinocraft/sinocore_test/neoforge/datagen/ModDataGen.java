@@ -2,6 +2,7 @@ package games.moegirl.sinocraft.sinocore_test.neoforge.datagen;
 
 import games.moegirl.sinocraft.sinocore_test.SinoCoreTest;
 import games.moegirl.sinocraft.sinocore_test.neoforge.datagen.providers.*;
+import games.moegirl.sinocraft.sinocore_test.registry.TestRegistry;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
@@ -20,10 +21,10 @@ public class ModDataGen {
         event.addProvider(new TestEnLanguageProvider(output, SinoCoreTest.MODID));
         event.addProvider(new TestZhLanguageProvider(output, SinoCoreTest.MODID));
         event.addProvider(new TestBiomeModifierProvider(output, SinoCoreTest.MODID));   // Todo: biome modifiers
-        event.addProvider(new TestItemModelProvider(output, SinoCoreTest.MODID, existingFileHelper));   // Todo: auto generating item models and block models.
         var blockTags = event.addProvider(new TestBlockTagsProvider(output, registries, SinoCoreTest.MODID, existingFileHelper));
         event.addProvider(new TestItemTagsProvider(output, registries, blockTags.contentsGetter()));
         event.addProvider(new TestRecipeProvider(output, registries));
+        event.addProvider(new TestBlockStateProvider(output, SinoCoreTest.MODID, existingFileHelper));  // Todo: autogen blockstates.
+        event.addProvider(new TestItemModelProvider(output, SinoCoreTest.MODID, existingFileHelper, TestRegistry.ITEMS));
     }
-
 }

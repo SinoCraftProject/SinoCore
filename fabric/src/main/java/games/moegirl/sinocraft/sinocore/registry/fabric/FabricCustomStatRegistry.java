@@ -9,6 +9,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.stats.StatFormatter;
 import net.minecraft.stats.Stats;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
@@ -39,7 +40,7 @@ public class FabricCustomStatRegistry implements ICustomStatRegistry {
     }
 
     @Override
-    public Registry<ResourceLocation> getRegistry() {
+    public @NotNull Registry<ResourceLocation> getRegistry() {
         return reg.getRegistry();
     }
 

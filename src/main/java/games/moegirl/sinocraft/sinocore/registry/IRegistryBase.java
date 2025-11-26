@@ -2,6 +2,7 @@ package games.moegirl.sinocraft.sinocore.registry;
 
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
@@ -11,14 +12,14 @@ public interface IRegistryBase<T> extends IRegistrable<T> {
      *
      * @return 注册表
      */
-    Registry<T> getRegistry();
+    @NotNull Registry<T> getRegistry();
 
     /**
      * 获取注册的所有元素引用
      *
      * @return 所有元素引用
      */
-    Iterable<IRegRef<T>> getEntries();
+    Iterable<@NotNull IRegRef<T>> getEntries();
 
     /**
      * 按 id 获取注册的元素引用

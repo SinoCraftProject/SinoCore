@@ -12,6 +12,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NewRegistryEvent;
 import net.neoforged.neoforge.registries.RegistryBuilder;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -61,7 +62,7 @@ public class NeoForgeRegistry<T> implements IRegistry<T> {
     }
 
     @Override
-    public Registry<T> getRegistry() {
+    public @NotNull Registry<T> getRegistry() {
         return dr.getRegistry().get();
     }
 

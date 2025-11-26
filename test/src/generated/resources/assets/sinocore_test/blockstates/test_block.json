@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "sinocore_test:block/test_block"
+    }
+  }
+}
