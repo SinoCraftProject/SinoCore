@@ -51,14 +51,6 @@ allprojects {
     version = "${rootProject.mod_version}+mc${project.minecraft_version}"
 
     var release = 'true'.equalsIgnoreCase(System.getenv('MOD_RELEASE'))
-    var isInCI = 'true'.equalsIgnoreCase(System.getenv('MOD_CI'))
-    if (isInCI) {
-        var buildNumber = System.getenv('MOD_CI_BUILD_NUMBER')
-        if (buildNumber != null) {
-            version += "-build.${buildNumber}"
-        }
-    }
-
     if (!release) {
         version += '-SNAPSHOT'
     }
@@ -160,7 +152,10 @@ allprojects {
 
                 full_version                    : project.version,
                 build_time                      : OffsetDateTime.now().toString(),
+                commit_id                       : System.getenv('MOD_CI_COMMIT_SHA') ?: 'uncommited',
+                is_release                      : release.toString()
         ]
+
         inputs.properties properties
         expand properties
         from 'src/main/templates'

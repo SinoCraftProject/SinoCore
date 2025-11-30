@@ -48,7 +48,7 @@ jobs:
     env:
       MOD_RELEASE: ${{ inputs.mod-release }}
       MOD_CI: true
-      MOD_CI_BUILD_NUMBER: ${{ github.run_number }}
+      MOD_CI_COMMIT_SHA: ${{ github.sha }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
