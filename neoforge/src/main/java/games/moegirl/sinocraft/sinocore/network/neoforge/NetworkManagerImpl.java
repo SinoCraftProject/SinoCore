@@ -4,6 +4,7 @@ import games.moegirl.sinocraft.sinocore.SinoCore;
 import games.moegirl.sinocraft.sinocore.network.PacketBuilder;
 import games.moegirl.sinocraft.sinocore.network.PacketTarget;
 import games.moegirl.sinocraft.sinocore.network.context.*;
+import games.moegirl.sinocraft.sinocore.utility.BuildInfo;
 import games.moegirl.sinocraft.sinocore.utility.neoforge.ModBusHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
@@ -38,7 +39,7 @@ public class NetworkManagerImpl {
                 .addListener((Consumer<RegisterPayloadHandlersEvent>) event -> {
                     var type = packet.getType();
                     var codec = packet.getCodec();
-                    var registrar = event.registrar(SinoCore.VERSION);
+                    var registrar = event.registrar(BuildInfo.MOD_VERSION);
 
                     var serverHandler = packet.getServerHandler();
                     var clientHandler = packet.getClientHandler();
@@ -68,7 +69,7 @@ public class NetworkManagerImpl {
                 .addListener((Consumer<RegisterPayloadHandlersEvent>) event -> {
                     var type = packet.getType();
                     var codec = packet.getCodec();
-                    var registrar = event.registrar(SinoCore.VERSION);
+                    var registrar = event.registrar(BuildInfo.MOD_VERSION);
 
 
                     var clientHandler = packet.getClientHandler();
