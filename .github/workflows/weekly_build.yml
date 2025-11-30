@@ -9,6 +9,7 @@ jobs:
   build:
     uses: ./.github/workflows/build.yml
     if: github.ref_name == 'main'
+    secrets: inherit
     with:
       mod-release: false
       upload-artifacts: true
