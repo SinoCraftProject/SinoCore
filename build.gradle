@@ -244,13 +244,4 @@ subprojects {
     shadow {
         addShadowVariantIntoJavaComponent = false
     }
-
-    publishing {
-        publications {
-            maven(MavenPublication) {
-                artifactId = project.base.archivesName.get()
-                from components.java
-            }
-        }
-    }
 }
