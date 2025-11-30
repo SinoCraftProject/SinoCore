@@ -56,11 +56,11 @@ allprojects {
         var buildNumber = System.getenv('MOD_CI_BUILD_NUMBER')
         if (buildNumber != null) {
             version += "-build.${buildNumber}"
-        } else {
-            if (!release) {
-                version += '-SNAPSHOT'
-            }
         }
+    }
+
+    if (!release) {
+        version += '-SNAPSHOT'
     }
 
     architectury {
