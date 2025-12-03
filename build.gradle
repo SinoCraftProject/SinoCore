@@ -48,7 +48,7 @@ allprojects {
     apply plugin: 'dev.architectury.loom'
 
     group = rootProject.maven_group
-    version = "${rootProject.mod_version}+mc${project.minecraft_version}"
+    version = rootProject.mod_version
 
     var release = 'true'.equalsIgnoreCase(System.getenv('MOD_RELEASE'))
     if (!release) {
@@ -150,7 +150,6 @@ allprojects {
                 fabric_loader_version_range     : project.fabric_loader_version_range,
                 fabric_api_version_range        : project.fabric_api_version_range,
 
-                full_version                    : project.version,
                 build_time                      : OffsetDateTime.now().toString(),
                 commit_id                       : System.getenv('MOD_CI_COMMIT_SHA') ?: 'uncommited',
                 is_release                      : release.toString()

@@ -47,7 +47,7 @@ unifiedPublishing {
 
     project {
         displayName = "${parent.mod_name} Fabric ${project.parent.mod_version} for MC ${rootProject.minecraft_version}"
-        version = project.version
+        version = "${project.version}+fabric"
         gameVersions = [rootProject.minecraft_version]
         gameLoaders = ['fabric']
         releaseType = 'release'
