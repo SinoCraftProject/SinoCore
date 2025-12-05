@@ -22,10 +22,14 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 
 public abstract class AbstractAutoGenItemModelProvider extends ItemModelProvider {
+    public static final String GENERATED = "item/generated";
+    public static final String HANDHELD = "item/handheld";
+
     private final Logger logger;
     private final boolean strict;
 
@@ -111,5 +115,14 @@ public abstract class AbstractAutoGenItemModelProvider extends ItemModelProvider
         }
 
         basicItem(item);
+    }
+
+    public ItemModelBuilder basicItem(Item item, ResourceLocation texture) {
+        return basicItem(Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(item)), texture);
+    }
+
+    public ItemModelBuilder basicItem(ResourceLocation item, ResourceLocation texture) {
+        return withExistingParent(item.toString(), GENERATED)
+                .texture("layer0", texture);
     }
 }
