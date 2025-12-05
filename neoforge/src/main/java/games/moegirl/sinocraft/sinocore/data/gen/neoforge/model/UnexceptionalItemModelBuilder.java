@@ -12,7 +12,9 @@ import java.util.function.Consumer;
 
 /**
  * @author luqin2007
+ * Use {@link games.moegirl.sinocraft.sinocore.datagen.model.LenientItemModelBuilder} instead.
  */
+@Deprecated(forRemoval = true, since = "1.2.0")
 public class UnexceptionalItemModelBuilder extends ItemModelBuilder {
 
     final List<Pair<String, ResourceLocation>> notExistingTexture = new ArrayList<>();

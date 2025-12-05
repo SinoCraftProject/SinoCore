@@ -12,7 +12,9 @@ import java.util.function.Consumer;
 
 /**
  * @author qyl27
+ * Use {@link games.moegirl.sinocraft.sinocore.datagen.model.LenientBlockModelBuilder} instead.
  */
+@Deprecated(forRemoval = true, since = "1.2.0")
 public class UnexceptionalBlockModelBuilder extends BlockModelBuilder {
 
     public final List<Pair<String, ResourceLocation>> notExistingTexture = new ArrayList<>();

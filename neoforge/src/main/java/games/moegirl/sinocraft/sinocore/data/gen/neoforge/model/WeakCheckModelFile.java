@@ -8,7 +8,9 @@ import java.util.function.Function;
 
 /**
  * Model file with weak check.
+ * Use {@link games.moegirl.sinocraft.sinocore.datagen.model.UncheckedExistingModelFile} instead.
  */
+@Deprecated(forRemoval = true, since = "1.2.0")
 public class WeakCheckModelFile extends ModelFile.ExistingModelFile {
 
     protected final boolean strict;
