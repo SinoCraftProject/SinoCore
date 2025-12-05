@@ -14,4 +14,19 @@ public class AdvancementTree extends games.moegirl.sinocraft.sinocore.datagen.ad
     public AdvancementTree(Consumer<AdvancementHolder> saver, ResourceLocation rootId, Advancement.Builder advancement) {
         super(saver, rootId, advancement);
     }
+
+    public AdvancementTree child(ResourceLocation id, Advancement.Builder advancement) {
+        super.child(id, advancement);
+        return this;
+    }
+
+    public AdvancementTree branch(ResourceLocation id, Advancement.Builder advancement) {
+        super.branch(id, advancement);
+        return this;
+    }
+
+    public AdvancementTree endBranch() {
+        super.endBranch();
+        return this;
+    }
 }

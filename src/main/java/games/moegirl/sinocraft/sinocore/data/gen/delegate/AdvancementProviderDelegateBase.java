@@ -3,7 +3,6 @@ package games.moegirl.sinocraft.sinocore.data.gen.delegate;
 import games.moegirl.sinocraft.sinocore.data.gen.advancement.AdvancementTree;
 import games.moegirl.sinocraft.sinocore.data.gen.advancement.DisplayInfoBuilder;
 import games.moegirl.sinocraft.sinocore.data.gen.advancement.IAdvancementGenerator;
-import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.critereon.*;
