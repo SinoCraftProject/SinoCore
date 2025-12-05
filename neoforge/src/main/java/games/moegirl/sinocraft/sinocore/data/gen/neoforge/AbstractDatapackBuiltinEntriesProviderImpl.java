@@ -4,6 +4,7 @@ import games.moegirl.sinocraft.sinocore.data.gen.DataGenContext;
 import games.moegirl.sinocraft.sinocore.data.gen.delegate.DatapackProviderDelegateBase;
 import games.moegirl.sinocraft.sinocore.data.gen.neoforge.impl.NeoForgeDatapackProviderDelegate;
 
+@Deprecated(forRemoval = true, since = "1.2.0")
 public class AbstractDatapackBuiltinEntriesProviderImpl {
 
     public static DatapackProviderDelegateBase createDelegate(DataGenContext context) {

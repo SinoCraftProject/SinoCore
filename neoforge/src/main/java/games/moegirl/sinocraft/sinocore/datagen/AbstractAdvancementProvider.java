@@ -1,7 +1,7 @@
-package games.moegirl.sinocraft.sinocore.data.gen.neoforge;
+package games.moegirl.sinocraft.sinocore.datagen;
 
-import games.moegirl.sinocraft.sinocore.data.gen.advancement.AdvancementTree;
-import games.moegirl.sinocraft.sinocore.data.gen.advancement.DisplayInfoBuilder;
+import games.moegirl.sinocraft.sinocore.datagen.advancement.AdvancementTree;
+import games.moegirl.sinocraft.sinocore.datagen.advancement.DisplayInfoBuilder;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;

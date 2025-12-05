@@ -1,6 +1,6 @@
 package games.moegirl.sinocraft.sinocore_test.neoforge.datagen.providers;
 
-import games.moegirl.sinocraft.sinocore.data.gen.neoforge.AbstractLanguageProvider;
+import games.moegirl.sinocraft.sinocore.datagen.AbstractLanguageProvider;
 import games.moegirl.sinocraft.sinocore_test.datagen.TestLangKeys;
 import games.moegirl.sinocraft.sinocore_test.registry.TestRegistry;
 import net.minecraft.data.PackOutput;

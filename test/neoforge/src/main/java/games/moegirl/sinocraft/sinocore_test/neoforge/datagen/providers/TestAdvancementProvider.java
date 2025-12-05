@@ -1,7 +1,7 @@
 package games.moegirl.sinocraft.sinocore_test.neoforge.datagen.providers;
 
-import games.moegirl.sinocraft.sinocore.data.gen.advancement.AdvancementTree;
-import games.moegirl.sinocraft.sinocore.data.gen.neoforge.AbstractAdvancementProvider;
+import games.moegirl.sinocraft.sinocore.datagen.advancement.AdvancementTree;
+import games.moegirl.sinocraft.sinocore.datagen.AbstractAdvancementProvider;
 import games.moegirl.sinocraft.sinocore_test.registry.TestRegistry;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementType;

@@ -1,4 +1,4 @@
-package games.moegirl.sinocraft.sinocore.data.gen.neoforge;
+package games.moegirl.sinocraft.sinocore.datagen;
 
 import com.google.common.collect.Streams;
 import games.moegirl.sinocraft.sinocore.registry.IRegistry;
