@@ -25,8 +25,10 @@ import java.util.concurrent.CompletableFuture;
 
 /**
  * 使用 CODEC 或 DIRECT_CODEC 直接导出 json 文件的的 Provider
+ * @deprecated Use {@link games.moegirl.sinocraft.sinocore.neoforge.api.datagen.AbstractCodecProvider} instead.
  */
 @SuppressWarnings({"unchecked", "rawtypes"})
+@Deprecated(forRemoval = true, since = "1.2.0")
 public abstract class AbstractCodecProvider implements ISinoDataProvider {
 
     protected final CompletableFuture<HolderLookup.Provider> provider;
@@ -41,7 +43,6 @@ public abstract class AbstractCodecProvider implements ISinoDataProvider {
         this.modId = modId;
     }
 
-    @Deprecated(forRemoval = true, since = "1.2.0")
     public AbstractCodecProvider(DataGenContext context) {
         this(context.getOutput(), context.getRegistries(), context.getModId());
     }
