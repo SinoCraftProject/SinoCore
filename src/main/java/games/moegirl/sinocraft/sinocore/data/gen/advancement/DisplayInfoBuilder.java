@@ -8,10 +8,10 @@ import net.minecraft.world.level.ItemLike;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Moved to {@link games.moegirl.sinocraft.sinocore.datagen.advancement.DisplayInfoBuilder}
+ * @deprecated Moved to {@link games.moegirl.sinocraft.sinocore.api.datagen.advancement.DisplayInfoBuilder}
  */
 @Deprecated(forRemoval = true, since = "1.2.0")
-public class DisplayInfoBuilder extends games.moegirl.sinocraft.sinocore.datagen.advancement.DisplayInfoBuilder {
+public class DisplayInfoBuilder extends games.moegirl.sinocraft.sinocore.api.datagen.advancement.DisplayInfoBuilder {
 
     public DisplayInfoBuilder setBackground(@Nullable ResourceLocation background) {
         super.setBackground(background);

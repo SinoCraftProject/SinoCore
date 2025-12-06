@@ -14,4 +14,9 @@ public class SinoCorePlatform {
     public static boolean isDevelopmentEnvironment() {
         throw new AssertionError();
     }
+
+    @ExpectPlatform
+    public static boolean isClientDist() {
+        throw new AssertionError();
+    }
 }

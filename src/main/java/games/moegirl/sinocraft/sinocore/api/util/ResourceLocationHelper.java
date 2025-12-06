@@ -1,4 +1,4 @@
-package games.moegirl.sinocraft.sinocore.helper;
+package games.moegirl.sinocraft.sinocore.api.util;
 
 import net.minecraft.resources.ResourceLocation;
 

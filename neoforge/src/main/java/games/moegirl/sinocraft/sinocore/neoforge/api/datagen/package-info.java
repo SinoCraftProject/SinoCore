@@ -1,6 +1,6 @@
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-package games.moegirl.sinocraft.sinocore.datagen.model;
+package games.moegirl.sinocraft.sinocore.neoforge.api.datagen;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
 

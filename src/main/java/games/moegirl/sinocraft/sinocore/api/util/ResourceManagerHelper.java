@@ -1,20 +1,14 @@
-package games.moegirl.sinocraft.sinocore.utility;
+package games.moegirl.sinocraft.sinocore.api.util;
 
 import games.moegirl.sinocraft.sinocore.SinoCorePlatform;
-import games.moegirl.sinocraft.sinocore.api.util.ResourceManagerHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.packs.resources.ResourceManager;
 
-/**
- * @deprecated Replaced by {@link ResourceManagerHelper}
- */
-@Deprecated(forRemoval = true, since = "1.2.0")
-public class Resources {
-
+public class ResourceManagerHelper {
     public static ResourceManager getResourceManager() {
-        try {
+        if (SinoCorePlatform.isClientDist()) {
             return Minecraft.getInstance().getResourceManager();
-        } catch (Exception /* ClassNotFoundException */ e) {
+        } else {
             return SinoCorePlatform.getServer().getResourceManager();
         }
     }

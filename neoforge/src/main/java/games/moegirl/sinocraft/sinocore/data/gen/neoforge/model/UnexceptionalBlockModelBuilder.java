@@ -1,6 +1,7 @@
 package games.moegirl.sinocraft.sinocore.data.gen.neoforge.model;
 
 import com.mojang.datafixers.util.Pair;
+import games.moegirl.sinocraft.sinocore.neoforge.api.datagen.model.LenientBlockModelBuilder;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.client.model.generators.BlockModelBuilder;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
@@ -12,7 +13,7 @@ import java.util.function.Consumer;
 
 /**
  * @author qyl27
- * Use {@link games.moegirl.sinocraft.sinocore.datagen.model.LenientBlockModelBuilder} instead.
+ * Use {@link LenientBlockModelBuilder} instead.
  */
 @Deprecated(forRemoval = true, since = "1.2.0")
 public class UnexceptionalBlockModelBuilder extends BlockModelBuilder {

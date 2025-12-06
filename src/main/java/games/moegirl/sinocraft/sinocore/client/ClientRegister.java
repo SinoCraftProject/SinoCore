@@ -10,6 +10,10 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 
+/**
+ * Will move to {@code games.moegirl.sinocraft.sinocore.api.client} in 1.2.0.
+ */
+@Deprecated
 public class ClientRegister {
 
     @ExpectPlatform

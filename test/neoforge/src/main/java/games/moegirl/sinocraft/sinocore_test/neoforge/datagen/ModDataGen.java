@@ -7,6 +7,8 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 
+import java.util.List;
+
 @EventBusSubscriber(modid = SinoCoreTest.MODID)
 public class ModDataGen {
 
@@ -24,7 +26,7 @@ public class ModDataGen {
         var blockTags = event.addProvider(new TestBlockTagsProvider(output, registries, SinoCoreTest.MODID, existingFileHelper));
         event.addProvider(new TestItemTagsProvider(output, registries, blockTags.contentsGetter()));
         event.addProvider(new TestRecipeProvider(output, registries));
-        event.addProvider(new TestBlockStateProvider(output, SinoCoreTest.MODID, existingFileHelper));  // Todo: autogen blockstates.
-        event.addProvider(new TestItemModelProvider(output, SinoCoreTest.MODID, existingFileHelper, TestRegistry.ITEMS));
+        event.addProvider(new TestBlockStateProvider(output, SinoCoreTest.MODID, existingFileHelper, List.of(TestRegistry.BLOCKS)));
+        event.addProvider(new TestItemModelProvider(output, SinoCoreTest.MODID, existingFileHelper, List.of(TestRegistry.ITEMS)));
     }
 }

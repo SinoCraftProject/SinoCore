@@ -1,4 +1,4 @@
-package games.moegirl.sinocraft.sinocore.datagen.model;
+package games.moegirl.sinocraft.sinocore.neoforge.api.datagen.model;
 
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.client.model.generators.ModelFile;

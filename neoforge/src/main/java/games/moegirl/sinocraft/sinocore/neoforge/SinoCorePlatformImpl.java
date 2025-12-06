@@ -13,4 +13,8 @@ public class SinoCorePlatformImpl {
     public static boolean isDevelopmentEnvironment() {
         return !FMLLoader.isProduction();
     }
+
+    public static boolean isClientDist() {
+        return FMLLoader.getDist().isClient();
+    }
 }

@@ -1,4 +1,4 @@
-package games.moegirl.sinocraft.sinocore.datagen.advancement;
+package games.moegirl.sinocraft.sinocore.api.datagen.advancement;
 
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementHolder;

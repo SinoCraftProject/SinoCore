@@ -1,18 +1,22 @@
 package games.moegirl.sinocraft.sinocore_test.neoforge.datagen.providers;
 
+import games.moegirl.sinocraft.sinocore.neoforge.api.datagen.AbstractAutoGenBlockStateProvider;
+import games.moegirl.sinocraft.sinocore.registry.IRegistry;
 import games.moegirl.sinocraft.sinocore_test.registry.TestRegistry;
 import net.minecraft.data.PackOutput;
-import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
+import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
-public class TestBlockStateProvider extends BlockStateProvider {
+import java.util.List;
 
-    public TestBlockStateProvider(PackOutput output, String modId, ExistingFileHelper exFileHelper) {
-        super(output, modId, exFileHelper);
+public class TestBlockStateProvider extends AbstractAutoGenBlockStateProvider {
+
+    public TestBlockStateProvider(PackOutput output, String modId, ExistingFileHelper exFileHelper, List<IRegistry<? extends Block>> autoGenRegistries) {
+        super(output, modId, exFileHelper, autoGenRegistries);
     }
 
     @Override
-    protected void registerStatesAndModels() {
+    protected void register() {
         cubeAll(TestRegistry.TEST_BLOCK.get());
         simpleBlock(TestRegistry.TEST_BLOCK.get());
     }

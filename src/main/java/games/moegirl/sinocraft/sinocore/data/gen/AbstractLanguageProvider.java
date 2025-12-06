@@ -3,6 +3,9 @@ package games.moegirl.sinocraft.sinocore.data.gen;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import games.moegirl.sinocraft.sinocore.data.gen.delegate.LanguageProviderDelegateBase;
 
+/**
+ * @deprecated Use {@link games.moegirl.sinocraft.sinocore.neoforge.api.datagen.AbstractLanguageProvider} instead.
+ */
 @Deprecated(forRemoval = true, since = "1.2.0")
 public abstract class AbstractLanguageProvider extends NeoForgeDataProviderBase<LanguageProviderDelegateBase> {
 

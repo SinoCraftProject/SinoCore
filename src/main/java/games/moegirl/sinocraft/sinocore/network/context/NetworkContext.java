@@ -1,24 +1,20 @@
 package games.moegirl.sinocraft.sinocore.network.context;
 
+import lombok.Getter;
 import net.minecraft.network.Connection;
 import net.minecraft.network.ConnectionProtocol;
 import net.minecraft.network.protocol.PacketFlow;
 
 public sealed class NetworkContext permits ClientNetworkContext, ServerNetworkContext {
+    @Getter
     protected final ConnectionProtocol stage;
+
+    @Getter
     protected final Connection connection;
 
     public NetworkContext(ConnectionProtocol stage, Connection connection) {
         this.stage = stage;
         this.connection = connection;
-    }
-
-    public ConnectionProtocol getStage() {
-        return stage;
-    }
-
-    public Connection getConnection() {
-        return connection;
     }
 
     /**

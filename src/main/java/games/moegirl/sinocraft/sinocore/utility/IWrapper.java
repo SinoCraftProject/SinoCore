@@ -1,5 +1,6 @@
 package games.moegirl.sinocraft.sinocore.utility;
 
+@Deprecated(forRemoval = true, since = "1.2.0")
 public interface IWrapper<O, T> extends ISelf<T> {
 
     O getOrigin();

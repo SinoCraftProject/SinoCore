@@ -7,10 +7,10 @@ import net.minecraft.resources.ResourceLocation;
 import java.util.function.Consumer;
 
 /**
- * Moved to {@link games.moegirl.sinocraft.sinocore.datagen.advancement.AdvancementTree}
+ * @deprecated Moved to {@link games.moegirl.sinocraft.sinocore.api.datagen.advancement.AdvancementTree}
  */
 @Deprecated(forRemoval = true, since = "1.2.0")
-public class AdvancementTree extends games.moegirl.sinocraft.sinocore.datagen.advancement.AdvancementTree {
+public class AdvancementTree extends games.moegirl.sinocraft.sinocore.api.datagen.advancement.AdvancementTree {
     public AdvancementTree(Consumer<AdvancementHolder> saver, ResourceLocation rootId, Advancement.Builder advancement) {
         super(saver, rootId, advancement);
     }

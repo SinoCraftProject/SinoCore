@@ -1,4 +1,4 @@
-package games.moegirl.sinocraft.sinocore.datagen.advancement;
+package games.moegirl.sinocraft.sinocore.api.datagen.advancement;
 
 import net.minecraft.advancements.AdvancementType;
 import net.minecraft.advancements.DisplayInfo;

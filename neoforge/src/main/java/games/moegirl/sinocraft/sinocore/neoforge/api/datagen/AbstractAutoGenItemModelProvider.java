@@ -1,17 +1,17 @@
-package games.moegirl.sinocraft.sinocore.datagen;
+package games.moegirl.sinocraft.sinocore.neoforge.api.datagen;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Streams;
-import games.moegirl.sinocraft.sinocore.datagen.model.LenientItemModelBuilder;
-import games.moegirl.sinocraft.sinocore.datagen.model.UncheckedExistingModelFile;
+import games.moegirl.sinocraft.sinocore.neoforge.api.datagen.model.LenientItemModelBuilder;
+import games.moegirl.sinocraft.sinocore.neoforge.api.datagen.model.UncheckedExistingModelFile;
 import games.moegirl.sinocraft.sinocore.registry.IRegistry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.data.CachedOutput;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.TieredItem;
+import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.client.model.generators.ItemModelBuilder;
 import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 
 public abstract class AbstractAutoGenItemModelProvider extends ItemModelProvider {
@@ -33,28 +32,27 @@ public abstract class AbstractAutoGenItemModelProvider extends ItemModelProvider
     private final Logger logger;
     private final boolean strict;
 
-    private final List<IRegistry<? extends Item>> registries;
+    private final List<IRegistry<? extends Item>> registries = new ArrayList<>();
     private final List<ResourceLocation> skipped = new ArrayList<>();
 
-    @SafeVarargs
     public AbstractAutoGenItemModelProvider(PackOutput output, String modId, ExistingFileHelper existingFileHelper,
-                                            IRegistry<? extends Item>... autoGenRegistries) {
+                                            List<IRegistry<? extends Item>> autoGenRegistries) {
         this(output, modId, existingFileHelper, false, autoGenRegistries);
     }
 
-    @SafeVarargs
     public AbstractAutoGenItemModelProvider(PackOutput output, String modId, ExistingFileHelper existingFileHelper,
-                                            boolean strict, IRegistry<? extends Item>... autoGenRegistries) {
+                                            boolean strict, List<IRegistry<? extends Item>> autoGenRegistries) {
         super(output, modId, existingFileHelper);
-        this.registries = Arrays.asList(autoGenRegistries);
         this.logger = LoggerFactory.getLogger(getName());
         this.strict = strict;
+        this.registries.addAll(autoGenRegistries);
     }
 
+    // <editor-fold desc="Inner implementation">
+
     @Override
-    public CompletableFuture<?> run(CachedOutput output) {
-        clear();
-        registerModels();
+    protected final void registerModels() {
+        register();
 
         registries.stream()
                 .flatMap(registry -> Streams.stream(registry.getEntries()))
@@ -63,8 +61,6 @@ public abstract class AbstractAutoGenItemModelProvider extends ItemModelProvider
                 .map(Supplier::get)
                 .map(Item::asItem)
                 .forEach(this::autoGenItem);
-
-        return generateAll(output);
     }
 
     @Override
@@ -91,18 +87,9 @@ public abstract class AbstractAutoGenItemModelProvider extends ItemModelProvider
         return new UncheckedExistingModelFile(path, existingFileHelper, p -> logger.warn("ModelFile {} does not exist in any known resource pack", p));
     }
 
-    public ResourceLocation locWithFolder(ResourceLocation path) {
-        return path.getPath().contains("/") ? path :
-                ResourceLocation.fromNamespaceAndPath(path.getNamespace(), folder + "/" + path.getPath());
-    }
-
-    protected void skipAutoGen(Item... items) {
-        skipped.addAll(Arrays.stream(items).map(BuiltInRegistries.ITEM::getKey).toList());
-    }
-
     private void autoGenItem(Item item) {
         if (item instanceof BlockItem b) {
-            var blockModel = modLoc(BLOCK_FOLDER + "/" + BuiltInRegistries.BLOCK.getKey(b.getBlock()).getPath());
+            var blockModel = modLoc(BLOCK_FOLDER + "/" + key(b.getBlock()).getPath());
             if (existingFileHelper.exists(blockModel, MODEL)) {
                 simpleBlockItem(b.getBlock());
                 return;
@@ -117,8 +104,29 @@ public abstract class AbstractAutoGenItemModelProvider extends ItemModelProvider
         basicItem(item);
     }
 
+    // </editor-fold>
+
+    protected abstract void register();
+
+    public ResourceLocation locWithFolder(ResourceLocation path) {
+        return path.getPath().contains("/") ? path :
+                ResourceLocation.fromNamespaceAndPath(path.getNamespace(), folder + "/" + path.getPath());
+    }
+
+    public void skipAutoGen(Item... items) {
+        skipped.addAll(Arrays.stream(items).map(this::key).toList());
+    }
+
+    public ResourceLocation key(Item item) {
+        return BuiltInRegistries.ITEM.getKey(item);
+    }
+
+    public ResourceLocation key(Block block) {
+        return BuiltInRegistries.BLOCK.getKey(block);
+    }
+
     public ItemModelBuilder basicItem(Item item, ResourceLocation texture) {
-        return basicItem(Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(item)), texture);
+        return basicItem(Objects.requireNonNull(key(item)), texture);
     }
 
     public ItemModelBuilder basicItem(ResourceLocation item, ResourceLocation texture) {

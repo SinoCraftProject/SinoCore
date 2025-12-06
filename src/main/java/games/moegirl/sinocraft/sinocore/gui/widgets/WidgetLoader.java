@@ -6,8 +6,8 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.MapCodec;
 import games.moegirl.sinocraft.sinocore.SinoCorePlatform;
+import games.moegirl.sinocraft.sinocore.api.util.ResourceManagerHelper;
 import games.moegirl.sinocraft.sinocore.gui.widgets.entry.AbstractWidgetEntry;
-import games.moegirl.sinocraft.sinocore.utility.Resources;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
 
@@ -54,7 +54,7 @@ public class WidgetLoader {
     public static Widgets loadWidgets(ResourceLocation name) {
         if (!FORCE_RELOAD_WIDGETS && WIDGETS.containsKey(name)) return (WIDGETS.get(name));
         ResourceLocation jsonFile = ResourceLocation.fromNamespaceAndPath(name.getNamespace(), name.getPath() + ".json");
-        Resource resource = Resources.getResourceManager()
+        Resource resource = ResourceManagerHelper.getResourceManager()
                 .getResource(jsonFile)
                 .orElseThrow(() -> new RuntimeException("Failed to load widget " + name + ": " + jsonFile + " not found"));
         try (BufferedReader reader = resource.openAsReader()) {

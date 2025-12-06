@@ -11,6 +11,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
+/**
+ * Will move to {@code games.moegirl.sinocraft.sinocore.api.injectable} in 1.2.0.
+ */
+@Deprecated
 public interface ISinoItemProperties {
 
     /**
@@ -46,7 +50,7 @@ public interface ISinoItemProperties {
      * @param asIcon 同时作为图标使用
      */
     default Item.Properties sino$tab(ResourceKey<CreativeModeTab> tab, Function<ItemLike, ItemStack> sup, boolean asIcon) {
-        return null;
+        return (Item.Properties) this;
     }
 
     /**

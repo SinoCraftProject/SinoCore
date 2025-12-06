@@ -7,8 +7,10 @@ import java.util.stream.Stream;
 /**
  * 可空类型接口，类似 {@link java.util.Optional}
  *
- * @param <T>
+ * @param <T> the type of value
+ * @deprecated Will move to {@link games.moegirl.sinocraft.sinocore.api.util.IOptional}
  */
+@Deprecated
 public interface IOptional<T> {
 
     boolean isPresent();

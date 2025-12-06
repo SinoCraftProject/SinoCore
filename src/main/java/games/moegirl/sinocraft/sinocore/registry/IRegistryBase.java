@@ -12,7 +12,7 @@ public interface IRegistryBase<T> extends IRegistrable<T> {
      *
      * @return 注册表
      */
-    @NotNull Registry<T> getRegistry();
+    Registry<T> getRegistry();
 
     /**
      * 获取注册的所有元素引用

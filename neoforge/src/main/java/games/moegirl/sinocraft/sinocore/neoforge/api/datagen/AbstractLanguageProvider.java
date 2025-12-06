@@ -1,4 +1,4 @@
-package games.moegirl.sinocraft.sinocore.datagen;
+package games.moegirl.sinocraft.sinocore.neoforge.api.datagen;
 
 import games.moegirl.sinocraft.sinocore.registry.ITabRegistry;
 import net.minecraft.core.registries.BuiltInRegistries;
