@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 // 明明有 CODEC，但搞不到 Holder，只能用这玩意，就很气
-// Todo: move to nf
+// Fixme: Biome Modifier is only for forge/neoforge.
 public abstract class AbstractBiomeModifierProvider implements ISinoDataProvider {
     protected static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 

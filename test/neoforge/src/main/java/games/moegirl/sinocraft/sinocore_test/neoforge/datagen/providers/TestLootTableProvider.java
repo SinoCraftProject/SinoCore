@@ -1,22 +1,32 @@
 package games.moegirl.sinocraft.sinocore_test.neoforge.datagen.providers;
 
-import games.moegirl.sinocraft.sinocore.data.gen.loot.AbstractLootTableProvider;
-import games.moegirl.sinocraft.sinocore.data.gen.DataGenContext;
-import games.moegirl.sinocraft.sinocore.data.gen.delegate.LootTableProviderDelegateBase;
+import games.moegirl.sinocraft.sinocore.neoforge.api.datagen.AbstractLootTableProvider;
+import games.moegirl.sinocraft.sinocore_test.registry.TestRegistry;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.PackOutput;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
+
+import java.util.concurrent.CompletableFuture;
 
 public class TestLootTableProvider extends AbstractLootTableProvider {
 
-    public TestLootTableProvider(DataGenContext context) {
-        super(context);
+    public TestLootTableProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries, String modId) {
+        super(output, registries, modId);
     }
 
     @Override
-    public void generateData(LootTableProviderDelegateBase delegate) {
-        // Todo: qyl27: fix it, broken in update to 1.21.
-//        IBlockLootTableSubProvider blocks = delegate.getBlocks();
-//        delegate.addBlock(TestRegistry.TEST_BLOCK, blocks.createSelfDropWithConditionTable(TestRegistry.TEST_BLOCK.get(),
-//                blocks.hasSilkTouch(),
-//                LootItem.lootTableItem(TestRegistry.TEST_ITEM_MC_TAB.get())
-//                        .apply(SetItemCountFunction.setCount(UniformGenerator.between(3, 5)))));
+    protected void register() {
+        addProvider(registries -> new AbstractBlockLootSubProvider(registries) {
+            @Override
+            public void generate() {
+                add(TestRegistry.TEST_BLOCK.get(), createSelfDropDispatchTable(TestRegistry.TEST_BLOCK.get(),
+                        hasSilkTouch(),
+                        LootItem.lootTableItem(Items.APPLE).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 5)))));
+            }
+        }, LootContextParamSets.BLOCK);
     }
 }

@@ -21,7 +21,7 @@ public class TestAdvancementProvider extends AbstractAdvancementProvider {
     }
 
     @Override
-    protected void addAdvancements() {
+    protected void register() {
         addAdvancementTree(saver -> new AdvancementTree(saver, modLoc("test_adv"), Advancement.Builder.advancement()
                 .display(new ItemStack(TestRegistry.TEST_ITEM_MC_TAB.get()),
                         Component.literal("测试成就"),

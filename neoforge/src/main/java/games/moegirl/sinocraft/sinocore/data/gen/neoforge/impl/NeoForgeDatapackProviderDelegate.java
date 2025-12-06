@@ -22,7 +22,6 @@ public class NeoForgeDatapackProviderDelegate extends DatapackProviderDelegateBa
         return entries;
     }
 
-    // Fixme: qyl27: migrate to 1.21
 //    @Override
 //    public <T> void add(ResourceKey<? extends Registry<T>> type, Consumer<BootstapContext<T>> register) {
 //        if (lastEntry != null && Objects.equals(lastEntry.type, type)) {

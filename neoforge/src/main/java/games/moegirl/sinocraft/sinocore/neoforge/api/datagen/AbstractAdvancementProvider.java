@@ -40,17 +40,21 @@ public abstract class AbstractAdvancementProvider extends AdvancementProvider {
         this.modId = modId;
     }
 
+    // <editor-fold desc="Inner implementation">
+
     @Override
     public CompletableFuture<?> run(CachedOutput output) {
         return createProvider().run(output);
     }
 
-    protected AdvancementProvider createProvider() {
-        addAdvancements();
+    private AdvancementProvider createProvider() {
+        register();
         return new AdvancementProvider(output, registries, existingFileHelper, generators);
     }
 
-    protected abstract void addAdvancements();
+    // </editor-fold>
+
+    protected abstract void register();
 
     protected void addAdvancements(AdvancementProvider.AdvancementGenerator generator) {
         generators.add(generator);

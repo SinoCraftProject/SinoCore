@@ -12,6 +12,5 @@ public abstract class DatapackProviderDelegateBase extends ProviderDelegateBase<
         super(builder);
     }
 
-    // Fixme: qyl27: migrate to 1.21
 //    public abstract <T> void add(ResourceKey<? extends Registry<T>> type, Consumer<BootstapContext<T>> register);
 }
