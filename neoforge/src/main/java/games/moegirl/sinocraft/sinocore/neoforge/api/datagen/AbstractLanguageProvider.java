@@ -132,8 +132,8 @@ public abstract class AbstractLanguageProvider extends LanguageProvider {
                 // get translation key from display component
                 add(lang.getKey(), name);
             } else {
-                // 若对应 Tab 不需要语言文件，直接跳过
-                logger.warn("Skipped add language to a tab without translatable name: {}", name);
+                // 若对应 Tab 不需要语言文件，给出Error级别的提示
+                logger.error("No language key available for tab: {}, you must add it manually", key.location());
             }
         } else {
             // Tab 并未注册，只添加

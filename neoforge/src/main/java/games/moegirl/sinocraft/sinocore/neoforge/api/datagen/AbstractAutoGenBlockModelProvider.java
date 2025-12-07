@@ -68,7 +68,7 @@ public abstract class AbstractAutoGenBlockModelProvider extends BlockModelProvid
         var loc = locWithFolder(path.contains(":") ? mcLoc(path) : modLoc(path));
         skipped.add(loc);
         this.existingFileHelper.trackGenerated(loc, MODEL);
-        return generatedModels.computeIfAbsent(loc, l -> new LenientBlockModelBuilder(l, existingFileHelper, p -> logger.warn("Texture {} does not exist in any known resource pack", p)));
+        return generatedModels.computeIfAbsent(loc, l -> new LenientBlockModelBuilder(l, existingFileHelper, p -> logger.error("Texture {} does not exist in any known resource pack", p)));
     }
 
     @Override
@@ -77,7 +77,7 @@ public abstract class AbstractAutoGenBlockModelProvider extends BlockModelProvid
             return super.getExistingFile(path);
         }
 
-        return new UncheckedExistingModelFile(path, existingFileHelper, p -> logger.warn("ModelFile {} does not exist in any known resource pack", p));
+        return new UncheckedExistingModelFile(path, existingFileHelper, p -> logger.error("ModelFile {} does not exist in any known resource pack", p));
     }
 
     private void autoGenBlock(Block block) {
