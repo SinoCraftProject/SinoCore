@@ -12,7 +12,7 @@ public class TestZhLanguageProvider extends AbstractLanguageProvider {
     }
 
     @Override
-    protected void addTranslations() {
+    protected void register() {
         addTab(TestRegistry.TEST_TAB, "SinoTest: 测试标签页");
         addItem(TestRegistry.TEST_ITEM_MC_TAB, "测试物品：位于建筑物品标签页");
         addItem(TestRegistry.TEST_ITEM_MOD_TAB, "测试物品：位于 Mod 标签页");
@@ -20,5 +20,7 @@ public class TestZhLanguageProvider extends AbstractLanguageProvider {
         addBlock(TestRegistry.TEST_BLOCK, "测试方块");
         add(TestLangKeys.TEST_WITH_ITEM, "你的副手物品携带了测试标签。");
         add(TestLangKeys.TEST_WITH_BLOCK, "你点击的方块带有测试标签。");
+
+        add("sinocoretest.key_only_in_zh_cn", "仅在中文语言文件中存在的翻译键，AbstractLanguageProvider会对此提出警告。");
     }
 }

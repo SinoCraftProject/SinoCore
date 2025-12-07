@@ -12,7 +12,7 @@ public class TestEnLanguageProvider extends AbstractLanguageProvider {
     }
 
     @Override
-    protected void addTranslations() {
+    protected void register() {
         addTab(TestRegistry.TEST_TAB, "SinoTest: Test Tab");
         addItem(TestRegistry.TEST_ITEM_MC_TAB, "Test Item: In building tab");
         addItem(TestRegistry.TEST_ITEM_MOD_TAB, "Test Item: In mod tab");

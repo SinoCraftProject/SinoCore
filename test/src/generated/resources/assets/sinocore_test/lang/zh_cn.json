@@ -5,5 +5,6 @@
   "item.sinocore_test.test_item_mod_tab": "测试物品：位于 Mod 标签页",
   "itemGroup.sinocore_test.sinocore_test": "SinoTest: 测试标签页",
   "sinocore_test.test.block": "你点击的方块带有测试标签。",
-  "sinocore_test.test.item": "你的副手物品携带了测试标签。"
+  "sinocore_test.test.item": "你的副手物品携带了测试标签。",
+  "sinocoretest.key_only_in_zh_cn": "仅在中文语言文件中存在的翻译键，AbstractLanguageProvider会对此提出警告。"
 }
