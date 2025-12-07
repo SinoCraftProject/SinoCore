@@ -3,7 +3,6 @@ on:
   push:
     tags:
       - 'v**'
-  workflow_dispatch:
 
 jobs:
   build:
@@ -14,3 +13,33 @@ jobs:
       upload-artifacts: true
       publish-maven: true
       publish-mod: true
+
+  upload:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v5
+        with:
+          name: 'build'
+          path: 'output'
+      - run: ls -R output
+
+      - name: Remove last week's build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release delete weekly-build --yes --cleanup-tag --repo ${{ github.repository }} 2>/dev/null || true
+
+      - name: Publish pre-release
+        uses: softprops/action-gh-release@v2
+        with:
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+          make_latest: true
+          preserve_order: true
+          tag_name: ${{ github.ref_name }}
+          name: "Release ${{ github.run_number }}"
+          files: |
+            output/**/*@(-neoforge|-fabric)*@(.[0-9]).jar
