@@ -7,3 +7,9 @@
 
 华夏系列模组通用代码库。  
 Common library of SinoSeries Mods.
+
+## 文档 / Documentation
+[https://docs.sino.moegirl.games/dev/](https://docs.sino.moegirl.games/dev/)
+
+## 许可证 / License
+[PolyForm Shield License 1.0.0](https://polyformproject.org/licenses/shield/1.0.0/)
