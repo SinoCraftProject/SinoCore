@@ -25,7 +25,7 @@ public class NeoForgeRegistry<T> implements IRegistry<T> {
     protected DeferredRegister<T> dr;
     protected boolean registered;
 
-    NeoForgeRegistry(String modId, ResourceKey<Registry<T>> key) {
+    public NeoForgeRegistry(String modId, ResourceKey<Registry<T>> key) {
         this.bus = ModBusHelper.getModBus(modId);
 
         this.modId = modId;

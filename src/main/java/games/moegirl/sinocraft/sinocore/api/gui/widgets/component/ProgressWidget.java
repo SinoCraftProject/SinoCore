@@ -28,8 +28,8 @@ public class ProgressWidget extends AbstractWidget {
     @Override
     protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         GLSwitcher b = GLSwitcher.blend();
-        if (entry.getTexture().isPresent() && widgets.containsWidget(entry.getTexture().get())) {
-            TextureEntry texture = (TextureEntry) widgets.getWidget(entry.getTexture().get());
+        if (widgets.containsWidget(entry.getTexture())) {
+            TextureEntry texture = (TextureEntry) widgets.getWidget(entry.getTexture());
             guiGraphics.blit(widgets.getTexture(), getX(), getY(), getWidth(), getHeight(),
                     texture.getTextureX(), texture.getTextureY(), texture.getTextureWidth(), texture.getTextureHeight(),
                     widgets.getWidth(), widgets.getHeight());

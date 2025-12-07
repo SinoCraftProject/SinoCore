@@ -1,5 +1,10 @@
 package games.moegirl.sinocraft.sinocore.neoforge.api.datagen.recipe;
 
+import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.advancements.Criterion;
+import net.minecraft.advancements.critereon.InventoryChangeTrigger;
+import net.minecraft.advancements.critereon.ItemPredicate;
+import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.data.recipes.*;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -7,9 +12,30 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 
-import static games.moegirl.sinocraft.sinocore.data.gen.recipe.AbstractRecipeProvider.has;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
 public class CommonRecipes {
+    public static Criterion<InventoryChangeTrigger.TriggerInstance> has(MinMaxBounds.Ints count, ItemLike item) {
+        return inventoryTrigger(net.minecraft.advancements.critereon.ItemPredicate.Builder.item().of(new ItemLike[]{item}).withCount(count));
+    }
+
+    public static Criterion<InventoryChangeTrigger.TriggerInstance> has(ItemLike itemLike) {
+        return inventoryTrigger(net.minecraft.advancements.critereon.ItemPredicate.Builder.item().of(new ItemLike[]{itemLike}));
+    }
+
+    public static Criterion<InventoryChangeTrigger.TriggerInstance> has(TagKey<Item> tag) {
+        return inventoryTrigger(net.minecraft.advancements.critereon.ItemPredicate.Builder.item().of(tag));
+    }
+
+    public static Criterion<InventoryChangeTrigger.TriggerInstance> inventoryTrigger(ItemPredicate.Builder... items) {
+        return inventoryTrigger((ItemPredicate[]) Arrays.stream(items).map(ItemPredicate.Builder::build).toArray((x$0) -> new ItemPredicate[x$0]));
+    }
+
+    public static Criterion<InventoryChangeTrigger.TriggerInstance> inventoryTrigger(ItemPredicate... predicates) {
+        return CriteriaTriggers.INVENTORY_CHANGED.createCriterion(new InventoryChangeTrigger.TriggerInstance(Optional.empty(), InventoryChangeTrigger.TriggerInstance.Slots.ANY, List.of(predicates)));
+    }
 
     public static RecipeBuilder stairsBuilder(ItemLike stairs, TagKey<Item> block) {
         return stairsBuilder(stairs, Ingredient.of(block))

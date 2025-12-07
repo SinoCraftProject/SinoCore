@@ -23,7 +23,7 @@ public class FabricRegistry<T> implements IRegistry<T> {
     protected final Map<ResourceLocation, IRegRef<T>> elements = new HashMap<>();
 
     @SuppressWarnings("unchecked")
-    FabricRegistry(String modId, ResourceKey<Registry<T>> key) {
+    public FabricRegistry(String modId, ResourceKey<Registry<T>> key) {
         this.modId = modId;
         this.key = key;
 

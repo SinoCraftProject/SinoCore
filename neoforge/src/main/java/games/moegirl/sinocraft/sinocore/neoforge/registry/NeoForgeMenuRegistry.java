@@ -10,7 +10,7 @@ import net.neoforged.neoforge.network.IContainerFactory;
 
 public class NeoForgeMenuRegistry extends NeoForgeRegistry<MenuType<?>> implements IMenuRegistry {
 
-    NeoForgeMenuRegistry(String modId) {
+    public NeoForgeMenuRegistry(String modId) {
         super(modId, Registries.MENU);
     }
 

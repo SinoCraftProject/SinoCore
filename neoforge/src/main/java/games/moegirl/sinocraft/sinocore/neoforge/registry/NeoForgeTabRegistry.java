@@ -29,7 +29,7 @@ public class NeoForgeTabRegistry implements ITabRegistry {
     private final DeferredRegister<CreativeModeTab> dr;
     private final Map<ResourceLocation, IRegRef<CreativeModeTab>> refs = new HashMap<>();
 
-    NeoForgeTabRegistry(String modId) {
+    public NeoForgeTabRegistry(String modId) {
         this.modId = modId;
         this.bus = ModBusHelper.getModBus(modId);
         this.dr = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, modId);

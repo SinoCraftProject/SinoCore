@@ -26,7 +26,7 @@ public class FabricTabRegistry implements ITabRegistry {
     private final Map<ResourceLocation, IRegRef<CreativeModeTab>> refs = new HashMap<>();
 
     @SuppressWarnings("unchecked")
-    FabricTabRegistry(String modId) {
+    public FabricTabRegistry(String modId) {
         this.modId = modId;
         registry = (Registry<CreativeModeTab>) BuiltInRegistries.REGISTRY.get(Registries.CREATIVE_MODE_TAB.location());
     }

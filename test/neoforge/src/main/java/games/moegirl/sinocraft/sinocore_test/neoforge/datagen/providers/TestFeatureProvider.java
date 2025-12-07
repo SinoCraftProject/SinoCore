@@ -1,24 +1,16 @@
 package games.moegirl.sinocraft.sinocore_test.neoforge.datagen.providers;
 
-import games.moegirl.sinocraft.sinocore.data.gen.AbstractDatapackBuiltinEntriesProvider;
-import games.moegirl.sinocraft.sinocore.data.gen.DataGenContext;
-import games.moegirl.sinocraft.sinocore.data.gen.delegate.DatapackProviderDelegateBase;
 import net.minecraft.core.Holder;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 
-public class TestFeatureProvider extends AbstractDatapackBuiltinEntriesProvider {
+public class TestFeatureProvider {
 
     private Holder<ConfiguredFeature<?, ?>> TEST_FEATURE;
 
-    public TestFeatureProvider(DataGenContext context) {
-        super(context);
-    }
-
-    @Override
-    public void generateData(DatapackProviderDelegateBase delegate) {
+//    public void generateData(DatapackProviderDelegateBase delegate) {
 //        delegate.add(Registries.CONFIGURED_FEATURE, this::configuredFeatures);
 //        delegate.add(Registries.PLACED_FEATURE, this::placedFeatures);
-    }
+//    }
 
 //    private void configuredFeatures(BootstapContext<ConfiguredFeature<?, ?>> context) {
 //        TEST_FEATURE = context.register(TestKeys.TEST_FEATURE, new ConfiguredFeature<>(Feature.ORE,

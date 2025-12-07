@@ -27,7 +27,7 @@ public class FabricMenuRegistry extends FabricRegistry<MenuType<?>> implements I
         }
     };
 
-    FabricMenuRegistry(String modId) {
+    public FabricMenuRegistry(String modId) {
         super(modId, Registries.MENU);
     }
 
