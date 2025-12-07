@@ -1,7 +1,7 @@
 package games.moegirl.sinocraft.sinocore.mixin.item;
 
-import games.moegirl.sinocraft.sinocore.registry.ITabRegistry;
-import games.moegirl.sinocraft.sinocore.registry.RegistryManager;
+import games.moegirl.sinocraft.sinocore.api.registry.ITabRegistry;
+import games.moegirl.sinocraft.sinocore.api.registry.RegistryManager;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.Item;
 import org.spongepowered.asm.mixin.Mixin;

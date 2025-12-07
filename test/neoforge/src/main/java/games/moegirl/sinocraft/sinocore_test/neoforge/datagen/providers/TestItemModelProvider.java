@@ -1,7 +1,7 @@
 package games.moegirl.sinocraft.sinocore_test.neoforge.datagen.providers;
 
 import games.moegirl.sinocraft.sinocore.neoforge.api.datagen.AbstractAutoGenItemModelProvider;
-import games.moegirl.sinocraft.sinocore.registry.IRegistry;
+import games.moegirl.sinocraft.sinocore.api.registry.IRegistry;
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;

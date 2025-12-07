@@ -1,7 +1,7 @@
 package games.moegirl.sinocraft.sinocore_test.network;
 
-import games.moegirl.sinocraft.sinocore.network.NetworkManager;
-import games.moegirl.sinocraft.sinocore.network.PacketDistributor;
+import games.moegirl.sinocraft.sinocore.api.network.NetworkManager;
+import games.moegirl.sinocraft.sinocore.api.network.PacketDistributor;
 import games.moegirl.sinocraft.sinocore_test.registry.TestRegistry;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;

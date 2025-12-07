@@ -1,9 +1,9 @@
 package games.moegirl.sinocraft.sinocore_test.registry;
 
-import games.moegirl.sinocraft.sinocore.registry.IRegRef;
-import games.moegirl.sinocraft.sinocore.registry.IRegistry;
-import games.moegirl.sinocraft.sinocore.registry.ITabRegistry;
-import games.moegirl.sinocraft.sinocore.registry.RegistryManager;
+import games.moegirl.sinocraft.sinocore.api.registry.IRegRef;
+import games.moegirl.sinocraft.sinocore.api.registry.IRegistry;
+import games.moegirl.sinocraft.sinocore.api.registry.ITabRegistry;
+import games.moegirl.sinocraft.sinocore.api.registry.RegistryManager;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;

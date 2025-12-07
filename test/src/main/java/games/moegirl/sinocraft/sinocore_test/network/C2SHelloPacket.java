@@ -1,6 +1,6 @@
 package games.moegirl.sinocraft.sinocore_test.network;
 
-import games.moegirl.sinocraft.sinocore.network.context.ServerPlayNetworkContext;
+import games.moegirl.sinocraft.sinocore.api.network.context.ServerPlayNetworkContext;
 import games.moegirl.sinocraft.sinocore_test.SinoCoreTest;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.ChatType;

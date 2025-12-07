@@ -1,8 +1,8 @@
 package games.moegirl.sinocraft.sinocore.event.client.model.neoforge;
 
 import games.moegirl.sinocraft.sinocore.SinoCore;
-import games.moegirl.sinocraft.sinocore.event.client.ModelEvents;
-import games.moegirl.sinocraft.sinocore.event.client.args.model.AfterBakeArgs;
+import games.moegirl.sinocraft.sinocore.api.event.client.ModelEvents;
+import games.moegirl.sinocraft.sinocore.api.event.client.args.model.AfterBakeArgs;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.neoforged.api.distmarker.Dist;
@@ -22,7 +22,7 @@ public class ModelEventImpl {
         for (var entry : event.getModels().entrySet()) {
             var id = entry.getKey();
             var model = entry.getValue();
-            var newModel = ModelEvents.AFTER_BAKE.invoke(new AfterBakeArgs(event.getModelBakery(), id, model)).model();
+            var newModel = ModelEvents.AFTER_BAKE.invoke(new AfterBakeArgs(event.getModelBakery(), id, model)).getModel();
             if (!Objects.equals(newModel, model)) {
                 modified.put(id, newModel);
             }

@@ -7,11 +7,6 @@
         "item.ItemMixin",
         "item.ItemPropertiesExtension",
         "advancement.ServerPlayerMixin",
-        "data.AdvancementProviderMixin",
-        "data.LootTableProviderMixin",
-        "data.RecipeProviderExtension",
-        "data.RecipeProviderMixin",
-        "data.TagsProviderMixin",
         "event.game.crafting.CartographyTableMenuMixin"
     ],
     "client": [

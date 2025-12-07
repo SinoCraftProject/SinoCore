@@ -1,7 +1,7 @@
 package games.moegirl.sinocraft.sinocore.neoforge.api.datagen;
 
 import com.google.common.collect.Streams;
-import games.moegirl.sinocraft.sinocore.registry.IRegistry;
+import games.moegirl.sinocraft.sinocore.api.registry.IRegistry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.PackOutput;

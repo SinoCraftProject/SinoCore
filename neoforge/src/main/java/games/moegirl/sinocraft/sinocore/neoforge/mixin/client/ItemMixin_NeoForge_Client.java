@@ -1,7 +1,6 @@
 package games.moegirl.sinocraft.sinocore.neoforge.mixin.client;
 
-import games.moegirl.sinocraft.sinocore.client.neoforge.SinoClientNeoForge;
-import games.moegirl.sinocraft.sinocore.interfaces.injectable.ISinoItem;
+import games.moegirl.sinocraft.sinocore.client.SinoClientNeoForge;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
@@ -14,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.function.Consumer;
 
 @Mixin(Item.class)
-public abstract class ItemMixin_NeoForge_Client implements ISinoItem {
+public abstract class ItemMixin_NeoForge_Client {
 
     @Inject(at = @At(value = "TAIL"), method = "initializeClient", remap = false)
     private void afterInitClient(Consumer<IClientItemExtensions> consumer, CallbackInfo ci) {

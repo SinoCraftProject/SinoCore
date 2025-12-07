@@ -22,7 +22,7 @@ public class ModDataGen {
         event.addProvider(new TestAdvancementProvider(output, registries, existingFileHelper, SinoCoreTest.MODID));
         event.addProvider(new TestEnLanguageProvider(output, SinoCoreTest.MODID));
         event.addProvider(new TestZhLanguageProvider(output, SinoCoreTest.MODID));
-        event.addProvider(new TestBiomeModifierProvider(output, SinoCoreTest.MODID));   // Todo: biome modifiers
+//        event.addProvider(new TestBiomeModifierProvider(output, SinoCoreTest.MODID));   // Todo: biome modifiers
         var blockTags = event.addProvider(new TestBlockTagsProvider(output, registries, SinoCoreTest.MODID, existingFileHelper));
         event.addProvider(new TestItemTagsProvider(output, registries, blockTags.contentsGetter()));
         event.addProvider(new TestRecipeProvider(output, registries));

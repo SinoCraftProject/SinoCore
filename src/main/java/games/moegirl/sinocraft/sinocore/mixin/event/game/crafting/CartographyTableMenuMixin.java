@@ -1,7 +1,7 @@
 package games.moegirl.sinocraft.sinocore.mixin.event.game.crafting;
 
-import games.moegirl.sinocraft.sinocore.event.game.CraftingEvents;
-import games.moegirl.sinocraft.sinocore.event.game.args.crafting.CartographyTableCraftArgs;
+import games.moegirl.sinocraft.sinocore.api.event.game.CraftingEvents;
+import games.moegirl.sinocraft.sinocore.api.event.game.args.crafting.CartographyTableCraftArgs;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.CartographyTableMenu;

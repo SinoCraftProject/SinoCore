@@ -4,7 +4,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Streams;
 import games.moegirl.sinocraft.sinocore.neoforge.api.datagen.model.LenientBlockModelBuilder;
 import games.moegirl.sinocraft.sinocore.neoforge.api.datagen.model.UncheckedExistingModelFile;
-import games.moegirl.sinocraft.sinocore.registry.IRegistry;
+import games.moegirl.sinocraft.sinocore.api.registry.IRegistry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;

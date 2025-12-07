@@ -1,8 +1,8 @@
 package games.moegirl.sinocraft.sinocore.event.client.render.neoforge;
 
 import games.moegirl.sinocraft.sinocore.SinoCore;
-import games.moegirl.sinocraft.sinocore.event.client.RenderEvents;
-import games.moegirl.sinocraft.sinocore.event.client.args.render.RenderItemInFrameArgs;
+import games.moegirl.sinocraft.sinocore.api.event.client.RenderEvents;
+import games.moegirl.sinocraft.sinocore.api.event.client.args.render.RenderItemInFrameArgs;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;

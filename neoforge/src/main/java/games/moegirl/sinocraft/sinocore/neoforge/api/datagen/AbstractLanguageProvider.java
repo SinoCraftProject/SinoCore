@@ -1,6 +1,6 @@
 package games.moegirl.sinocraft.sinocore.neoforge.api.datagen;
 
-import games.moegirl.sinocraft.sinocore.registry.ITabRegistry;
+import games.moegirl.sinocraft.sinocore.api.registry.ITabRegistry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.network.chat.contents.TranslatableContents;

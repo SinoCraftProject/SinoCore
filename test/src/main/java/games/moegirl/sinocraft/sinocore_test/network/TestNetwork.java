@@ -1,7 +1,7 @@
 package games.moegirl.sinocraft.sinocore_test.network;
 
-import games.moegirl.sinocraft.sinocore.network.NetworkManager;
-import games.moegirl.sinocraft.sinocore.registry.IRegRef;
+import games.moegirl.sinocraft.sinocore.api.network.NetworkManager;
+import games.moegirl.sinocraft.sinocore.api.registry.IRegRef;
 import games.moegirl.sinocraft.sinocore_test.registry.TestRegistry;
 
 public class TestNetwork {

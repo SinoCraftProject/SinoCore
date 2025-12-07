@@ -1,7 +1,7 @@
 package games.moegirl.sinocraft.sinocore.neoforge.api.datagen;
 
-import games.moegirl.sinocraft.sinocore.api.datagen.advancement.AdvancementTree;
-import games.moegirl.sinocraft.sinocore.api.datagen.advancement.DisplayInfoBuilder;
+import games.moegirl.sinocraft.sinocore.neoforge.api.datagen.advancement.AdvancementTree;
+import games.moegirl.sinocraft.sinocore.neoforge.api.datagen.advancement.DisplayInfoBuilder;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;

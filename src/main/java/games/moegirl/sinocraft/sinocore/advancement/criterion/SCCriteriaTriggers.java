@@ -1,9 +1,9 @@
 package games.moegirl.sinocraft.sinocore.advancement.criterion;
 
 import games.moegirl.sinocraft.sinocore.SinoCore;
-import games.moegirl.sinocraft.sinocore.registry.IRegRef;
-import games.moegirl.sinocraft.sinocore.registry.IRegistry;
-import games.moegirl.sinocraft.sinocore.registry.RegistryManager;
+import games.moegirl.sinocraft.sinocore.api.registry.IRegRef;
+import games.moegirl.sinocraft.sinocore.api.registry.IRegistry;
+import games.moegirl.sinocraft.sinocore.api.registry.RegistryManager;
 import net.minecraft.advancements.CriterionTrigger;
 import net.minecraft.core.registries.Registries;
 

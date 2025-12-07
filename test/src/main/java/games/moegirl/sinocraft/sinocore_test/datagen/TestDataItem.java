@@ -1,6 +1,6 @@
 package games.moegirl.sinocraft.sinocore_test.datagen;
 
-import games.moegirl.sinocraft.sinocore.registry.IRegRef;
+import games.moegirl.sinocraft.sinocore.api.registry.IRegRef;
 import games.moegirl.sinocraft.sinocore_test.registry.TestRegistry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
