@@ -1,6 +1,6 @@
 package games.moegirl.sinocraft.sinocore.neoforge.mixin.client;
 
-import games.moegirl.sinocraft.sinocore.client.SinoClientNeoForge;
+import games.moegirl.sinocraft.sinocore.neoforge.client.SinoClientNeoForge;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;

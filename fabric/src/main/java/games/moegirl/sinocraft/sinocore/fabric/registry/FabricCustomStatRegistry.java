@@ -4,7 +4,7 @@ import com.google.common.base.Suppliers;
 import games.moegirl.sinocraft.sinocore.api.registry.ICustomStatRegistry;
 import games.moegirl.sinocraft.sinocore.api.registry.IRegRef;
 import games.moegirl.sinocraft.sinocore.api.registry.IRegistry;
-import games.moegirl.sinocraft.sinocore.api.registry.fabric.RegistryManagerImpl;
+import games.moegirl.sinocraft.sinocore.platform.fabric.RegistryPlatformImpl;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -19,7 +19,7 @@ public class FabricCustomStatRegistry implements ICustomStatRegistry {
     private final IRegistry<ResourceLocation> reg;
 
     public FabricCustomStatRegistry(String modId) {
-        reg = RegistryManagerImpl._create(modId, Registries.CUSTOM_STAT);
+        reg = RegistryPlatformImpl.create(modId, Registries.CUSTOM_STAT);
     }
 
     @Override

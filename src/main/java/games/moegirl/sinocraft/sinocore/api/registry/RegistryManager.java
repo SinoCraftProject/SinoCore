@@ -2,7 +2,7 @@ package games.moegirl.sinocraft.sinocore.api.registry;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.logging.LogUtils;
-import dev.architectury.injectables.annotations.ExpectPlatform;
+import games.moegirl.sinocraft.sinocore.platform.RegistryPlatform;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -70,7 +70,7 @@ public class RegistryManager {
      * @return SinoCore 注册表
      */
     public synchronized static <T> IRegistry<T> create(String modId, ResourceKey<Registry<T>> key) {
-        return appendRegistry(modId, key, _create(modId, key));
+        return appendRegistry(modId, key, RegistryPlatform.create(modId, key));
     }
 
     /**
@@ -84,7 +84,7 @@ public class RegistryManager {
      * @return Tab 注册表
      */
     public synchronized static ITabRegistry createTab(String modId) {
-        return appendRegistry(modId, Registries.CREATIVE_MODE_TAB, _createTab(modId));
+        return appendRegistry(modId, Registries.CREATIVE_MODE_TAB, RegistryPlatform.createTab(modId));
     }
 
     /**
@@ -98,7 +98,7 @@ public class RegistryManager {
      * @return Menu 注册表
      */
     public synchronized static IMenuRegistry createMenu(String modId) {
-        return appendRegistry(modId, Registries.MENU, _createMenu(modId));
+        return appendRegistry(modId, Registries.MENU, RegistryPlatform.createMenu(modId));
     }
 
     /**
@@ -108,7 +108,7 @@ public class RegistryManager {
      * @return 自定义统计信息注册表
      */
     public synchronized static ICustomStatRegistry createCustomStat(String modId) {
-        return appendRegistry(modId, Registries.CUSTOM_STAT, _createCustomStat(modId));
+        return appendRegistry(modId, Registries.CUSTOM_STAT, RegistryPlatform.createCustomStat(modId));
     }
 
     /**
@@ -118,7 +118,7 @@ public class RegistryManager {
      * @return Screen 注册表
      */
     public synchronized static IScreenRegistry createScreen(String modId) {
-        return appendRegistrable(SCREEN_MAP, modId, RegistryManager._createScreen(modId));
+        return appendRegistrable(SCREEN_MAP, modId, RegistryPlatform.createScreen(modId));
     }
 
     /**
@@ -128,36 +128,6 @@ public class RegistryManager {
      * @return Command 注册表
      */
     public synchronized static ICommandRegistry createCommand(String modId) {
-        return appendRegistrable(COMMAND_MAP, modId, RegistryManager._createCommand(modId));
-    }
-
-    @ExpectPlatform
-    static <T> IRegistry<T> _create(String modId, ResourceKey<Registry<T>> key) {
-        throw new AssertionError();
-    }
-
-    @ExpectPlatform
-    static ITabRegistry _createTab(String modId) {
-        throw new AssertionError();
-    }
-
-    @ExpectPlatform
-    static IMenuRegistry _createMenu(String modId) {
-        throw new AssertionError();
-    }
-
-    @ExpectPlatform
-    static IScreenRegistry _createScreen(String modId) {
-        throw new AssertionError();
-    }
-
-    @ExpectPlatform
-    static ICommandRegistry _createCommand(String modId) {
-        throw new AssertionError();
-    }
-
-    @ExpectPlatform
-    static ICustomStatRegistry _createCustomStat(String modId) {
-        throw new AssertionError();
+        return appendRegistrable(COMMAND_MAP, modId, RegistryPlatform.createCommand(modId));
     }
 }

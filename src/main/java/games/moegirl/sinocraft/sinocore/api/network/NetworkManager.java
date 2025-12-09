@@ -1,8 +1,8 @@
 package games.moegirl.sinocraft.sinocore.api.network;
 
-import dev.architectury.injectables.annotations.ExpectPlatform;
 import games.moegirl.sinocraft.sinocore.api.network.context.ClientPlayNetworkContext;
 import games.moegirl.sinocraft.sinocore.api.network.context.ServerPlayNetworkContext;
+import games.moegirl.sinocraft.sinocore.platform.NetworkPlatform;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
@@ -20,9 +20,8 @@ public class NetworkManager {
      * @param player  玩家
      * @param <T>     数据包类型
      */
-    @ExpectPlatform
     public static <T extends CustomPacketPayload> void send(T payload, ServerPlayer player) {
-        throw new AssertionError();
+        NetworkPlatform.send(payload, player);
     }
 
     /**
@@ -35,9 +34,8 @@ public class NetworkManager {
      * @param <T>     数据包类型
      * @see PacketDistributor
      */
-    @ExpectPlatform
     public static <T extends CustomPacketPayload> void send(T payload, PacketTarget target) {
-        throw new AssertionError();
+        NetworkPlatform.send(payload, target);
     }
 
     /**
@@ -46,9 +44,8 @@ public class NetworkManager {
      * @param payload 数据包
      * @param <T>     数据包类型
      */
-    @ExpectPlatform
     public static <T extends CustomPacketPayload> void sendToServer(T payload) {
-        throw new AssertionError();
+        NetworkPlatform.sendToServer(payload);
     }
 
     public static <T extends CustomPacketPayload> PacketBuilder<T, RegistryFriendlyByteBuf, ClientPlayNetworkContext, ServerPlayNetworkContext> playPacket(Class<T> clazz, String id) {
@@ -63,9 +60,8 @@ public class NetworkManager {
         return new PacketBuilder<>(NetworkManager::registerPlay, type);
     }
 
-    @ExpectPlatform
     static <T extends CustomPacketPayload> void registerPlay(PacketBuilder<T, RegistryFriendlyByteBuf, ClientPlayNetworkContext, ServerPlayNetworkContext> packet) {
-        throw new AssertionError();
+        NetworkPlatform.registerPlay(packet);
     }
 
     // Todo: Configuration tasks API

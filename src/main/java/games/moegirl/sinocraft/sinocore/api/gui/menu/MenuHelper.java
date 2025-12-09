@@ -1,6 +1,6 @@
 package games.moegirl.sinocraft.sinocore.api.gui.menu;
 
-import dev.architectury.injectables.annotations.ExpectPlatform;
+import games.moegirl.sinocraft.sinocore.platform.MenuPlatform;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
 
@@ -13,8 +13,7 @@ public class MenuHelper {
         player.openMenu(provider);
     }
 
-    @ExpectPlatform
     public static void openMenuWithData(ServerPlayer player, IExtraDataMenuProvider provider) {
-        throw new AssertionError();
+        MenuPlatform.openMenuWithData(player, provider);
     }
 }

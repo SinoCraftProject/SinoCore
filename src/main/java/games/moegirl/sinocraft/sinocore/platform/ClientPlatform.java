@@ -1,6 +1,6 @@
-package games.moegirl.sinocraft.sinocore.api.client;
+package games.moegirl.sinocraft.sinocore.platform;
 
-import games.moegirl.sinocraft.sinocore.platform.ClientPlatform;
+import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.client.color.block.BlockColor;
 import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
@@ -9,22 +9,28 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
+import org.jetbrains.annotations.ApiStatus;
 
-public class ClientRegister {
+@ApiStatus.Internal
+public class ClientPlatform {
 
+    @ExpectPlatform
     public static void registerItemModelPredicate(ItemLike item, ResourceLocation id, ClampedItemPropertyFunction function) {
-        ClientPlatform.registerItemModelPredicate(item, id, function);
+        throw new AssertionError();
     }
 
+    @ExpectPlatform
     public static void registerItemColor(ItemColor color, ItemLike... item) {
-        ClientPlatform.registerItemColor(color, item);
+        throw new AssertionError();
     }
 
+    @ExpectPlatform
     public static void registerBlockColor(BlockColor color, Block... blocks) {
-        ClientPlatform.registerBlockColor(color, blocks);
+        throw new AssertionError();
     }
 
+    @ExpectPlatform
     public static void registerItemCustomRenderer(Item item, BlockEntityWithoutLevelRenderer renderer) {
-        ClientPlatform.registerItemCustomRenderer(item, renderer);
+        throw new AssertionError();
     }
 }
