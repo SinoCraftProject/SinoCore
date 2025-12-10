@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class Size {
-    public static final MapCodec<Size> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+    public static final MapCodec<Size> MAP_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Codec.INT.fieldOf("width").forGetter(Size::getWidth),
             Codec.INT.fieldOf("height").forGetter(Size::getHeight)
     ).apply(instance, Size::new));

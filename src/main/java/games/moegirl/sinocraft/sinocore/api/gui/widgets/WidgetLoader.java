@@ -6,8 +6,8 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.MapCodec;
 import games.moegirl.sinocraft.sinocore.SinoCorePlatform;
+import games.moegirl.sinocraft.sinocore.api.gui.layout.entry.*;
 import games.moegirl.sinocraft.sinocore.api.util.ResourceManagerHelper;
-import games.moegirl.sinocraft.sinocore.api.gui.layout.entry.AbstractWidgetEntry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
 
@@ -29,18 +29,20 @@ public class WidgetLoader {
     public static boolean FORCE_RELOAD_WIDGETS = SinoCorePlatform.isDevelopmentEnvironment();
 
     static {
-        for (Class<?> subclass : AbstractWidgetEntry.class.getPermittedSubclasses()) {
-            try {
-                MapCodec<? extends AbstractWidgetEntry> codec =
-                        (MapCodec<? extends AbstractWidgetEntry>) subclass.getField("CODEC").get(null);
-                String className = subclass.getSimpleName();
-                String name = className.substring(0, className.length() - "Entry".length()).toLowerCase(Locale.ROOT);
-                CODEC_MAP.put(name, codec);
-                CODEC_NAME_MAP.put(subclass, name);
-            } catch (IllegalAccessException | NoSuchFieldException e) {
-                throw new RuntimeException(e);
-            }
-        }
+        addWidget("button", ButtonEntry.CODEC, ButtonEntry.class);
+        addWidget("editbox", EditBoxEntry.CODEC, EditBoxEntry.class);
+        addWidget("point", PointEntry.CODEC, PointEntry.class);
+        addWidget("progress", ProgressEntry.CODEC, ProgressEntry.class);
+        addWidget("rect", RectEntry.CODEC, RectEntry.class);
+        addWidget("slot", SlotEntry.CODEC, SlotEntry.class);
+        addWidget("slots", SlotsEntry.CODEC, SlotsEntry.class);
+        addWidget("text", TextEntry.CODEC, TextEntry.class);
+        addWidget("texture", TextureEntry.CODEC, TextureEntry.class);
+    }
+
+    private static <T extends AbstractWidgetEntry> void addWidget(String name, MapCodec<T> codec, Class<T> clazz) {
+        CODEC_MAP.put(name, codec);
+        CODEC_NAME_MAP.put(clazz, name);
     }
 
     private static final Map<ResourceLocation, Widgets> WIDGETS = new HashMap<>();

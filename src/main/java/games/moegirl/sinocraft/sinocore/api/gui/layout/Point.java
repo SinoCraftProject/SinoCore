@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class Point {
-    public static final MapCodec<Point> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+    public static final MapCodec<Point> MAP_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Codec.INT.fieldOf("x").forGetter(Point::getX),
             Codec.INT.fieldOf("y").forGetter(Point::getY)
     ).apply(instance, Point::new));
