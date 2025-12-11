@@ -6,7 +6,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.MapCodec;
 import games.moegirl.sinocraft.sinocore.SinoCorePlatform;
-import games.moegirl.sinocraft.sinocore.api.gui.layout.entry.*;
+import games.moegirl.sinocraft.sinocore.api.gui.layout.widget.*;
 import games.moegirl.sinocraft.sinocore.api.util.ResourceManagerHelper;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
@@ -15,13 +15,12 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.*;
 
-@SuppressWarnings("UnreachableCode")
 public class WidgetLoader {
 
     private static final Map<String, MapCodec<? extends AbstractWidgetEntry>> CODEC_MAP = new HashMap<>();
     private static final Map<Class<?>, String> CODEC_NAME_MAP = new HashMap<>();
 
-    public static final Codec<AbstractWidgetEntry> WIDGET_CODEC = Codec.STRING.dispatch(AbstractWidgetEntry::getType, CODEC_MAP::get);
+    public static final Codec<AbstractWidgetEntry> WIDGET_CODEC = Codec.STRING.dispatch(WidgetLoader::getTypeName, CODEC_MAP::get);
 
     /**
      * 每次调用 loadWidgets 都重新从硬盘加载
@@ -29,11 +28,12 @@ public class WidgetLoader {
     public static boolean FORCE_RELOAD_WIDGETS = SinoCorePlatform.isDevelopmentEnvironment();
 
     static {
-        addWidget("button", ButtonEntry.CODEC, ButtonEntry.class);
-        addWidget("editbox", EditBoxEntry.CODEC, EditBoxEntry.class);
-        addWidget("point", PointEntry.CODEC, PointEntry.class);
+        addWidget("button", ButtonEntry.MAP_CODEC, ButtonEntry.class);
+        addWidget("image_button", ImageButtonEntry.MAP_CODEC, ImageButtonEntry.class);
+        addWidget("edit_box", EditBoxEntry.CODEC, EditBoxEntry.class);
+        addWidget("point", PointEntry.MAP_CODEC, PointEntry.class);
         addWidget("progress", ProgressEntry.CODEC, ProgressEntry.class);
-        addWidget("rect", RectEntry.CODEC, RectEntry.class);
+        addWidget("rect", RectangleEntry.CODEC, RectangleEntry.class);
         addWidget("slot", SlotEntry.CODEC, SlotEntry.class);
         addWidget("slots", SlotsEntry.CODEC, SlotsEntry.class);
         addWidget("text", TextEntry.CODEC, TextEntry.class);
@@ -85,7 +85,7 @@ public class WidgetLoader {
         }
     }
 
-    public static String getTypeName(Class<? extends AbstractWidgetEntry> entryClass) {
-        return CODEC_NAME_MAP.get(entryClass);
+    public static String getTypeName(AbstractWidgetEntry entry) {
+        return CODEC_NAME_MAP.get(entry.getClass());
     }
 }

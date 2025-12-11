@@ -3,7 +3,7 @@ package games.moegirl.sinocraft.sinocore.api.gui.widgets;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import games.moegirl.sinocraft.sinocore.api.gui.layout.entry.AbstractWidgetEntry;
+import games.moegirl.sinocraft.sinocore.api.gui.layout.widget.AbstractWidgetEntry;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.HashMap;

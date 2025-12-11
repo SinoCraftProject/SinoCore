@@ -1,11 +1,10 @@
 package games.moegirl.sinocraft.sinocore.api.gui;
 
-import games.moegirl.sinocraft.sinocore.api.gui.layout.entry.*;
+import games.moegirl.sinocraft.sinocore.api.gui.layout.widget.*;
 import games.moegirl.sinocraft.sinocore.api.gui.widgets.Widgets;
 import games.moegirl.sinocraft.sinocore.api.gui.widgets.component.EditBoxWidget;
 import games.moegirl.sinocraft.sinocore.api.gui.widgets.component.ImageButtonWidget;
 import games.moegirl.sinocraft.sinocore.api.gui.widgets.component.ProgressWidget;
-import games.moegirl.sinocraft.sinocore.api.gui.layout.entry.*;
 import games.moegirl.sinocraft.sinocore.utility.GLSwitcher;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;

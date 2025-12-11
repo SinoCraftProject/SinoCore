@@ -2,8 +2,8 @@ package games.moegirl.sinocraft.sinocore.api.gui.widgets.component;
 
 import games.moegirl.sinocraft.sinocore.api.gui.AbstractWidgetScreen;
 import games.moegirl.sinocraft.sinocore.api.gui.widgets.Widgets;
-import games.moegirl.sinocraft.sinocore.api.gui.layout.entry.ButtonEntry;
-import games.moegirl.sinocraft.sinocore.api.gui.layout.entry.TextureEntry;
+import games.moegirl.sinocraft.sinocore.api.gui.layout.widget.ButtonEntry;
+import games.moegirl.sinocraft.sinocore.api.gui.layout.widget.TextureEntry;
 import games.moegirl.sinocraft.sinocore.utility.GLSwitcher;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;

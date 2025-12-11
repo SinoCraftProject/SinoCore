@@ -1,6 +1,6 @@
 package games.moegirl.sinocraft.sinocore.api.gui.widgets.component;
 
-import games.moegirl.sinocraft.sinocore.api.gui.layout.entry.EditBoxEntry;
+import games.moegirl.sinocraft.sinocore.api.gui.layout.widget.EditBoxEntry;
 import net.minecraft.client.gui.ComponentPath;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.EditBox;
