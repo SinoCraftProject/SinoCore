@@ -30,12 +30,12 @@ public class WidgetLoader {
     static {
         addWidget("button", ButtonEntry.MAP_CODEC, ButtonEntry.class);
         addWidget("image_button", ImageButtonEntry.MAP_CODEC, ImageButtonEntry.class);
-        addWidget("edit_box", EditBoxEntry.CODEC, EditBoxEntry.class);
+        addWidget("edit_box", EditBoxEntry.MAP_CODEC, EditBoxEntry.class);
         addWidget("point", PointEntry.MAP_CODEC, PointEntry.class);
-        addWidget("progress", ProgressEntry.CODEC, ProgressEntry.class);
-        addWidget("rect", RectangleEntry.CODEC, RectangleEntry.class);
+        addWidget("progress", ProgressEntry.MAP_CODEC, ProgressEntry.class);
+        addWidget("rect", RectangleEntry.MAP_CODEC, RectangleEntry.class);
         addWidget("slot", SlotEntry.CODEC, SlotEntry.class);
-        addWidget("slots", SlotsEntry.CODEC, SlotsEntry.class);
+        addWidget("slots", SlotGroupEntry.CODEC, SlotGroupEntry.class);
         addWidget("text", TextEntry.CODEC, TextEntry.class);
         addWidget("texture", TextureEntry.CODEC, TextureEntry.class);
     }

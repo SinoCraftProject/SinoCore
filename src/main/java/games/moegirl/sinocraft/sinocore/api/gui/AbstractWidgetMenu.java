@@ -4,7 +4,7 @@ import games.moegirl.sinocraft.sinocore.api.gui.widgets.SlotStrategy;
 import games.moegirl.sinocraft.sinocore.api.gui.widgets.WidgetLoader;
 import games.moegirl.sinocraft.sinocore.api.gui.widgets.Widgets;
 import games.moegirl.sinocraft.sinocore.api.gui.layout.widget.SlotEntry;
-import games.moegirl.sinocraft.sinocore.api.gui.layout.widget.SlotsEntry;
+import games.moegirl.sinocraft.sinocore.api.gui.layout.widget.SlotGroupEntry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -46,7 +46,7 @@ public abstract class AbstractWidgetMenu extends AbstractContainerMenu {
      * @param slotStrategy Strategy of slot.
      */
     protected void addSlots(Container container, String name, int beginIndex, SlotStrategy<Container> slotStrategy) {
-        SlotsEntry slots = (SlotsEntry) widgets.getWidget(name);
+        SlotGroupEntry slots = (SlotGroupEntry) widgets.getWidget(name);
         for (int i = 0; i < slots.getSlotCount(); i++) {
             SlotEntry slotEntry = slots.getSlot(i);
             addSlotInternal(slotStrategy, container, beginIndex + i, slotEntry.getX(), slotEntry.getY());
@@ -64,7 +64,7 @@ public abstract class AbstractWidgetMenu extends AbstractContainerMenu {
      */
     protected void addSlotsWithSlotBlocked(Container container, String name, int beginIndex,
                                            SlotStrategy<Container> defaultStrategy, List<Integer> blocked) {
-        SlotsEntry slots = (SlotsEntry) widgets.getWidget(name);
+        SlotGroupEntry slots = (SlotGroupEntry) widgets.getWidget(name);
         for (int i = 0; i < slots.getSlotCount(); i++) {
             SlotEntry slotEntry = slots.getSlot(i);
             var Strategy = blocked.contains(i) ? SlotStrategy.blockAll() : defaultStrategy;

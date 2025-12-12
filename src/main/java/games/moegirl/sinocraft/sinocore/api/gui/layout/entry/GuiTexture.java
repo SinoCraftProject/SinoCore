@@ -10,6 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ExtraCodecs;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.Optional;
 
 @Getter
@@ -26,20 +27,18 @@ public class GuiTexture extends GuiSprite {
             Size.CODEC.optionalFieldOf("size", null)
     );
 
-    private static final Codec<GuiTexture> CODEC_PATH = ResourceLocation.CODEC.comapFlatMap(r -> DataResult.success(new GuiTexture(r)), GuiSprite::getPath);
-
-    private static final Codec<GuiTexture> CODEC_WITH_SIZE = RecordCodecBuilder.create(instance -> instance.group(
-            ResourceLocation.CODEC.fieldOf("path").forGetter(GuiSprite::getPath),
-            SIZE_MAP_CODEC.fieldOf("size").forGetter(e -> e.size)
-    ).apply(instance, GuiTexture::new));
-
     private static final Codec<GuiTexture> CODEC_WITH_UV = RecordCodecBuilder.create(instance -> instance.group(
             ResourceLocation.CODEC.fieldOf("path").forGetter(GuiSprite::getPath),
             SIZE_MAP_CODEC.fieldOf("size").forGetter(e -> e.size),
             MapCodec.assumeMapUnsafe(UV.CODEC).forGetter(e -> e.uv)
     ).apply(instance, GuiTexture::new));
+    private static final Codec<GuiTexture> CODEC_PATH = ResourceLocation.CODEC.comapFlatMap(r -> DataResult.success(new GuiTexture(r)), GuiSprite::getPath);
+    private static final Codec<GuiTexture> CODEC_WITH_SIZE = RecordCodecBuilder.create(instance -> instance.group(
+            ResourceLocation.CODEC.fieldOf("path").forGetter(GuiSprite::getPath),
+            SIZE_MAP_CODEC.fieldOf("size").forGetter(e -> e.size)
+    ).apply(instance, GuiTexture::new));
 
-    public static final Codec<GuiTexture> CODEC = CodecHelper.withAlternative(CODEC_WITH_UV, CodecHelper.withAlternative(CODEC_WITH_SIZE, CODEC_PATH));
+    public static final Codec<GuiTexture> CODEC = CodecHelper.withDecodingFallbacks(CODEC_WITH_UV, List.of(CODEC_WITH_SIZE, CODEC_PATH));
     public static final MapCodec<GuiTexture> MAP_CODEC = MapCodec.assumeMapUnsafe(CODEC);
 
     @Nullable

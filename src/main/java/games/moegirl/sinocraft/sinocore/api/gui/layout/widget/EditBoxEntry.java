@@ -13,11 +13,11 @@ import org.jetbrains.annotations.Nullable;
  * @author luqin2007
  */
 @Getter
-public final class EditBoxEntry extends AbstractWidgetEntry {
+public class EditBoxEntry extends AbstractWidgetEntry {
     public static final int DEFAULT_TEXT_COLOR = 0xE0E0E0;
     public static final int DEFAULT_UNEDITABLE_TEXT_COLOR = 0x707070;
 
-    public static final MapCodec<EditBoxEntry> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+    public static final MapCodec<EditBoxEntry> MAP_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             AbstractWidgetEntry.MAP_CODEC.forGetter(e -> e),
             ComponentSerialization.CODEC.optionalFieldOf("title", null).forGetter(EditBoxEntry::getTitle),
             ComponentSerialization.CODEC.optionalFieldOf("hint", null).forGetter(EditBoxEntry::getHint),
@@ -37,17 +37,17 @@ public final class EditBoxEntry extends AbstractWidgetEntry {
     ).apply(instance, EditBoxEntry::new));
 
     @Nullable
-    private final Component title;
+    protected final Component title;
     @Nullable
-    private final Component hint;
+    protected final Component hint;
     @Nullable
-    private final String suggestion;
-    private final String placeholder;
-    private final int maxLength;
-    private final int color;
-    private final int uneditableColor;
-    private final float alpha;
-    private final boolean bordered;
+    protected final String suggestion;
+    protected final String placeholder;
+    protected final int maxLength;
+    protected final int color;
+    protected final int uneditableColor;
+    protected final float alpha;
+    protected final boolean bordered;
 
     EditBoxEntry(AbstractWidgetEntry entry, @Nullable Component title, @Nullable Component hint,
                  @Nullable String suggestion, String placeholder, int maxLength,

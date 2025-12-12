@@ -17,7 +17,7 @@ public record Size(int width, int height) {
             ExtraCodecs.NON_NEGATIVE_INT.listOf().fieldOf("size").forGetter(p -> List.of(p.width(), p.height()))
     ).apply(instance, l -> new Size(l.get(0), l.get(1))));
 
-    public static final Codec<Size> CODEC = CodecHelper.withAlternative(CODEC_WH, CODEC_LIST);
+    public static final Codec<Size> CODEC = CodecHelper.withDecodingFallback(CODEC_WH, CODEC_LIST);
 
     public static final Size ZERO = new Size(0, 0);
 }

@@ -1,6 +1,7 @@
 package games.moegirl.sinocraft.sinocore.api.gui.layout.entry;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import lombok.Getter;
 import net.minecraft.resources.ResourceLocation;
@@ -12,6 +13,8 @@ public class GuiNineSliceSprite extends GuiSprite {
             Size.CODEC.fieldOf("size").forGetter(GuiNineSliceSprite::getSize),
             Border.CODEC.fieldOf("border").forGetter(GuiNineSliceSprite::getBorder)
     ).apply(instance, GuiNineSliceSprite::new));
+
+    public static final MapCodec<GuiNineSliceSprite> MAP_CODEC = MapCodec.assumeMapUnsafe(CODEC);
 
     final Size size;
     final Border border;

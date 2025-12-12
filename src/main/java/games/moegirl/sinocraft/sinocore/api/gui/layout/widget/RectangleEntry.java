@@ -10,7 +10,7 @@ public class RectangleEntry extends AbstractWidgetEntry {
 
     public static final int DEFAULT_COLOR = 0xFF66CCFF;
 
-    public static final MapCodec<RectangleEntry> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+    public static final MapCodec<RectangleEntry> MAP_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             AbstractWidgetEntry.MAP_CODEC.forGetter(e -> e),
             Codec.INT.optionalFieldOf("color", DEFAULT_COLOR).forGetter(RectangleEntry::getColor),
             Codec.INT.optionalFieldOf("border_width", 0).forGetter(RectangleEntry::getBorderWidth),
