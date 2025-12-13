@@ -20,7 +20,7 @@ public abstract class GuiSprite {
     final ResourceLocation path;
 
     @Getter
-    public static enum Type {
+    public enum Type {
         TEXTURE("texture", GuiTexture.class, GuiTexture.MAP_CODEC),
         NINE_PATCH("nine_patch", GuiNineSliceSprite.class, GuiNineSliceSprite.MAP_CODEC),
         ;

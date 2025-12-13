@@ -1,4 +1,4 @@
-package games.moegirl.sinocraft.sinocore.api.gui.layout.widget;
+package games.moegirl.sinocraft.sinocore.api.gui.layout.component;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
@@ -9,22 +9,24 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Optional;
+
 /**
  * @author luqin2007
  */
 @Getter
-public class EditBoxEntry extends AbstractWidgetEntry {
+public class EditBoxEntry extends AbstractComponentEntry {
     public static final int DEFAULT_TEXT_COLOR = 0xE0E0E0;
     public static final int DEFAULT_UNEDITABLE_TEXT_COLOR = 0x707070;
 
     public static final MapCodec<EditBoxEntry> MAP_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            AbstractWidgetEntry.MAP_CODEC.forGetter(e -> e),
-            ComponentSerialization.CODEC.optionalFieldOf("title", null).forGetter(EditBoxEntry::getTitle),
-            ComponentSerialization.CODEC.optionalFieldOf("hint", null).forGetter(EditBoxEntry::getHint),
-            Codec.STRING.optionalFieldOf("suggestion", null).forGetter(EditBoxEntry::getSuggestion),
+            AbstractComponentEntry.MAP_CODEC.forGetter(e -> e),
+            ComponentSerialization.CODEC.optionalFieldOf("title", Component.empty()).forGetter(e -> e.title),
+            ComponentSerialization.CODEC.optionalFieldOf("hint", null).forGetter(e -> e.hint),
+            Codec.STRING.optionalFieldOf("suggestion", null).forGetter(e -> e.suggestion),
             CodecHelper.unwarpOptional(
                     CodecHelper.optionalAliasedFieldOf(Codec.STRING, "placeholder", "default")
-            ).forGetter(EditBoxEntry::getPlaceholder),
+            ).forGetter(e -> e.placeholder),
             Codec.INT.optionalFieldOf("max_length", Integer.MAX_VALUE).forGetter(EditBoxEntry::getMaxLength),
             CodecHelper.unwarpOptional(
                     CodecHelper.optionalAliasedFieldOf(Codec.INT, "text_color", "color"), DEFAULT_TEXT_COLOR
@@ -36,12 +38,13 @@ public class EditBoxEntry extends AbstractWidgetEntry {
             Codec.BOOL.optionalFieldOf("bordered", true).forGetter(EditBoxEntry::isBordered)
     ).apply(instance, EditBoxEntry::new));
 
-    @Nullable
     protected final Component title;
+
     @Nullable
     protected final Component hint;
     @Nullable
     protected final String suggestion;
+    @Nullable
     protected final String placeholder;
     protected final int maxLength;
     protected final int color;
@@ -49,8 +52,8 @@ public class EditBoxEntry extends AbstractWidgetEntry {
     protected final float alpha;
     protected final boolean bordered;
 
-    EditBoxEntry(AbstractWidgetEntry entry, @Nullable Component title, @Nullable Component hint,
-                 @Nullable String suggestion, String placeholder, int maxLength,
+    EditBoxEntry(AbstractComponentEntry entry, Component title, @Nullable Component hint,
+                 @Nullable String suggestion, @Nullable String placeholder, int maxLength,
                  int color, int uneditableColor, float alpha, boolean bordered) {
         super(entry);
         this.title = title;
@@ -62,5 +65,17 @@ public class EditBoxEntry extends AbstractWidgetEntry {
         this.uneditableColor = uneditableColor;
         this.alpha = alpha;
         this.bordered = bordered;
+    }
+
+    public Optional<Component> getHint() {
+        return Optional.ofNullable(hint);
+    }
+
+    public Optional<String> getSuggestion() {
+        return Optional.ofNullable(suggestion);
+    }
+
+    public Optional<String> getPlaceholder() {
+        return Optional.ofNullable(placeholder);
     }
 }

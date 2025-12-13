@@ -1,8 +1,8 @@
-package games.moegirl.sinocraft.sinocore.api.gui.widgets.component;
+package games.moegirl.sinocraft.sinocore.api.gui.widgets;
 
-import games.moegirl.sinocraft.sinocore.api.gui.widgets.Widgets;
-import games.moegirl.sinocraft.sinocore.api.gui.layout.widget.ProgressEntry;
-import games.moegirl.sinocraft.sinocore.api.gui.layout.widget.TextureEntry;
+import games.moegirl.sinocraft.sinocore.api.gui.AbstractWidgetScreen;
+import games.moegirl.sinocraft.sinocore.api.gui.layout.component.ProgressBarEntry;
+import games.moegirl.sinocraft.sinocore.api.gui.layout.component.SpriteEntry;
 import games.moegirl.sinocraft.sinocore.utility.GLSwitcher;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -12,31 +12,33 @@ import net.minecraft.network.chat.Component;
 
 import java.util.function.DoubleSupplier;
 
-public class ProgressWidget extends AbstractWidget {
+public class ProgressBarWidget extends AbstractWidget {
 
+    private final ProgressBarEntry entry;
+    /**
+     * 0 ~ 100 for percentage of progress
+     */
     private final DoubleSupplier progressSupplier;
-    private final ProgressEntry entry;
-    private final Widgets widgets;
 
-    public ProgressWidget(int leftPos, int topPos, Widgets widgets, ProgressEntry entry, DoubleSupplier progress) {
-        super(leftPos + entry.getX(), topPos + entry.getY(), entry.getWidth(), entry.getHeight(), Component.empty());
+    public ProgressBarWidget(AbstractWidgetScreen<?> screen, ProgressBarEntry entry, DoubleSupplier progress) {
+        super(entry.getX() + screen.getLeftPos(), entry.getY() + screen.getTopPos(),
+                entry.getWidth(), entry.getHeight(), Component.empty());
         this.progressSupplier = progress;
         this.entry = entry;
-        this.widgets = widgets;
     }
 
     @Override
     protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         GLSwitcher b = GLSwitcher.blend();
         if (widgets.containsWidget(entry.getTexture())) {
-            TextureEntry texture = (TextureEntry) widgets.getWidget(entry.getTexture());
+            SpriteEntry texture = (SpriteEntry) widgets.getWidget(entry.getTexture());
             guiGraphics.blit(widgets.getTexture(), getX(), getY(), getWidth(), getHeight(),
                     texture.getTextureX(), texture.getTextureY(), texture.getTextureWidth(), texture.getTextureHeight(),
                     widgets.getWidth(), widgets.getHeight());
         }
         double progress = getProgress();
         if (progress > 0) {
-            TextureEntry p = (TextureEntry) widgets.getWidget(entry.getTextureFilled());
+            SpriteEntry p = (SpriteEntry) widgets.getWidget(entry.getTextureFilled());
             int x = getX(), y = getY();
             int w = p.getWidth(), h = p.getHeight();
             double tu = p.getTextureX(), tv = p.getTextureY();

@@ -1,10 +1,10 @@
 package games.moegirl.sinocraft.sinocore.api.gui;
 
-import games.moegirl.sinocraft.sinocore.api.gui.layout.widget.*;
-import games.moegirl.sinocraft.sinocore.api.gui.widgets.Widgets;
+import games.moegirl.sinocraft.sinocore.api.gui.layout.component.*;
+import games.moegirl.sinocraft.sinocore.api.gui.layout.Layout;
 import games.moegirl.sinocraft.sinocore.api.gui.widgets.component.EditBoxWidget;
 import games.moegirl.sinocraft.sinocore.api.gui.widgets.component.ImageButtonWidget;
-import games.moegirl.sinocraft.sinocore.api.gui.widgets.component.ProgressWidget;
+import games.moegirl.sinocraft.sinocore.api.gui.widgets.component.ProgressBarWidget;
 import games.moegirl.sinocraft.sinocore.utility.GLSwitcher;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -18,14 +18,14 @@ import java.util.function.DoubleSupplier;
 
 public class AbstractWidgetScreen<T extends AbstractWidgetMenu> extends AbstractContainerScreen<T> {
 
-    protected final Widgets widgets;
+    protected final Layout widgets;
 
     public AbstractWidgetScreen(T menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
         this.widgets = menu.widgets;
 
         if (widgets.containsWidget("background")) {
-            TextureEntry entry = (TextureEntry) widgets.getWidget("background");
+            SpriteEntry entry = (SpriteEntry) widgets.getWidget("background");
             imageWidth = entry.getWidth();
             imageHeight = entry.getHeight();
         }
@@ -51,9 +51,8 @@ public class AbstractWidgetScreen<T extends AbstractWidgetMenu> extends Abstract
     }
 
     protected ImageButtonWidget addButton(String name, Button.OnPress onPress) {
-        ButtonEntry entry = (ButtonEntry) widgets.getWidget(name);
-        var tooltip = entry.getTooltip() != null ? Component.translatable(entry.getTooltip()) : Component.empty();
-        ImageButtonWidget button = new ImageButtonWidget(this, entry, onPress, tooltip);
+        ImageButtonEntry entry = (ImageButtonEntry) widgets.getWidget(name);
+        ImageButtonWidget button = new ImageButtonWidget(this, entry, onPress);
         addRenderableWidget(button);
         return button;
     }
@@ -80,9 +79,9 @@ public class AbstractWidgetScreen<T extends AbstractWidgetMenu> extends Abstract
         return addEditBox(name, font, responder);
     }
 
-    protected ProgressWidget addProgress(GuiGraphics guiGraphics, String name, DoubleSupplier progress) {
-        ProgressEntry entry = (ProgressEntry) widgets.getWidget(name);
-        ProgressWidget widget = new ProgressWidget(leftPos, topPos, widgets, entry, progress);
+    protected ProgressBarWidget addProgress(GuiGraphics guiGraphics, String name, DoubleSupplier progress) {
+        ProgressBarEntry entry = (ProgressBarEntry) widgets.getWidget(name);
+        ProgressBarWidget widget = new ProgressBarWidget(leftPos, topPos, widgets, entry, progress);
         addRenderableWidget(widget);
         return widget;
     }
@@ -112,17 +111,17 @@ public class AbstractWidgetScreen<T extends AbstractWidgetMenu> extends Abstract
     }
 
     public void blitTexture(GuiGraphics guiGraphics, String name) {
-        TextureEntry entry = (TextureEntry) widgets.getWidget(name);
+        SpriteEntry entry = (SpriteEntry) widgets.getWidget(name);
         blitTexture(guiGraphics, name, entry.getX(), entry.getY(), entry.getWidth(), entry.getHeight());
     }
 
     public void blitTexture(GuiGraphics guiGraphics, String name, int x, int y) {
-        TextureEntry entry = (TextureEntry) widgets.getWidget(name);
+        SpriteEntry entry = (SpriteEntry) widgets.getWidget(name);
         blitTexture(guiGraphics, name, x, y, entry.getWidth(), entry.getHeight());
     }
 
     public void blitTexture(GuiGraphics guiGraphics, String name, int x, int y, int width, int height) {
-        TextureEntry entry = (TextureEntry) widgets.getWidget(name);
+        SpriteEntry entry = (SpriteEntry) widgets.getWidget(name);
         guiGraphics.blit(widgets.getTexture(), leftPos + x, topPos + y, width, height, entry.getTextureX(), entry.getTextureY(),
                 entry.getTextureWidth(), entry.getTextureHeight(), widgets.getWidth(), widgets.getHeight());
     }
@@ -146,7 +145,7 @@ public class AbstractWidgetScreen<T extends AbstractWidgetMenu> extends Abstract
         return font;
     }
 
-    public Widgets getWidgets() {
+    public Layout getWidgets() {
         return widgets;
     }
 }

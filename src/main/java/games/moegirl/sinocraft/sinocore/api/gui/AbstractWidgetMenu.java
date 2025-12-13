@@ -1,10 +1,10 @@
 package games.moegirl.sinocraft.sinocore.api.gui;
 
 import games.moegirl.sinocraft.sinocore.api.gui.widgets.SlotStrategy;
-import games.moegirl.sinocraft.sinocore.api.gui.widgets.WidgetLoader;
-import games.moegirl.sinocraft.sinocore.api.gui.widgets.Widgets;
-import games.moegirl.sinocraft.sinocore.api.gui.layout.widget.SlotEntry;
-import games.moegirl.sinocraft.sinocore.api.gui.layout.widget.SlotGroupEntry;
+import games.moegirl.sinocraft.sinocore.api.gui.layout.LayoutLoader;
+import games.moegirl.sinocraft.sinocore.api.gui.layout.Layout;
+import games.moegirl.sinocraft.sinocore.api.gui.layout.component.SlotEntry;
+import games.moegirl.sinocraft.sinocore.api.gui.layout.component.SlotGroupEntry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -16,15 +16,15 @@ import java.util.List;
 
 public abstract class AbstractWidgetMenu extends AbstractContainerMenu {
 
-    protected final Widgets widgets;
+    protected final Layout widgets;
 
-    protected AbstractWidgetMenu(@Nullable MenuType<?> menuType, int containerId, Widgets widgets) {
+    protected AbstractWidgetMenu(@Nullable MenuType<?> menuType, int containerId, Layout widgets) {
         super(menuType, containerId);
         this.widgets = widgets;
     }
 
     protected AbstractWidgetMenu(@Nullable MenuType<?> menuType, int containerId, ResourceLocation widgetsName) {
-        this(menuType, containerId, WidgetLoader.loadWidgets(widgetsName));
+        this(menuType, containerId, LayoutLoader.loadWidgets(widgetsName));
     }
 
     protected <C extends Container> Slot addSlot(C container, String slotName, int index, SlotStrategy<C> slotType) {

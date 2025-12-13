@@ -1,4 +1,4 @@
-package games.moegirl.sinocraft.sinocore.api.gui.layout.widget;
+package games.moegirl.sinocraft.sinocore.api.gui.layout.component;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -7,9 +7,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
 
 @Getter
-public class ButtonEntry extends AbstractWidgetEntry {
+public class ButtonEntry extends AbstractComponentEntry {
     public static final MapCodec<ButtonEntry> MAP_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            AbstractWidgetEntry.MAP_CODEC.forGetter(e -> e),
+            AbstractComponentEntry.MAP_CODEC.forGetter(e -> e),
             ComponentSerialization.CODEC.optionalFieldOf("text", Component.empty()).forGetter(ButtonEntry::getText)
     ).apply(instance, ButtonEntry::new));
 
@@ -19,7 +19,7 @@ public class ButtonEntry extends AbstractWidgetEntry {
         this(entry, entry.text);
     }
 
-    protected ButtonEntry(AbstractWidgetEntry entry, Component text) {
+    protected ButtonEntry(AbstractComponentEntry entry, Component text) {
         super(entry);
         this.text = text;
     }

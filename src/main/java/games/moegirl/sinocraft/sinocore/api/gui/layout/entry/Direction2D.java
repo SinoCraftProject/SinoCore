@@ -22,6 +22,10 @@ public enum Direction2D {
         this.isReversed = isReversed;
     }
 
+    public boolean isHorizontal() {
+        return !isVertical();
+    }
+
     public static Direction2D from(String str) {
         return parse(str).getOrThrow();
     }

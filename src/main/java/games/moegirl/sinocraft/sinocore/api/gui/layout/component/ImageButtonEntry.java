@@ -1,4 +1,4 @@
-package games.moegirl.sinocraft.sinocore.api.gui.layout.widget;
+package games.moegirl.sinocraft.sinocore.api.gui.layout.component;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;

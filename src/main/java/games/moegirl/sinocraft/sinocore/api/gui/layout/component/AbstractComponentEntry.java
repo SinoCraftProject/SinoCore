@@ -1,4 +1,4 @@
-package games.moegirl.sinocraft.sinocore.api.gui.layout.widget;
+package games.moegirl.sinocraft.sinocore.api.gui.layout.component;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
@@ -17,16 +17,16 @@ import java.util.Optional;
  * Represents a widget entry in layout JSON.
  */
 @Getter
-public class AbstractWidgetEntry {
-    public static final Codec<AbstractWidgetEntry> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            MapCodec.assumeMapUnsafe(Bounds.CODEC).forGetter(AbstractWidgetEntry::getBounds),
-            Codec.BOOL.optionalFieldOf("enabled", true).forGetter(AbstractWidgetEntry::isEnabled),
-            Codec.BOOL.optionalFieldOf("visible", true).forGetter(AbstractWidgetEntry::isVisible),
+public class AbstractComponentEntry {
+    public static final Codec<AbstractComponentEntry> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            MapCodec.assumeMapUnsafe(Bounds.CODEC).forGetter(AbstractComponentEntry::getBounds),
+            Codec.BOOL.optionalFieldOf("enabled", true).forGetter(AbstractComponentEntry::isEnabled),
+            Codec.BOOL.optionalFieldOf("visible", true).forGetter(AbstractComponentEntry::isVisible),
             ComponentSerialization.CODEC.optionalFieldOf("tooltip", null).forGetter(e -> e.tooltip),
             ComponentSerialization.CODEC.optionalFieldOf("narration", null).forGetter(e -> e.narration)
-    ).apply(instance, AbstractWidgetEntry::new));
+    ).apply(instance, AbstractComponentEntry::new));
 
-    public static final MapCodec<AbstractWidgetEntry> MAP_CODEC = MapCodec.assumeMapUnsafe(AbstractWidgetEntry.CODEC);
+    public static final MapCodec<AbstractComponentEntry> MAP_CODEC = MapCodec.assumeMapUnsafe(AbstractComponentEntry.CODEC);
 
     protected final Bounds bounds;
     protected final boolean enabled;
@@ -38,19 +38,19 @@ public class AbstractWidgetEntry {
     @Nullable
     protected final Component narration;
 
-    protected AbstractWidgetEntry(AbstractWidgetEntry entry) {
+    protected AbstractComponentEntry(AbstractComponentEntry entry) {
         this(entry.bounds, entry.enabled, entry.visible, entry.tooltip, entry.narration);
     }
 
-    protected AbstractWidgetEntry(Bounds bounds) {
+    protected AbstractComponentEntry(Bounds bounds) {
         this(bounds, true, true);
     }
 
-    protected AbstractWidgetEntry(Bounds bounds, boolean enabled, boolean visible) {
+    protected AbstractComponentEntry(Bounds bounds, boolean enabled, boolean visible) {
         this(bounds, enabled, visible, null, null);
     }
 
-    protected AbstractWidgetEntry(Bounds bounds, boolean enabled, boolean visible, @Nullable Component tooltip, @Nullable Component narration) {
+    protected AbstractComponentEntry(Bounds bounds, boolean enabled, boolean visible, @Nullable Component tooltip, @Nullable Component narration) {
         this.bounds = bounds;
         this.enabled = enabled;
         this.visible = visible;
