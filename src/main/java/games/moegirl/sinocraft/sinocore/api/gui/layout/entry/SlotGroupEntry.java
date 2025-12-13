@@ -1,9 +1,7 @@
-package games.moegirl.sinocraft.sinocore.api.gui.layout.component;
+package games.moegirl.sinocraft.sinocore.api.gui.layout.entry;
 
 import com.mojang.serialization.*;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import games.moegirl.sinocraft.sinocore.api.gui.layout.entry.Bounds;
-import games.moegirl.sinocraft.sinocore.api.gui.layout.entry.Direction2D;
 import games.moegirl.sinocraft.sinocore.api.util.codec.CodecHelper;
 import lombok.Getter;
 import net.minecraft.util.ExtraCodecs;

@@ -1,24 +1,60 @@
 package games.moegirl.sinocraft.sinocore.api.gui.screen;
 
+import games.moegirl.sinocraft.sinocore.api.gui.component.AbstractComposedComponent;
 import games.moegirl.sinocraft.sinocore.api.gui.component.IComponent;
+import games.moegirl.sinocraft.sinocore.api.gui.component.IComposedComponent;
 import games.moegirl.sinocraft.sinocore.api.gui.component.window.IWindow;
+import games.moegirl.sinocraft.sinocore.api.gui.component.window.IWindowHolder;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.events.GuiEventListener;
-import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import org.jetbrains.annotations.Nullable;
 
+import javax.naming.OperationNotSupportedException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public abstract class AbstractScreen extends Screen implements IScreen {
-    protected AbstractScreen(Component title) {
-        super(title);
+public abstract class AbstractMenuScreen<T extends AbstractContainerMenu> extends AbstractContainerScreen<T> implements IWindowHolder {
+    public AbstractMenuScreen(T menu, Inventory playerInventory, Component title) {
+        super(menu, playerInventory, title);
     }
 
     // <editor-fold desc="IComponent.">
+
+    @Override
+    public @Nullable AbstractComposedComponent getParent() {
+        return null;
+    }
+
+    @Override
+    public void setParent(@Nullable IComposedComponent parent) {
+        throw new RuntimeException(new OperationNotSupportedException());
+    }
+
+    @Override
+    public void setX(int x) {
+        throw new RuntimeException(new OperationNotSupportedException());
+    }
+
+    @Override
+    public void setY(int y) {
+        throw new RuntimeException(new OperationNotSupportedException());
+    }
+
+    @Override
+    public int getX() {
+        return 0;
+    }
+
+    @Override
+    public int getY() {
+        return 0;
+    }
 
     @Override
     public int getWidth() {
@@ -28,6 +64,12 @@ public abstract class AbstractScreen extends Screen implements IScreen {
     @Override
     public int getHeight() {
         return height;
+    }
+
+    // Screen is always been hovered.
+    @Override
+    public boolean isHovered() {
+        return true;
     }
 
     // </editor-fold>
@@ -183,12 +225,37 @@ public abstract class AbstractScreen extends Screen implements IScreen {
     }
 
     @Override
-    public void tick() {
-        IScreen.super.tick();
-        super.tick();
+    protected void containerTick() {
+        for (var c : getChildren()) {
+            c.tick();
+        }
+
+        super.containerTick();
+    }
+
+    protected abstract void createChildren();
+
+    @Override
+    public final void initialize() {
+        createChildren();
+
+        for (var child : getChildren()) {
+            child.initialize();
+        }
+    }
+
+    @Override
+    public void unInitialize() {
+        for (var child : getChildren()) {
+            child.unInitialize();
+        }
+
+        closeAllWindows();
+        clearChildren();
     }
 
     // </editor-fold>
+
 
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
@@ -207,7 +274,7 @@ public abstract class AbstractScreen extends Screen implements IScreen {
         guiGraphics.pose().pushPose();
 
         if (hasWindow()) {
-            IScreen.drawGrayishBackground(guiGraphics);
+            drawGrayishBackground(guiGraphics);
         }
 
         for (var w : getWindows()) {
@@ -224,42 +291,72 @@ public abstract class AbstractScreen extends Screen implements IScreen {
         guiGraphics.pose().popPose();
     }
 
-    // <editor-fold desc="ContainerEventHandler.">
-
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        return IScreen.super.mouseClicked(mouseX, mouseY, button);
+        if (hasMutexWindow()) {
+            assert getMutexWindow() != null;
+            return getMutexWindow().mouseClicked(mouseX, mouseY, button);
+        }
+        return IWindowHolder.super.mouseClicked(mouseX, mouseY, button);
     }
 
     @Override
     public boolean mouseReleased(double mouseX, double mouseY, int button) {
-        return IScreen.super.mouseReleased(mouseX, mouseY, button);
+        if (hasMutexWindow()) {
+            assert getMutexWindow() != null;
+            return getMutexWindow().mouseReleased(mouseX, mouseY, button);
+        }
+        return IWindowHolder.super.mouseReleased(mouseX, mouseY, button);
     }
 
     @Override
     public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
-        return IScreen.super.mouseDragged(mouseX, mouseY, button, dragX, dragY);
+        if (hasMutexWindow()) {
+            assert getMutexWindow() != null;
+            return getMutexWindow().mouseDragged(mouseX, mouseY, button, dragX, dragY);
+        }
+        return IWindowHolder.super.mouseDragged(mouseX, mouseY, button, dragX, dragY);
     }
 
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
-        return IScreen.super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
+        if (hasMutexWindow()) {
+            assert getMutexWindow() != null;
+            return getMutexWindow().mouseScrolled(mouseX, mouseY, scrollX, scrollY);
+        }
+        return IWindowHolder.super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
     }
 
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        if (hasMutexWindow()) {
+            assert getMutexWindow() != null;
+            return getMutexWindow().keyPressed(keyCode, scanCode, modifiers);
+        }
         return super.keyPressed(keyCode, scanCode, modifiers);
     }
 
     @Override
     public boolean keyReleased(int keyCode, int scanCode, int modifiers) {
-        return IScreen.super.keyReleased(keyCode, scanCode, modifiers);
+        if (hasMutexWindow()) {
+            assert getMutexWindow() != null;
+            return getMutexWindow().keyReleased(keyCode, scanCode, modifiers);
+        }
+        return IWindowHolder.super.keyReleased(keyCode, scanCode, modifiers);
     }
 
     @Override
     public boolean charTyped(char codePoint, int modifiers) {
-        return IScreen.super.charTyped(codePoint, modifiers);
+        if (hasMutexWindow()) {
+            assert getMutexWindow() != null;
+            return getMutexWindow().charTyped(codePoint, modifiers);
+        }
+        return IWindowHolder.super.charTyped(codePoint, modifiers);
     }
 
-    // </editor-fold>
+    public static void drawGrayishBackground(GuiGraphics guiGraphics) {
+        guiGraphics.pose().pushPose();
+        guiGraphics.fillGradient(0, 0, guiGraphics.guiWidth(), guiGraphics.guiHeight(), -1072689136, -804253680);
+        guiGraphics.pose().popPose();
+    }
 }

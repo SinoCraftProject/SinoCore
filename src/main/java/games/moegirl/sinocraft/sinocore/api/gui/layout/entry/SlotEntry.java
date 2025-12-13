@@ -1,9 +1,8 @@
-package games.moegirl.sinocraft.sinocore.api.gui.layout.component;
+package games.moegirl.sinocraft.sinocore.api.gui.layout.entry;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import games.moegirl.sinocraft.sinocore.api.gui.layout.entry.*;
 import games.moegirl.sinocraft.sinocore.api.util.codec.CodecHelper;
 import lombok.Getter;
 import net.minecraft.resources.ResourceLocation;
@@ -16,7 +15,7 @@ import net.minecraft.resources.ResourceLocation;
 public class SlotEntry extends AbstractComponentEntry {
     public static final int SLOT_SIZE = 18;
 
-    public static final GuiSprite DEFAULT_SLOT_TEXTURE = new GuiNineSliceSprite(ResourceLocation.withDefaultNamespace("container/slot"), new Size(18, 18), new Border(1, 1, 1, 1));
+    public static final GuiSprite DEFAULT_SLOT_TEXTURE = new GuiSprite(ResourceLocation.withDefaultNamespace("container/slot"));
 
     public static final Codec<SlotEntry> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             AbstractComponentEntry.MAP_CODEC.forGetter(e -> e),

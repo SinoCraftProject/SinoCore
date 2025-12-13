@@ -1,12 +1,13 @@
 package games.moegirl.sinocraft.sinocore.api.gui.layout;
 
-import com.google.gson.JsonElement;
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 import com.google.gson.JsonParser;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.MapCodec;
 import games.moegirl.sinocraft.sinocore.SinoCorePlatform;
-import games.moegirl.sinocraft.sinocore.api.gui.layout.component.*;
+import games.moegirl.sinocraft.sinocore.api.gui.layout.entry.*;
 import games.moegirl.sinocraft.sinocore.api.util.ResourceManagerHelper;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
@@ -45,7 +46,7 @@ public class LayoutLoader {
         CODEC_NAME_MAP.put(clazz, name);
     }
 
-    private static final Map<ResourceLocation, Layout> LAYOUTS = new HashMap<>();
+    private static final BiMap<ResourceLocation, Layout> LAYOUTS = HashBiMap.create();
 
     /**
      * 从 GUI json 文件加载 Widgets 对象
@@ -68,12 +69,20 @@ public class LayoutLoader {
                         throw new RuntimeException("Failed to load widget " + name + ": " + err);
                     })
                     .getFirst();
-            layout.setBackground(ResourceLocation.fromNamespaceAndPath(name.getNamespace(), name.getPath() + ".png"));
             LAYOUTS.put(name, layout);
             return layout;
         } catch (IOException e) {
             throw new RuntimeException("Failed to load widget " + name + " (" + jsonFile + ")", e);
         }
+    }
+
+    public static ResourceLocation getBackground(Layout layout) {
+        var background = layout.getBackground();
+        if (background.isPresent()) {
+            return background.get().getPath();
+        }
+        var name = LAYOUTS.inverse().get(layout);
+        return ResourceLocation.fromNamespaceAndPath(name.getNamespace(), name.getPath() + ".png");
     }
 
     /**

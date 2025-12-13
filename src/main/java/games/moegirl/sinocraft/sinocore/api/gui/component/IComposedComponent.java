@@ -18,6 +18,49 @@ public interface IComposedComponent extends IComponent, ContainerEventHandler {
         }
     }
 
+    default void createChildren() {
+    }
+
+    @Override
+    default void initialize() {
+        IComponent.super.initialize();
+
+        createChildren();
+        for (var child : getChildren()) {
+            child.initialize();
+        }
+    }
+
+    @Override
+    default void unInitialize() {
+        for (var child : getChildren()) {
+            child.unInitialize();
+        }
+        clearChildren();
+
+        IComponent.super.unInitialize();
+    }
+
+    @Override
+    default void tick() {
+        IComponent.super.tick();
+
+        for (var child : getChildren()) {
+            child.tick();
+        }
+    }
+
+    @Override
+    default void update() {
+        IComponent.super.update();
+
+        for (var child : getChildren()) {
+            child.update();
+        }
+    }
+
+    // <editor-fold desc="ContainerEventHandler.">
+
     @Override
     default boolean mouseClicked(double mouseX, double mouseY, int button) {
         return ContainerEventHandler.super.mouseClicked(mouseX, mouseY, button);
@@ -39,6 +82,11 @@ public interface IComposedComponent extends IComponent, ContainerEventHandler {
     }
 
     @Override
+    default void mouseMoved(double mouseX, double mouseY) {
+        ContainerEventHandler.super.mouseMoved(mouseX, mouseY);
+    }
+
+    @Override
     default boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         return ContainerEventHandler.super.keyPressed(keyCode, scanCode, modifiers);
     }
@@ -52,4 +100,6 @@ public interface IComposedComponent extends IComponent, ContainerEventHandler {
     default boolean charTyped(char codePoint, int modifiers) {
         return ContainerEventHandler.super.charTyped(codePoint, modifiers);
     }
+
+    // </editor-fold>
 }

@@ -1,7 +1,7 @@
 package games.moegirl.sinocraft.sinocore.api.gui;
 
-import games.moegirl.sinocraft.sinocore.api.gui.layout.component.*;
 import games.moegirl.sinocraft.sinocore.api.gui.layout.Layout;
+import games.moegirl.sinocraft.sinocore.api.gui.layout.entry.*;
 import games.moegirl.sinocraft.sinocore.api.gui.widgets.component.EditBoxWidget;
 import games.moegirl.sinocraft.sinocore.api.gui.widgets.component.ImageButtonWidget;
 import games.moegirl.sinocraft.sinocore.api.gui.widgets.component.ProgressBarWidget;

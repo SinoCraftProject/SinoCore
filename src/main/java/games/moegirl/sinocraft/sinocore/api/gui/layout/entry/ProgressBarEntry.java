@@ -1,9 +1,7 @@
-package games.moegirl.sinocraft.sinocore.api.gui.layout.component;
+package games.moegirl.sinocraft.sinocore.api.gui.layout.entry;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import games.moegirl.sinocraft.sinocore.api.gui.layout.entry.Direction2D;
-import games.moegirl.sinocraft.sinocore.api.gui.layout.entry.GuiSprite;
 import lombok.Getter;
 
 @Getter

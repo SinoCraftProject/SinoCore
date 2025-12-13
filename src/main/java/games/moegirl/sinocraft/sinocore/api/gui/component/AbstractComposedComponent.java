@@ -1,7 +1,6 @@
 package games.moegirl.sinocraft.sinocore.api.gui.component;
 
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.events.ContainerEventHandler;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
@@ -9,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AbstractComposedComponent extends AbstractComponent implements IComposedComponent, ContainerEventHandler {
+public abstract class AbstractComposedComponent extends AbstractComponent implements IComposedComponent {
     private final List<IComponent> children = new ArrayList<>();
 
     @Nullable
@@ -72,47 +71,7 @@ public abstract class AbstractComposedComponent extends AbstractComponent implem
         this.focused = focused;
     }
 
-    @Override
-    public void tick() {
-        super.tick();
-
-        for (var child : getChildren()) {
-            child.tick();
-        }
-    }
-
-    @Override
-    public void update() {
-        super.update();
-
-        for (var child : getChildren()) {
-            child.update();
-        }
-    }
-
-    protected abstract void createChildren();
-
-    @Override
-    public final void initialize() {
-        createChildren();
-
-        for (var child : getChildren()) {
-            child.initialize();
-        }
-
-        super.initialize();
-    }
-
-    @Override
-    public void unInitialize() {
-        for (var child : getChildren()) {
-            child.unInitialize();
-        }
-
-        clearChildren();
-
-        super.unInitialize();
-    }
+    // <editor-fold desc="ContainerEventHandler.">
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
@@ -135,6 +94,11 @@ public abstract class AbstractComposedComponent extends AbstractComponent implem
     }
 
     @Override
+    public void mouseMoved(double mouseX, double mouseY) {
+        IComposedComponent.super.mouseMoved(mouseX, mouseY);
+    }
+
+    @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         return IComposedComponent.super.keyPressed(keyCode, scanCode, modifiers);
     }
@@ -148,6 +112,8 @@ public abstract class AbstractComposedComponent extends AbstractComponent implem
     public boolean charTyped(char codePoint, int modifiers) {
         return IComposedComponent.super.charTyped(codePoint, modifiers);
     }
+
+    // </editor-fold>
 
     @Override
     protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {

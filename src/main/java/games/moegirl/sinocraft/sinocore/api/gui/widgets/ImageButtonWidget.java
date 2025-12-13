@@ -2,7 +2,7 @@ package games.moegirl.sinocraft.sinocore.api.gui.widgets;
 
 import games.moegirl.sinocraft.sinocore.api.gui.AbstractWidgetScreen;
 import games.moegirl.sinocraft.sinocore.api.gui.layout.entry.GuiSprite;
-import games.moegirl.sinocraft.sinocore.api.gui.layout.component.ImageButtonEntry;
+import games.moegirl.sinocraft.sinocore.api.gui.layout.entry.ImageButtonEntry;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import org.jetbrains.annotations.NotNull;

@@ -10,47 +10,9 @@ import net.minecraft.resources.ResourceLocation;
 
 @Getter
 @AllArgsConstructor
-public abstract class GuiSprite {
-    private static final Codec<GuiSprite> SIMPLE_RL_CODEC = ResourceLocation.CODEC.comapFlatMap(r -> DataResult.success(new GuiTexture(r)), GuiSprite::getPath);
-    private static final Codec<GuiSprite> TYPE_DISPATCH_CODEC = Codec.STRING.dispatch(Type::getType, Type::getCodec);
-
-    public static final Codec<GuiSprite> CODEC = CodecHelper.withDecodingFallback(SIMPLE_RL_CODEC, TYPE_DISPATCH_CODEC);
+public class GuiSprite {
+    public static final Codec<GuiSprite> CODEC = ResourceLocation.CODEC.comapFlatMap(r -> DataResult.success(new GuiSprite(r)), GuiSprite::getPath);
     public static final MapCodec<GuiSprite> MAP_CODEC = MapCodec.assumeMapUnsafe(CODEC);
 
-    final ResourceLocation path;
-
-    @Getter
-    public enum Type {
-        TEXTURE("texture", GuiTexture.class, GuiTexture.MAP_CODEC),
-        NINE_PATCH("nine_patch", GuiNineSliceSprite.class, GuiNineSliceSprite.MAP_CODEC),
-        ;
-
-        private final String name;
-        private final Class<? extends GuiSprite> clazz;
-        private final MapCodec<? extends GuiSprite> mapCodec;
-
-        <T extends GuiSprite> Type(String name, Class<T> clazz, MapCodec<T> mapCodec) {
-            this.name = name;
-            this.clazz = clazz;
-            this.mapCodec = mapCodec;
-        }
-
-        public static String getType(GuiSprite obj) {
-            for (var type : values()) {
-                if (type.getClazz() == obj.getClass()) {
-                    return type.name;
-                }
-            }
-            throw new IllegalArgumentException("No GuiSprite Type for object: " + obj);
-        }
-
-        public static MapCodec<? extends GuiSprite> getCodec(String name) {
-            for (var type : values()) {
-                if (type.getName().equals(name)) {
-                    return type.mapCodec;
-                }
-            }
-            throw new IllegalArgumentException("No GuiSprite Type for name: " + name);
-        }
-    }
+    protected final ResourceLocation path;
 }

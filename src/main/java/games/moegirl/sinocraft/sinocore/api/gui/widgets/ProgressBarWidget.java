@@ -1,8 +1,8 @@
 package games.moegirl.sinocraft.sinocore.api.gui.widgets;
 
 import games.moegirl.sinocraft.sinocore.api.gui.AbstractWidgetScreen;
-import games.moegirl.sinocraft.sinocore.api.gui.layout.component.ProgressBarEntry;
-import games.moegirl.sinocraft.sinocore.api.gui.layout.component.SpriteEntry;
+import games.moegirl.sinocraft.sinocore.api.gui.layout.entry.ProgressBarEntry;
+import games.moegirl.sinocraft.sinocore.api.gui.layout.entry.SpriteEntry;
 import games.moegirl.sinocraft.sinocore.utility.GLSwitcher;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;

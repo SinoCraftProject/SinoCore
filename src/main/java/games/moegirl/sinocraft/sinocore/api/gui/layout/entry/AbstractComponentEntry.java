@@ -1,11 +1,8 @@
-package games.moegirl.sinocraft.sinocore.api.gui.layout.component;
+package games.moegirl.sinocraft.sinocore.api.gui.layout.entry;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import games.moegirl.sinocraft.sinocore.api.gui.layout.entry.Position;
-import games.moegirl.sinocraft.sinocore.api.gui.layout.entry.Bounds;
-import games.moegirl.sinocraft.sinocore.api.gui.layout.entry.Size;
 import lombok.Getter;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;

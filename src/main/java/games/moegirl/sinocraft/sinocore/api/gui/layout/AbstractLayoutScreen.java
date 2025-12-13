@@ -2,7 +2,6 @@ package games.moegirl.sinocraft.sinocore.api.gui.layout;
 
 import games.moegirl.sinocraft.sinocore.api.gui.screen.AbstractScreen;
 import lombok.Getter;
-import net.minecraft.network.chat.Component;
 
 @Getter
 public class AbstractLayoutScreen extends AbstractScreen {
@@ -11,8 +10,8 @@ public class AbstractLayoutScreen extends AbstractScreen {
     protected int startX;
     protected int startY;
 
-    public AbstractLayoutScreen(Layout layout, Component title) {
-        super(title);
+    public AbstractLayoutScreen(Layout layout) {
+        super(layout.getTitle());
         this.layout = layout;
     }
 
