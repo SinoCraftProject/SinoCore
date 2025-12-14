@@ -12,16 +12,22 @@ import org.jetbrains.annotations.Nullable;
 import java.util.function.Consumer;
 
 public interface IComponent extends Renderable, GuiEventListener, LayoutElement, NarratableEntry {
+    /**
+     * Update in every tick.
+     */
     default void tick() {
     }
 
+    /**
+     * Update, but invoke manually.
+     */
     default void update() {
     }
 
     default void initialize() {
     }
 
-    default void unInitialize() {
+    default void deinitialize() {
     }
 
     @Nullable IComposedComponent getParent();

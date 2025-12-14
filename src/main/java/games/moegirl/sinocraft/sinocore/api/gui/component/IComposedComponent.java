@@ -9,6 +9,10 @@ public interface IComposedComponent extends IComponent, ContainerEventHandler {
 
     void removeChild(IComponent child);
 
+    /**
+     * Get children components.
+     * @return An immutable list of children.
+     */
     List<IComponent> getChildren();
 
     default void clearChildren() {
@@ -32,13 +36,13 @@ public interface IComposedComponent extends IComponent, ContainerEventHandler {
     }
 
     @Override
-    default void unInitialize() {
+    default void deinitialize() {
         for (var child : getChildren()) {
-            child.unInitialize();
+            child.deinitialize();
         }
         clearChildren();
 
-        IComponent.super.unInitialize();
+        IComponent.super.deinitialize();
     }
 
     @Override

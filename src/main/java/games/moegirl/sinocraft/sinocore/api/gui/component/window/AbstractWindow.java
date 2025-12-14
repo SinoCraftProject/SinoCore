@@ -20,6 +20,6 @@ public abstract class AbstractWindow extends AbstractComposedComponent implement
 
     @Override
     public void onClose() {
-        unInitialize();
+        deinitialize();
     }
 }

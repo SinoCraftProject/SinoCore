@@ -24,7 +24,7 @@ public abstract class AbstractMenuScreen<T extends AbstractContainerMenu> extend
         super(menu, playerInventory, title);
     }
 
-    // <editor-fold desc="IComponent.">
+    // region IComponent
 
     @Override
     public @Nullable AbstractComposedComponent getParent() {
@@ -72,9 +72,9 @@ public abstract class AbstractMenuScreen<T extends AbstractContainerMenu> extend
         return true;
     }
 
-    // </editor-fold>
+    // endregion
 
-    // <editor-fold desc="Windows holder.">
+    // region Window holder.
 
     /**
      * Map<IWindow window, Boolean shown>
@@ -214,26 +214,9 @@ public abstract class AbstractMenuScreen<T extends AbstractContainerMenu> extend
 
     @Override
     protected void rebuildWidgets() {
-        unInitialize();
+        this.deinitialize();
         super.rebuildWidgets();
     }
-
-    @Override
-    protected void init() {
-        super.init();
-        initialize();
-    }
-
-    @Override
-    protected void containerTick() {
-        for (var c : getChildren()) {
-            c.tick();
-        }
-
-        super.containerTick();
-    }
-
-    protected abstract void createChildren();
 
     @Override
     public final void initialize() {
@@ -245,17 +228,41 @@ public abstract class AbstractMenuScreen<T extends AbstractContainerMenu> extend
     }
 
     @Override
-    public void unInitialize() {
+    public void deinitialize() {
         for (var child : getChildren()) {
-            child.unInitialize();
+            child.deinitialize();
         }
 
         closeAllWindows();
         clearChildren();
     }
 
-    // </editor-fold>
+    // endregion
 
+    // region Screen
+
+    @Override
+    protected void init() {
+        super.init();
+        initialize();
+    }
+
+    @Override
+    public void onClose() {
+        this.deinitialize();
+        super.onClose();
+    }
+
+    @Override
+    protected void containerTick() {
+        for (var c : getChildren()) {
+            c.tick();
+        }
+
+        super.containerTick();
+    }
+
+    // endregion
 
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
@@ -274,7 +281,7 @@ public abstract class AbstractMenuScreen<T extends AbstractContainerMenu> extend
         guiGraphics.pose().pushPose();
 
         if (hasWindow()) {
-            drawGrayishBackground(guiGraphics);
+            IScreen.drawGrayishBackground(guiGraphics);
         }
 
         for (var w : getWindows()) {
@@ -290,6 +297,8 @@ public abstract class AbstractMenuScreen<T extends AbstractContainerMenu> extend
 
         guiGraphics.pose().popPose();
     }
+
+    // region ContainerEventHandler
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
@@ -354,9 +363,5 @@ public abstract class AbstractMenuScreen<T extends AbstractContainerMenu> extend
         return IWindowHolder.super.charTyped(codePoint, modifiers);
     }
 
-    public static void drawGrayishBackground(GuiGraphics guiGraphics) {
-        guiGraphics.pose().pushPose();
-        guiGraphics.fillGradient(0, 0, guiGraphics.guiWidth(), guiGraphics.guiHeight(), -1072689136, -804253680);
-        guiGraphics.pose().popPose();
-    }
+    // endregion
 }

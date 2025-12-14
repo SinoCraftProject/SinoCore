@@ -18,7 +18,7 @@ public abstract class AbstractScreen extends Screen implements IScreen {
         super(title);
     }
 
-    // <editor-fold desc="IComponent.">
+    // region IComponent
 
     @Override
     public int getWidth() {
@@ -30,9 +30,9 @@ public abstract class AbstractScreen extends Screen implements IScreen {
         return height;
     }
 
-    // </editor-fold>
+    // endregion
 
-    // <editor-fold desc="Windows holder.">
+    // region Windows holder
 
     /**
      * Map<IWindow window, Boolean shown>
@@ -172,9 +172,13 @@ public abstract class AbstractScreen extends Screen implements IScreen {
 
     @Override
     protected void rebuildWidgets() {
-        unInitialize();
+        deinitialize();
         super.rebuildWidgets();
     }
+
+    // endregion
+
+    // region Screen
 
     @Override
     protected void init() {
@@ -184,11 +188,17 @@ public abstract class AbstractScreen extends Screen implements IScreen {
 
     @Override
     public void tick() {
-        IScreen.super.tick();
         super.tick();
+        IScreen.super.tick();
     }
 
-    // </editor-fold>
+    @Override
+    public void onClose() {
+        deinitialize();
+        super.onClose();
+    }
+
+    // endregion
 
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
@@ -224,7 +234,7 @@ public abstract class AbstractScreen extends Screen implements IScreen {
         guiGraphics.pose().popPose();
     }
 
-    // <editor-fold desc="ContainerEventHandler.">
+    // region ContainerEventHandler
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
@@ -261,5 +271,5 @@ public abstract class AbstractScreen extends Screen implements IScreen {
         return IScreen.super.charTyped(codePoint, modifiers);
     }
 
-    // </editor-fold>
+    // endregion
 }
