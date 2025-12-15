@@ -8,10 +8,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public abstract class AbstractScreen extends Screen implements IScreen {
     protected AbstractScreen(Component title) {
@@ -32,117 +29,7 @@ public abstract class AbstractScreen extends Screen implements IScreen {
 
     // endregion
 
-    // region Windows holder
-
-    /**
-     * Map<IWindow window, Boolean shown>
-     */
-    private final Map<IWindow, Boolean> windows = new HashMap<>();
-
-    @Nullable
-    private IWindow mutexWindow = null;
-
-    @Nullable
-    private IWindow focusedWindow = null;
-
-    @Override
-    public List<IWindow> getWindows() {
-        return List.copyOf(windows.keySet());
-    }
-
-    @Override
-    public void addWindow(IWindow window, boolean mutex, boolean show) {
-        addChild(window);
-        windows.put(window, false);
-        window.onOpen();
-
-        if (mutex) {
-            if (!hasMutexWindow()) {
-                setMutexWindow(window);
-            } else {
-                throw new IllegalStateException();
-            }
-        }
-
-        if (show) {
-            show(window);
-        }
-    }
-
-    @Override
-    public void closeWindow(IWindow window) {
-        if (getMutexWindow() == window) {
-            setMutexWindow(null);
-        }
-
-        if (getFocusedWindow() == window) {
-            setFocusedWindow(null);
-        }
-
-        removeChild(window);
-        windows.remove(window);
-        window.onClose();
-    }
-
-    @Override
-    public void show(IWindow window) {
-        if (!windows.get(window)) {
-            windows.put(window, true);
-            window.onShown();
-        }
-    }
-
-    @Override
-    public void hide(IWindow window) {
-        if (windows.get(window) && getMutexWindow() != window) {
-            windows.put(window, false);
-            window.onHidden();
-        }
-    }
-
-    @Override
-    public @Nullable IWindow getMutexWindow() {
-        return mutexWindow;
-    }
-
-    @Override
-    public void setMutexWindow(@Nullable IWindow window) {
-        if (window != null && hasWindow(window)) {
-            setFocusedWindow(window);
-            mutexWindow = window;
-        } else {
-            mutexWindow = null;
-        }
-    }
-
-    @Override
-    public @Nullable IWindow getFocusedWindow() {
-        return focusedWindow;
-    }
-
-    @Override
-    public void setFocusedWindow(@Nullable IWindow window) {
-        if (hasMutexWindow()) {
-            setFocused(getMutexWindow());
-            return;
-        }
-
-        setFocused(window);
-        for (var w : getWindows()) {
-            w.setFocused(w == window);
-        }
-    }
-
-    @Override
-    public void setFocused(@Nullable GuiEventListener focused) {
-        super.setFocused(focused);
-
-        if (focused instanceof IWindow window) {
-            this.focusedWindow = window;
-        } else {
-            this.focusedWindow = null;
-        }
-    }
+    // region IComposedComponent
 
     private final List<IComponent> children = new ArrayList<>();
 
@@ -165,6 +52,128 @@ public abstract class AbstractScreen extends Screen implements IScreen {
         return List.copyOf(children);
     }
 
+    // endregion
+
+    // region Windows holder
+
+    /**
+     * Map<IWindow window, Boolean shown>, ordered
+     */
+    private final Map<IWindow, Boolean> windows = new LinkedHashMap<>();
+
+    @Nullable
+    private IWindow modalWindow = null;
+
+    @Nullable
+    private IWindow focusedWindow = null;
+
+    @Override
+    public List<IWindow> getWindows() {
+        return List.copyOf(windows.keySet());
+    }
+
+    @Override
+    public void addWindow(IWindow window, boolean modal, boolean show) {
+        addChild(window);
+        windows.put(window, show);
+        window.onOpen();
+
+        if (modal) {
+            setModalWindow(window);
+        }
+
+        if (show) {
+            show(window);
+        }
+    }
+
+    @Override
+    public void closeWindow(IWindow window) {
+        if (isModalWindow(window)) {
+            setModalWindow(null);
+        }
+
+        if (isFocused(window)) {
+            setFocusedWindow(null);
+        }
+
+        removeChild(window);
+        windows.remove(window);
+        window.onClose();
+    }
+
+    @Override
+    public void show(IWindow window) {
+        if (!windows.get(window)) {
+            windows.put(window, true);
+            window.onShown();
+        }
+    }
+
+    @Override
+    public void hide(IWindow window) {
+        if (getModalWindow() == window) {
+            throw new UnsupportedOperationException("Modal window cannot be hidden.");
+        }
+
+        if (windows.get(window)) {
+            windows.put(window, false);
+            window.onHidden();
+        }
+    }
+
+    @Override
+    public @Nullable IWindow getModalWindow() {
+        return modalWindow;
+    }
+
+    @Override
+    public void setModalWindow(@Nullable IWindow window) {
+        if (window != null && hasWindow(window)) {
+            if (hasModalWindow()) {
+                throw new IllegalStateException("A modal window is already present.");
+            }
+
+            setFocusedWindow(window);
+            modalWindow = window;
+        } else {
+            modalWindow = null;
+        }
+    }
+
+    @Override
+    public @Nullable IWindow getFocusedWindow() {
+        return focusedWindow;
+    }
+
+    @Override
+    public void setFocusedWindow(@Nullable IWindow window) {
+        if (hasModalWindow()) {
+            setFocused(getModalWindow());
+            return;
+        }
+
+        setFocused(window);
+        for (var w : getWindows()) {
+            w.setFocused(w == window);
+        }
+    }
+
+    // endregion
+
+    // region Screen
+
+    @Override
+    public void setFocused(@Nullable GuiEventListener focused) {
+        super.setFocused(focused);
+
+        if (focused instanceof IWindow window) {
+            this.focusedWindow = window;
+        } else {
+            this.focusedWindow = null;
+        }
+    }
+
     @Override
     public List<? extends GuiEventListener> children() {
         return List.copyOf(getChildren());
@@ -175,10 +184,6 @@ public abstract class AbstractScreen extends Screen implements IScreen {
         deinitialize();
         super.rebuildWidgets();
     }
-
-    // endregion
-
-    // region Screen
 
     @Override
     protected void init() {
@@ -202,8 +207,8 @@ public abstract class AbstractScreen extends Screen implements IScreen {
 
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        var maskedMouseX = hasMutexWindow() ? -1 : mouseX;
-        var maskedMouseY = hasMutexWindow() ? -1 : mouseY;
+        var maskedMouseX = hasModalWindow() ? -1 : mouseX;
+        var maskedMouseY = hasModalWindow() ? -1 : mouseY;
 
         assert minecraft != null;
         guiGraphics.drawCenteredString(minecraft.font, title, this.width / 2, 4, 0xFFFFFFFF);
@@ -221,14 +226,14 @@ public abstract class AbstractScreen extends Screen implements IScreen {
         }
 
         for (var w : getWindows()) {
-            if (w != getMutexWindow()) {
+            if (w != getModalWindow()) {
                 w.render(guiGraphics, maskedMouseX, maskedMouseY, partialTick);
             }
         }
 
-        if (hasMutexWindow()) {
-            assert getMutexWindow() != null;
-            getMutexWindow().render(guiGraphics, mouseX, mouseY, partialTick);
+        if (hasModalWindow()) {
+            assert getModalWindow() != null;
+            getModalWindow().render(guiGraphics, mouseX, mouseY, partialTick);
         }
 
         guiGraphics.pose().popPose();

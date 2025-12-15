@@ -27,4 +27,14 @@ public abstract class AbstractComponent extends AbstractWidget implements ICompo
     protected final Minecraft getMinecraft() {
         return Minecraft.getInstance();
     }
+
+    @Override
+    public boolean isVisible() {
+        return visible;
+    }
+
+    @Override
+    public void setVisible(boolean visible) {
+        this.visible = visible;
+    }
 }

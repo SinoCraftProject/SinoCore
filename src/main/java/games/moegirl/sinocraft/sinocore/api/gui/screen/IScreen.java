@@ -9,7 +9,7 @@ import javax.naming.OperationNotSupportedException;
 
 public interface IScreen extends IWindowHolder {
 
-    // <editor-fold desc="IComponent.">
+    // region IComponent
 
     @Override
     default @Nullable IComposedComponent getParent() {
@@ -47,7 +47,17 @@ public interface IScreen extends IWindowHolder {
         return true;
     }
 
-    // </editor-fold>
+    @Override
+    default boolean isVisible() {
+        return true;
+    }
+
+    @Override
+    default void setVisible(boolean visible) {
+        throw new RuntimeException(new OperationNotSupportedException());
+    }
+
+    // endregion
 
     @Override
     default void tick() {
@@ -64,79 +74,79 @@ public interface IScreen extends IWindowHolder {
         guiGraphics.pose().popPose();
     }
 
-    // <editor-fold desc="ContainerEventHandler.">
+    // region ContainerEventHandler
 
     @Override
     default boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (hasMutexWindow()) {
-            assert getMutexWindow() != null;
-            return getMutexWindow().mouseClicked(mouseX, mouseY, button);
+        if (hasModalWindow()) {
+            assert getModalWindow() != null;
+            return getModalWindow().mouseClicked(mouseX, mouseY, button);
         }
         return IWindowHolder.super.mouseClicked(mouseX, mouseY, button);
     }
 
     @Override
     default boolean mouseReleased(double mouseX, double mouseY, int button) {
-        if (hasMutexWindow()) {
-            assert getMutexWindow() != null;
-            return getMutexWindow().mouseReleased(mouseX, mouseY, button);
+        if (hasModalWindow()) {
+            assert getModalWindow() != null;
+            return getModalWindow().mouseReleased(mouseX, mouseY, button);
         }
         return IWindowHolder.super.mouseReleased(mouseX, mouseY, button);
     }
 
     @Override
     default boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
-        if (hasMutexWindow()) {
-            assert getMutexWindow() != null;
-            return getMutexWindow().mouseDragged(mouseX, mouseY, button, dragX, dragY);
+        if (hasModalWindow()) {
+            assert getModalWindow() != null;
+            return getModalWindow().mouseDragged(mouseX, mouseY, button, dragX, dragY);
         }
         return IWindowHolder.super.mouseDragged(mouseX, mouseY, button, dragX, dragY);
     }
 
     @Override
     default boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
-        if (hasMutexWindow()) {
-            assert getMutexWindow() != null;
-            return getMutexWindow().mouseScrolled(mouseX, mouseY, scrollX, scrollY);
+        if (hasModalWindow()) {
+            assert getModalWindow() != null;
+            return getModalWindow().mouseScrolled(mouseX, mouseY, scrollX, scrollY);
         }
         return IWindowHolder.super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
     }
 
     @Override
     default void mouseMoved(double mouseX, double mouseY) {
-        if (hasMutexWindow()) {
-            assert getMutexWindow() != null;
-            getMutexWindow().mouseMoved(mouseX, mouseY);
+        if (hasModalWindow()) {
+            assert getModalWindow() != null;
+            getModalWindow().mouseMoved(mouseX, mouseY);
         }
         IWindowHolder.super.mouseMoved(mouseX, mouseY);
     }
 
     @Override
     default boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        if (hasMutexWindow()) {
-            assert getMutexWindow() != null;
-            return getMutexWindow().keyPressed(keyCode, scanCode, modifiers);
+        if (hasModalWindow()) {
+            assert getModalWindow() != null;
+            return getModalWindow().keyPressed(keyCode, scanCode, modifiers);
         }
         return IWindowHolder.super.keyPressed(keyCode, scanCode, modifiers);
     }
 
     @Override
     default boolean keyReleased(int keyCode, int scanCode, int modifiers) {
-        if (hasMutexWindow()) {
-            assert getMutexWindow() != null;
-            return getMutexWindow().keyReleased(keyCode, scanCode, modifiers);
+        if (hasModalWindow()) {
+            assert getModalWindow() != null;
+            return getModalWindow().keyReleased(keyCode, scanCode, modifiers);
         }
         return IWindowHolder.super.keyReleased(keyCode, scanCode, modifiers);
     }
 
     @Override
     default boolean charTyped(char codePoint, int modifiers) {
-        if (hasMutexWindow()) {
-            assert getMutexWindow() != null;
-            return getMutexWindow().charTyped(codePoint, modifiers);
+        if (hasModalWindow()) {
+            assert getModalWindow() != null;
+            return getModalWindow().charTyped(codePoint, modifiers);
         }
         return IWindowHolder.super.charTyped(codePoint, modifiers);
     }
 
-    // </editor-fold>
+    // endregion
 }

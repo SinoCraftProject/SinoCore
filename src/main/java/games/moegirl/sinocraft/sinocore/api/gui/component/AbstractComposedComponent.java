@@ -18,6 +18,7 @@ public abstract class AbstractComposedComponent extends AbstractComponent implem
 
     public AbstractComposedComponent(int x, int y, int width, int height, Component message) {
         super(x, y, width, height, message);
+        createChildren();
     }
 
     @Override

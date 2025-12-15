@@ -1,8 +1,8 @@
 package games.moegirl.sinocraft.sinocore.api.gui.component.window;
 
-import games.moegirl.sinocraft.sinocore.api.gui.component.IComponent;
+import games.moegirl.sinocraft.sinocore.api.gui.component.IComposedComponent;
 
-public interface IWindow extends IComponent {
+public interface IWindow extends IComposedComponent {
     default void onOpen() {
     }
     default void onClose() {

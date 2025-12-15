@@ -29,7 +29,6 @@ public interface IComposedComponent extends IComponent, ContainerEventHandler {
     default void initialize() {
         IComponent.super.initialize();
 
-        createChildren();
         for (var child : getChildren()) {
             child.initialize();
         }
@@ -40,7 +39,6 @@ public interface IComposedComponent extends IComponent, ContainerEventHandler {
         for (var child : getChildren()) {
             child.deinitialize();
         }
-        clearChildren();
 
         IComponent.super.deinitialize();
     }
@@ -63,7 +61,7 @@ public interface IComposedComponent extends IComponent, ContainerEventHandler {
         }
     }
 
-    // <editor-fold desc="ContainerEventHandler.">
+    // region ContainerEventHandler
 
     @Override
     default boolean mouseClicked(double mouseX, double mouseY, int button) {
@@ -105,5 +103,5 @@ public interface IComposedComponent extends IComponent, ContainerEventHandler {
         return ContainerEventHandler.super.charTyped(codePoint, modifiers);
     }
 
-    // </editor-fold>
+    // endregion
 }

@@ -7,15 +7,16 @@ import java.util.List;
 
 public interface IWindowHolder extends IComposedComponent {
     List<IWindow> getWindows();
-    void addWindow(IWindow window, boolean mutex, boolean show);
+    void addWindow(IWindow window, boolean modal, boolean show);
     void closeWindow(IWindow window);
 
     void show(IWindow window);
     void hide(IWindow window);
 
     @Nullable
-    IWindow getMutexWindow();
-    void setMutexWindow(@Nullable IWindow window);
+    IWindow getModalWindow();
+    void setModalWindow(@Nullable IWindow window);
+
     @Nullable
     IWindow getFocusedWindow();
     void setFocusedWindow(@Nullable IWindow window);
@@ -28,12 +29,12 @@ public interface IWindowHolder extends IComposedComponent {
         return getFocusedWindow() == window;
     }
 
-    default boolean isWindowMutex(IWindow window) {
-        return getMutexWindow() == window;
+    default boolean isModalWindow(IWindow window) {
+        return getModalWindow() == window;
     }
 
-    default boolean hasMutexWindow() {
-        return getMutexWindow() != null;
+    default boolean hasModalWindow() {
+        return getModalWindow() != null;
     }
 
     default boolean hasWindow() {

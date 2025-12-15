@@ -3,6 +3,7 @@ package games.moegirl.sinocraft.sinocore.api.gui.layout.entry;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import games.moegirl.sinocraft.sinocore.api.gui.Position;
 import games.moegirl.sinocraft.sinocore.api.util.codec.CodecHelper;
 import lombok.Getter;
 import net.minecraft.resources.ResourceLocation;
