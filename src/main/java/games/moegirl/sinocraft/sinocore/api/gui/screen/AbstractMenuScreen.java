@@ -77,6 +77,10 @@ public abstract class AbstractMenuScreen<T extends AbstractContainerMenu> extend
 
     @Override
     public void addWindow(IWindow window, boolean modal, boolean show) {
+        if (modal && hasModalWindow()) {
+            throw new IllegalStateException("A modal window is already present.");
+        }
+
         addChild(window);
         windows.put(window, false);
         window.onOpen();
@@ -130,13 +134,8 @@ public abstract class AbstractMenuScreen<T extends AbstractContainerMenu> extend
         return modalWindow;
     }
 
-    @Override
-    public void setModalWindow(@Nullable IWindow window) {
+    private void setModalWindow(@Nullable IWindow window) {
         if (window != null && hasWindow(window)) {
-            if (hasModalWindow()) {
-                throw new IllegalStateException("A modal window is already present.");
-            }
-
             setFocusedWindow(window);
             modalWindow = window;
         } else {

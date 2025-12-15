@@ -15,7 +15,6 @@ public interface IWindowHolder extends IComposedComponent {
 
     @Nullable
     IWindow getModalWindow();
-    void setModalWindow(@Nullable IWindow window);
 
     @Nullable
     IWindow getFocusedWindow();

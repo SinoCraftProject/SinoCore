@@ -74,6 +74,10 @@ public abstract class AbstractScreen extends Screen implements IScreen {
 
     @Override
     public void addWindow(IWindow window, boolean modal, boolean show) {
+        if (modal && hasModalWindow()) {
+            throw new IllegalStateException("A modal window is already present.");
+        }
+
         addChild(window);
         windows.put(window, show);
         window.onOpen();
@@ -127,13 +131,8 @@ public abstract class AbstractScreen extends Screen implements IScreen {
         return modalWindow;
     }
 
-    @Override
-    public void setModalWindow(@Nullable IWindow window) {
+    private void setModalWindow(@Nullable IWindow window) {
         if (window != null && hasWindow(window)) {
-            if (hasModalWindow()) {
-                throw new IllegalStateException("A modal window is already present.");
-            }
-
             setFocusedWindow(window);
             modalWindow = window;
         } else {
