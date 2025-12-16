@@ -3,65 +3,65 @@ package games.moegirl.sinocraft.sinocore.api.gui.layout.entry;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import games.moegirl.sinocraft.sinocore.api.util.codec.CodecHelper;
 import lombok.Getter;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentSerialization;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
 
 /**
  * @author luqin2007
  */
 @Getter
-public final class EditBoxEntry extends AbstractWidgetEntry {
-    public static final MapCodec<EditBoxEntry> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-                    Codec.INT.listOf().fieldOf("position").forGetter(b -> List.of(b.getX(), b.getY())),
-                    Codec.INT.listOf().fieldOf("size").forGetter(b -> List.of(b.getWidth(), b.getHeight())),
-                    Codec.STRING.optionalFieldOf("title", "").forGetter(EditBoxEntry::getTitle),
-                    Codec.STRING.optionalFieldOf("hint", null).forGetter(EditBoxEntry::getHint),
-                    Codec.INT.optionalFieldOf("max_length", 32).forGetter(EditBoxEntry::getMaxLength),
-                    Codec.STRING.optionalFieldOf("suggestion", null).forGetter(EditBoxEntry::getSuggestion),
-                    Codec.STRING.optionalFieldOf("default", "").forGetter(EditBoxEntry::getDefaultValue),
-                    Codec.INT.optionalFieldOf("color", 0xE0E0E0).forGetter(EditBoxEntry::getColor),
-                    Codec.INT.optionalFieldOf("color_uneditable", 0xE0E0E0).forGetter(EditBoxEntry::getUneditableColor),
-                    Codec.floatRange(0.0F, 1.0F).optionalFieldOf("alpha", 1.0F).forGetter(EditBoxEntry::getAlpha),
-                    Codec.STRING.optionalFieldOf("tooltip", null).forGetter(EditBoxEntry::getTooltip),
-                    Codec.BOOL.optionalFieldOf("bordered", true).forGetter(EditBoxEntry::isBordered))
-            .apply(instance, EditBoxEntry::new));
+public class EditBoxEntry extends AbstractComponentEntry {
+    public static final int DEFAULT_TEXT_COLOR = 0xE0E0E0;
+    public static final int DEFAULT_UNEDITABLE_TEXT_COLOR = 0x707070;
 
-    private final int x;
-    private final int y;
-    private final int width;
-    private final int height;
-    private final String title;
-    @Nullable
-    private final String hint;
-    private final int maxLength;
-    @Nullable
-    private final String suggestion;
-    private final String defaultValue;
-    private final int color;
-    private final int uneditableColor;
-    private final float alpha;
-    @Nullable
-    private final String tooltip;
-    private final boolean bordered;
+    public static final MapCodec<EditBoxEntry> MAP_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+            AbstractComponentEntry.MAP_CODEC.forGetter(e -> e),
+            ComponentSerialization.CODEC.optionalFieldOf("title", Component.empty()).forGetter(e -> e.title),
+            ComponentSerialization.CODEC.optionalFieldOf("hint", null).forGetter(e -> e.hint),
+            Codec.STRING.optionalFieldOf("suggestion", null).forGetter(e -> e.suggestion),
+            CodecHelper.unwarpOptional(
+                    CodecHelper.optionalAliasedFieldOf(Codec.STRING, "placeholder", "default")
+            ).forGetter(e -> e.placeholder),
+            Codec.INT.optionalFieldOf("max_length", Integer.MAX_VALUE).forGetter(EditBoxEntry::getMaxLength),
+            CodecHelper.unwarpOptional(
+                    CodecHelper.optionalAliasedFieldOf(Codec.INT, "text_color", "color"), DEFAULT_TEXT_COLOR
+            ).forGetter(EditBoxEntry::getColor),
+            CodecHelper.unwarpOptional(
+                    CodecHelper.optionalAliasedFieldOf(Codec.INT, "text_color_uneditable", "color_uneditable"), DEFAULT_UNEDITABLE_TEXT_COLOR
+            ).forGetter(EditBoxEntry::getUneditableColor),
+            Codec.floatRange(0.0F, 1.0F).optionalFieldOf("alpha", 1.0F).forGetter(EditBoxEntry::getAlpha),
+            Codec.BOOL.optionalFieldOf("bordered", true).forGetter(EditBoxEntry::isBordered)
+    ).apply(instance, EditBoxEntry::new));
 
-    EditBoxEntry(List<Integer> position, List<Integer> size, String title,
-                 @Nullable String hint, int maxLength, @Nullable String suggestion, String defaultValue, int color,
-                 int uneditableColor, float alpha, @Nullable String tooltip, boolean bordered) {
-        this.x = position.get(0);
-        this.y = position.get(1);
-        this.width = size.get(0);
-        this.height = size.get(1);
+    protected final Component title;
+
+    @Nullable
+    protected final Component hint;
+    @Nullable
+    protected final String suggestion;
+    @Nullable
+    protected final String placeholder;
+    protected final int maxLength;
+    protected final int color;
+    protected final int uneditableColor;
+    protected final float alpha;
+    protected final boolean bordered;
+
+    EditBoxEntry(AbstractComponentEntry entry, Component title, @Nullable Component hint,
+                 @Nullable String suggestion, @Nullable String placeholder, int maxLength,
+                 int color, int uneditableColor, float alpha, boolean bordered) {
+        super(entry);
         this.title = title;
         this.hint = hint;
         this.maxLength = maxLength;
         this.suggestion = suggestion;
-        this.defaultValue = defaultValue;
+        this.placeholder = placeholder;
         this.color = color;
         this.uneditableColor = uneditableColor;
         this.alpha = alpha;
-        this.tooltip = tooltip;
         this.bordered = bordered;
     }
 }

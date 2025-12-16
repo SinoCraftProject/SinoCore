@@ -3,3 +3,4 @@ accessible method net/minecraft/world/inventory/MenuType <init> (Lnet/minecraft/
 accessible method net/minecraft/world/inventory/AbstractContainerMenu addSlot (Lnet/minecraft/world/inventory/Slot;)Lnet/minecraft/world/inventory/Slot;
 accessible method net/minecraft/advancements/CriteriaTriggers register (Ljava/lang/String;Lnet/minecraft/advancements/CriterionTrigger;)Lnet/minecraft/advancements/CriterionTrigger;
 accessible field net/minecraft/server/network/ServerCommonPacketListenerImpl connection Lnet/minecraft/network/Connection;
+accessible method net/minecraft/client/gui/components/ImageWidget <init> (IIII)V

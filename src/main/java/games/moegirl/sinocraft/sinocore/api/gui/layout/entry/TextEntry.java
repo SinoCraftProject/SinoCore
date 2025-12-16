@@ -4,35 +4,30 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import lombok.Getter;
-
-import java.util.List;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentSerialization;
 
 @Getter
-public final class TextEntry extends AbstractWidgetEntry {
-    public static final MapCodec<TextEntry> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-                    Codec.INT.listOf().fieldOf("position").forGetter(e -> List.of(e.getX(), e.getY())),
-                    Codec.INT.optionalFieldOf("color", 0x808080).forGetter(TextEntry::getColor),
-                    Codec.STRING.optionalFieldOf("text", "").forGetter(TextEntry::getText),
-                    Codec.STRING.optionalFieldOf("rawText", "").forGetter(TextEntry::getRawText),
-                    Codec.BOOL.optionalFieldOf("shadow", false).forGetter(TextEntry::isShadowed),
-                    Codec.BOOL.optionalFieldOf("center", false).forGetter(TextEntry::isCentered))
-            .apply(instance, TextEntry::new));
+public final class TextEntry extends AbstractComponentEntry {
+    public static final Codec<TextEntry> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            AbstractComponentEntry.MAP_CODEC.forGetter(e -> e),
+            Codec.INT.optionalFieldOf("color", 0xFFFFFFFF).forGetter(TextEntry::getColor),
+            ComponentSerialization.CODEC.optionalFieldOf("text", Component.empty()).forGetter(TextEntry::getText),
+            Codec.BOOL.optionalFieldOf("shadowed", false).forGetter(TextEntry::isShadowed),
+            Codec.BOOL.optionalFieldOf("centered", false).forGetter(TextEntry::isCentered)
+    ).apply(instance, TextEntry::new));
 
-    private final int x;
-    private final int y;
+    public static final MapCodec<TextEntry> MAP_CODEC = MapCodec.assumeMapUnsafe(CODEC);
+
     private final int color;
-    private final String text;
-    private final String rawText;
+    private final Component text;
     private final boolean shadowed;
     private final boolean centered;
 
-    TextEntry(List<Integer> position, int color, String text, String rawText,
-              boolean shadowed, boolean centered) {
-        this.x = position.get(0);
-        this.y = position.get(1);
+    TextEntry(AbstractComponentEntry entry, int color, Component text, boolean shadowed, boolean centered) {
+        super(entry);
         this.color = color;
         this.text = text;
-        this.rawText = rawText;
         this.shadowed = shadowed;
         this.centered = centered;
     }
