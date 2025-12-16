@@ -63,7 +63,7 @@ public class LayoutWindow extends AbstractWindow {
     @Override
     protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         if (layout.getBackground() != null) {
-            guiGraphics.blitSprite(layout.getBackground().getPath(), getX(), getY(), getWidth(), getHeight());
+            layout.getBackground().blit(guiGraphics, getX(), getY(), getWidth(), getHeight());
         }
 
         super.renderWidget(guiGraphics, mouseX, mouseY, partialTick);

@@ -41,7 +41,7 @@ public class ImageButtonComponent extends ButtonComponent {
         } else {
             sprite = texture;
         }
-        guiGraphics.blitSprite(sprite.getPath(), this.getX(), this.getY(), this.width, this.height);
+        sprite.blit(guiGraphics, getX(), getY(), getWidth(), getHeight());
     }
 
     @Override
