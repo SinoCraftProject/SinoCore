@@ -93,14 +93,14 @@ public class LayoutManager {
         return new GuiTexture(path);
     }
 
+    public static void reloadLayout(ResourceLocation id) {
+        LAYOUTS.remove(id);
+    }
+
     /**
      * 重新加载所有 json 文件
      */
     public static void reloadAllLayouts() {
-        List<ResourceLocation> names = new ArrayList<>(LAYOUTS.keySet());
         LAYOUTS.clear();
-        for (ResourceLocation name : names) {
-            getLayout(name);
-        }
     }
 }

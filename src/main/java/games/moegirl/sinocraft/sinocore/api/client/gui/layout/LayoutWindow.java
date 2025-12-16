@@ -5,6 +5,7 @@ import games.moegirl.sinocraft.sinocore.api.client.gui.component.*;
 import games.moegirl.sinocraft.sinocore.api.gui.Bounds;
 import games.moegirl.sinocraft.sinocore.api.client.gui.component.window.AbstractWindow;
 import games.moegirl.sinocraft.sinocore.api.gui.layout.Layout;
+import games.moegirl.sinocraft.sinocore.api.gui.layout.LayoutManager;
 import games.moegirl.sinocraft.sinocore.api.gui.layout.entry.*;
 import games.moegirl.sinocraft.sinocore.api.client.gui.screen.IScreen;
 import net.minecraft.client.gui.GuiGraphics;
@@ -56,9 +57,8 @@ public class LayoutWindow extends AbstractWindow {
 
     @Override
     protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        if (layout.getBackground() != null) {
-            GuiImageRender.blitImage(layout.getBackground(), guiGraphics, getX(), getY(), getWidth(), getHeight());
-        }
+        var background = LayoutManager.getBackground(layout);
+        GuiImageRender.blitImage(background, guiGraphics, getX(), getY(), getWidth(), getHeight());
 
         super.renderWidget(guiGraphics, mouseX, mouseY, partialTick);
     }
