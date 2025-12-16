@@ -59,27 +59,27 @@ public class AbstractComponentEntry {
     }
 
     public Position getPosition() {
-        return bounds.origin();
+        return bounds.getOrigin();
     }
 
     public int getX() {
-        return bounds.origin().x();
+        return bounds.getX();
     }
 
     public int getY() {
-        return bounds.origin().y();
+        return bounds.getY();
     }
 
     public Size getSize() {
-        return bounds.size();
+        return bounds.getSize();
     }
 
     public int getWidth() {
-        return bounds.size().width();
+        return bounds.getWidth();
     }
 
     public int getHeight() {
-        return bounds.size().height();
+        return bounds.getHeight();
     }
 
     public Optional<Component> getTooltip() {

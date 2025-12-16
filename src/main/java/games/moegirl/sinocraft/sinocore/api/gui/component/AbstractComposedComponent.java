@@ -1,5 +1,6 @@
 package games.moegirl.sinocraft.sinocore.api.gui.component;
 
+import games.moegirl.sinocraft.sinocore.api.gui.Bounds;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.network.chat.Component;
@@ -8,13 +9,21 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AbstractComposedComponent extends AbstractComponent implements IComposedComponent {
+public class AbstractComposedComponent extends AbstractComponent implements IComposedComponent {
     private final List<IComponent> children = new ArrayList<>();
 
     @Nullable
     private GuiEventListener focused;
 
     private boolean dragging;
+
+    public AbstractComposedComponent(Bounds bounds) {
+        this(bounds, Component.empty());
+    }
+
+    public AbstractComposedComponent(Bounds bounds, Component message) {
+        this(bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight(), message);
+    }
 
     public AbstractComposedComponent(int x, int y, int width, int height, Component message) {
         super(x, y, width, height, message);

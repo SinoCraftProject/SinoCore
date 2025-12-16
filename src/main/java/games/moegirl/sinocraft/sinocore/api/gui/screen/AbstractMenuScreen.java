@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-public abstract class AbstractMenuScreen<T extends AbstractContainerMenu> extends AbstractContainerScreen<T> implements IScreen {
+public class AbstractMenuScreen<T extends AbstractContainerMenu> extends AbstractContainerScreen<T> implements IScreen {
     public AbstractMenuScreen(T menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
         createChildren();
@@ -242,6 +242,11 @@ public abstract class AbstractMenuScreen<T extends AbstractContainerMenu> extend
         }
 
         guiGraphics.pose().popPose();
+    }
+
+    @Override
+    protected void renderBg(GuiGraphics guiGraphics, float partialTick, int mouseX, int mouseY) {
+        // No background as default
     }
 
     // region ContainerEventHandler

@@ -1,7 +1,10 @@
 package games.moegirl.sinocraft.sinocore.api.gui.component;
 
+import games.moegirl.sinocraft.sinocore.api.gui.Bounds;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
 
@@ -9,6 +12,14 @@ public abstract class AbstractComponent extends AbstractWidget implements ICompo
 
     @Nullable
     private IComposedComponent parent;
+
+    public AbstractComponent(Bounds bounds) {
+        this(bounds, Component.empty());
+    }
+
+    public AbstractComponent(Bounds bounds, Component message) {
+        this(bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight(), message);
+    }
 
     public AbstractComponent(int x, int y, int width, int height, Component message) {
         super(x, y, width, height, message);
@@ -36,5 +47,9 @@ public abstract class AbstractComponent extends AbstractWidget implements ICompo
     @Override
     public void setVisible(boolean visible) {
         this.visible = visible;
+    }
+
+    @Override
+    protected void updateWidgetNarration(NarrationElementOutput narrationElementOutput) {
     }
 }

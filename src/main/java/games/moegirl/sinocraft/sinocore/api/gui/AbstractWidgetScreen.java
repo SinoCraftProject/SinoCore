@@ -2,9 +2,6 @@ package games.moegirl.sinocraft.sinocore.api.gui;
 
 import games.moegirl.sinocraft.sinocore.api.gui.layout.Layout;
 import games.moegirl.sinocraft.sinocore.api.gui.layout.entry.*;
-import games.moegirl.sinocraft.sinocore.api.gui.widgets.component.EditBoxWidget;
-import games.moegirl.sinocraft.sinocore.api.gui.widgets.component.ImageButtonWidget;
-import games.moegirl.sinocraft.sinocore.api.gui.widgets.component.ProgressBarWidget;
 import games.moegirl.sinocraft.sinocore.utility.GLSwitcher;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -48,42 +45,6 @@ public class AbstractWidgetScreen<T extends AbstractWidgetMenu> extends Abstract
         if (widgets.containsWidget("background")) {
             blitTexture(guiGraphics, "background", 0, 0);
         }
-    }
-
-    protected ImageButtonWidget addButton(String name, Button.OnPress onPress) {
-        ImageButtonEntry entry = (ImageButtonEntry) widgets.getWidget(name);
-        ImageButtonWidget button = new ImageButtonWidget(this, entry, onPress);
-        addRenderableWidget(button);
-        return button;
-    }
-
-    protected EditBoxWidget addEditBox(String name, Font font) {
-        EditBoxEntry entry = (EditBoxEntry) widgets.getWidget(name);
-        EditBoxWidget editBox = new EditBoxWidget(font, entry, leftPos, topPos);
-        addRenderableWidget(editBox);
-        editBox.initializeFocus(this);
-        return editBox;
-    }
-
-    protected EditBoxWidget addEditBox(String name, Font font, Consumer<String> responder) {
-        EditBoxWidget editBox = addEditBox(name, font);
-        editBox.setResponder(responder);
-        return editBox;
-    }
-
-    protected EditBoxWidget addEditBox(String name) {
-        return addEditBox(name, font);
-    }
-
-    protected EditBoxWidget addEditBox(String name, Consumer<String> responder) {
-        return addEditBox(name, font, responder);
-    }
-
-    protected ProgressBarWidget addProgress(GuiGraphics guiGraphics, String name, DoubleSupplier progress) {
-        ProgressBarEntry entry = (ProgressBarEntry) widgets.getWidget(name);
-        ProgressBarWidget widget = new ProgressBarWidget(leftPos, topPos, widgets, entry, progress);
-        addRenderableWidget(widget);
-        return widget;
     }
 
     protected void drawText(GuiGraphics guiGraphics, String name, Font font) {

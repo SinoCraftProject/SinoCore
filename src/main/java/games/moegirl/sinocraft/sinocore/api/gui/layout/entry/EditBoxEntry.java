@@ -66,16 +66,4 @@ public class EditBoxEntry extends AbstractComponentEntry {
         this.alpha = alpha;
         this.bordered = bordered;
     }
-
-    public Optional<Component> getHint() {
-        return Optional.ofNullable(hint);
-    }
-
-    public Optional<String> getSuggestion() {
-        return Optional.ofNullable(suggestion);
-    }
-
-    public Optional<String> getPlaceholder() {
-        return Optional.ofNullable(placeholder);
-    }
 }

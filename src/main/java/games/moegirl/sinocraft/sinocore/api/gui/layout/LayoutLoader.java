@@ -36,7 +36,8 @@ public class LayoutLoader {
         addComponent("progress_bar", ProgressBarEntry.MAP_CODEC, ProgressBarEntry.class);
         addComponent("rectangle", RectangleEntry.MAP_CODEC, RectangleEntry.class);
         addComponent("slot", SlotEntry.MAP_CODEC, SlotEntry.class);
-        addComponent("slot_group", SlotGroupEntry.MAP_CODEC, SlotGroupEntry.class);
+        addComponent("slot_list", SlotListEntry.MAP_CODEC, SlotListEntry.class);
+        addComponent("slot_grid", SlotGridEntry.MAP_CODEC, SlotGridEntry.class);
         addComponent("sprite", SpriteEntry.MAP_CODEC, SpriteEntry.class);
         addComponent("text", TextEntry.MAP_CODEC, TextEntry.class);
     }
@@ -78,8 +79,8 @@ public class LayoutLoader {
 
     public static ResourceLocation getBackground(Layout layout) {
         var background = layout.getBackground();
-        if (background.isPresent()) {
-            return background.get().getPath();
+        if (background != null) {
+            return background.getPath();
         }
         var name = LAYOUTS.inverse().get(layout);
         return ResourceLocation.fromNamespaceAndPath(name.getNamespace(), name.getPath() + ".png");

@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-public abstract class AbstractScreen extends Screen implements IScreen {
+public class AbstractScreen extends Screen implements IScreen {
     protected AbstractScreen(Component title) {
         super(title);
     }
