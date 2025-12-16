@@ -7,14 +7,11 @@ import games.moegirl.sinocraft.sinocore.api.client.gui.component.window.Abstract
 import games.moegirl.sinocraft.sinocore.api.gui.layout.Layout;
 import games.moegirl.sinocraft.sinocore.api.gui.layout.entry.*;
 import games.moegirl.sinocraft.sinocore.api.client.gui.screen.IScreen;
-import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.Button;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.function.DoubleSupplier;
 
 public class LayoutWindow extends AbstractWindow {
     protected final IScreen screen;
@@ -50,14 +47,9 @@ public class LayoutWindow extends AbstractWindow {
                 continue;
             }
 
-            if (entry instanceof ImageButtonEntry imageButton) {
-                addComponent(name, createImageButton(imageButton, button -> {}));
-            } else if (entry instanceof ButtonEntry button) {
-                addComponent(name, createButton(button, b -> {}));
-            } else if (entry instanceof EditBoxEntry editBox) {
-                addComponent(name, createEditBox(editBox));
-            } else if (entry instanceof ProgressBarEntry progressBar) {
-                addComponent(name, createProgressBar(progressBar, () -> 0.5));
+            var component = LayoutClientFactories.createComponent(entry, this);
+            if (component != null) {
+                addComponent(name, component);
             }
         }
     }
@@ -81,40 +73,4 @@ public class LayoutWindow extends AbstractWindow {
         var component = components.get(name);
         return (T) component;
     }
-
-    // region Create components
-
-    private Bounds getComponentBounds(AbstractComponentEntry entry) {
-        return new Bounds(getX() + entry.getX(), getY() + entry.getY(), entry.getWidth(), entry.getHeight());
-    }
-
-    protected ButtonComponent createButton(ButtonEntry entry, Button.OnPress onPress) {
-        return new ButtonComponent(getComponentBounds(entry), entry.getText(), onPress);
-    }
-
-    protected ButtonComponent createImageButton(ImageButtonEntry entry, Button.OnPress onPress) {
-        return new ImageButtonComponent(getComponentBounds(entry),
-                entry.getTexture(), entry.getTextureHover(), entry.getTexturePressed(), entry.getTextureDisabled(),
-                onPress);
-    }
-
-    protected EditBoxComponent createEditBox(EditBoxEntry entry, Font font) {
-        return new EditBoxComponent(font, entry.getBounds(), entry.getTitle(), entry.getHint(),
-                entry.getHint(), entry.getSuggestion(), entry.getPlaceholder(),
-                entry.getMaxLength(), entry.getColor(), entry.getUneditableColor(),
-                entry.isBordered());
-    }
-
-    protected EditBoxComponent createEditBox(EditBoxEntry entry) {
-        return createEditBox(entry, getMinecraft().font);
-    }
-
-    protected ProgressBarComponent createProgressBar(ProgressBarEntry entry, DoubleSupplier progress) {
-        var progressBar = new ProgressBarComponent(entry.getBounds(), entry.getDirection(),
-                entry.getTexture(), entry.getTextureFilled(), progress);
-        addChild(progressBar);
-        return progressBar;
-    }
-
-    // endregion
 }

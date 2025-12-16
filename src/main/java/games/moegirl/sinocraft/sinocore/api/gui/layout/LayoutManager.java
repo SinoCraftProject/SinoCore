@@ -61,9 +61,9 @@ public class LayoutManager {
      * @param name 文件路径
      * @return 从 resources 中加载的 Widgets 对象
      */
-    public static Layout loadWidgets(ResourceLocation name) {
+    public static Layout getLayout(ResourceLocation name) {
         if (!FORCE_RELOAD_WIDGETS && LAYOUTS.containsKey(name)) {
-            return (LAYOUTS.get(name));
+            return LAYOUTS.get(name);
         }
         ResourceLocation jsonFile = ResourceLocation.fromNamespaceAndPath(name.getNamespace(), name.getPath() + ".json");
         Resource resource = ResourceManagerHelper.getResourceManager()
@@ -96,11 +96,11 @@ public class LayoutManager {
     /**
      * 重新加载所有 json 文件
      */
-    public static void reloadAllWidgets() {
+    public static void reloadAllLayouts() {
         List<ResourceLocation> names = new ArrayList<>(LAYOUTS.keySet());
         LAYOUTS.clear();
         for (ResourceLocation name : names) {
-            loadWidgets(name);
+            getLayout(name);
         }
     }
 }

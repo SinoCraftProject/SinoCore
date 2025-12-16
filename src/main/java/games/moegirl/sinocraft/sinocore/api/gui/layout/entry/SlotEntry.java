@@ -15,7 +15,7 @@ import net.minecraft.resources.ResourceLocation;
  * Size of slot is always 18 * 18 in mc (16px item + 2px border). But the background could be larger.
  */
 @Getter
-public class SlotEntry extends AbstractComponentEntry {
+public class SlotEntry extends AbstractComponentEntry implements IServerLayoutComponent {
     public static final int SLOT_SIZE = 18;
 
     public static final GuiImage DEFAULT_SLOT_TEXTURE = new GuiSprite(ResourceLocation.withDefaultNamespace("container/slot"));
@@ -43,5 +43,13 @@ public class SlotEntry extends AbstractComponentEntry {
         super(entry);
         this.offset = offset;
         this.texture = texture;
+    }
+
+    public int getSlotX() {
+        return getX() + offset.getX();
+    }
+
+    public int getSlotY() {
+        return getY() + offset.getY();
     }
 }

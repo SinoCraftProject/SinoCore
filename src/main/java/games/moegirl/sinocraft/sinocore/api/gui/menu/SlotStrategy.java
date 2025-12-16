@@ -1,4 +1,4 @@
-package games.moegirl.sinocraft.sinocore.api.client.gui.component;
+package games.moegirl.sinocraft.sinocore.api.gui.menu;
 
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.Container;
@@ -41,7 +41,7 @@ public interface SlotStrategy<C extends Container> {
         };
     }
 
-    static SlotStrategy<Container> noLimit() {
+    static SlotStrategy<Container> empty() {
         return Slot::new;
     }
 

@@ -2,7 +2,7 @@ package games.moegirl.sinocraft.sinocore.api.gui.layout.entry;
 
 import java.util.List;
 
-public abstract class SlotGroupEntry extends AbstractComponentEntry {
+public abstract class SlotGroupEntry extends AbstractComponentEntry implements IServerLayoutComponent {
     protected SlotGroupEntry(AbstractComponentEntry entry) {
         super(entry);
     }
