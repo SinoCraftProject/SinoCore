@@ -1,7 +1,6 @@
 package games.moegirl.sinocraft.sinocore.api.gui;
 
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import games.moegirl.sinocraft.sinocore.api.util.codec.CodecHelper;
@@ -10,7 +9,6 @@ import lombok.Getter;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ExtraCodecs;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -105,10 +103,5 @@ public class GuiTexture extends GuiImage {
 
     public float getV1() {
         return ((float) vOffset + vHeight) / textureHeight;
-    }
-
-    @Override
-    public void blit(GuiGraphics guiGraphics, int x, int y, int width, int height) {
-        guiGraphics.blit(path, x, y, width, height, getU0(), getV0(), uWidth, vHeight, textureWidth, textureHeight);
     }
 }

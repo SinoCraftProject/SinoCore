@@ -1,6 +1,6 @@
-package games.moegirl.sinocraft.sinocore.api.gui.component.window;
+package games.moegirl.sinocraft.sinocore.api.client.gui.component.window;
 
-import games.moegirl.sinocraft.sinocore.api.gui.component.AbstractComposedComponent;
+import games.moegirl.sinocraft.sinocore.api.client.gui.component.AbstractComposedComponent;
 import net.minecraft.network.chat.Component;
 
 public abstract class AbstractWindow extends AbstractComposedComponent implements IWindow {

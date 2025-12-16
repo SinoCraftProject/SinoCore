@@ -40,9 +40,4 @@ public class GuiSprite extends GuiImage {
                 "path=" + path +
                 ']';
     }
-
-    @Override
-    public void blit(GuiGraphics guiGraphics, int x, int y, int width, int height) {
-        guiGraphics.blitSprite(path, x, y, width, height);
-    }
 }

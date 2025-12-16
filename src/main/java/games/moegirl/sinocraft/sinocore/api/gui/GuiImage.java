@@ -9,7 +9,6 @@ import net.minecraft.client.gui.GuiGraphics;
 import java.util.function.Function;
 
 public abstract class GuiImage {
-
     public static final Codec<GuiImage> CODEC = CodecHelper.withDecodingFallback(Type.SPRITE_CODEC, Type.TEXTURE_CODEC);
     public static final MapCodec<GuiImage> MAP_CODEC = MapCodec.assumeMapUnsafe(CODEC);
 
@@ -34,6 +33,4 @@ public abstract class GuiImage {
                 }
         );
     }
-
-    public abstract void blit(GuiGraphics guiGraphics, int x, int y, int width, int height);
 }

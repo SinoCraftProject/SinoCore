@@ -1,5 +1,6 @@
-package games.moegirl.sinocraft.sinocore.api.gui.component;
+package games.moegirl.sinocraft.sinocore.api.client.gui.component;
 
+import games.moegirl.sinocraft.sinocore.api.client.gui.GuiImageRender;
 import games.moegirl.sinocraft.sinocore.api.gui.Bounds;
 import games.moegirl.sinocraft.sinocore.api.gui.Direction2D;
 import games.moegirl.sinocraft.sinocore.api.gui.GuiImage;
@@ -40,7 +41,7 @@ public class ProgressBarComponent extends AbstractComponent {
 
     @Override
     protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        texture.blit(guiGraphics, getX(), getY(), getWidth(), getHeight());
+        GuiImageRender.blitImage(texture, guiGraphics, getX(), getY(), getWidth(), getHeight());
 
         guiGraphics.pose().pushPose();
 
@@ -64,7 +65,7 @@ public class ProgressBarComponent extends AbstractComponent {
             }
         }
 
-        filledTexture.blit(guiGraphics, getX(), getY(), getWidth(), getHeight());
+        GuiImageRender.blitImage(filledTexture, guiGraphics, getX(), getY(), getWidth(), getHeight());
         guiGraphics.disableScissor();
 
         guiGraphics.pose().popPose();

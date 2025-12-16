@@ -10,13 +10,9 @@ import games.moegirl.sinocraft.sinocore.SinoCorePlatform;
 import games.moegirl.sinocraft.sinocore.api.gui.GuiImage;
 import games.moegirl.sinocraft.sinocore.api.gui.GuiTexture;
 import games.moegirl.sinocraft.sinocore.api.gui.layout.entry.*;
-import games.moegirl.sinocraft.sinocore.api.gui.screen.AbstractMenuScreen;
-import games.moegirl.sinocraft.sinocore.api.gui.screen.AbstractScreen;
 import games.moegirl.sinocraft.sinocore.api.util.ResourceManagerHelper;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -40,12 +36,14 @@ public class LayoutManager {
         addComponent("image_button", ImageButtonEntry.MAP_CODEC, ImageButtonEntry.class);
         addComponent("progress_bar", ProgressBarEntry.MAP_CODEC, ProgressBarEntry.class);
         addComponent("rectangle", RectangleEntry.MAP_CODEC, RectangleEntry.class);
+        addComponent("image", ImageEntry.MAP_CODEC, ImageEntry.class);
+        addComponent("text", TextEntry.MAP_CODEC, TextEntry.class);
+
         addComponent("slot", SlotEntry.MAP_CODEC, SlotEntry.class);
         addComponent("slot_list", SlotListEntry.MAP_CODEC, SlotListEntry.class);
         addComponent("slot_grid", SlotGridEntry.MAP_CODEC, SlotGridEntry.class);
-        addComponent("image", ImageEntry.MAP_CODEC, ImageEntry.class);
-        addComponent("text", TextEntry.MAP_CODEC, TextEntry.class);
     }
+
     private static <T extends AbstractComponentEntry> void addComponent(String name, MapCodec<T> codec, Class<T> clazz) {
         CODEC_MAP.put(name, codec);
         CODEC_NAME_MAP.put(clazz, name);
@@ -104,19 +102,5 @@ public class LayoutManager {
         for (ResourceLocation name : names) {
             loadWidgets(name);
         }
-    }
-
-    public static AbstractScreen createLayoutScreen(Layout layout) {
-        var screen = new AbstractScreen(layout.getTitle());
-        var layoutWindow = new LayoutWindow(screen, layout);
-        screen.addWindow(layoutWindow, true);
-        return screen;
-    }
-
-    public static <T extends AbstractContainerMenu> AbstractMenuScreen<T> createLayoutMenuScreen(T menu, Inventory playerInventory, Layout layout) {
-        var screen = new AbstractMenuScreen<>(menu, playerInventory, layout.getTitle());
-        var layoutWindow = new LayoutWindow(screen, layout);
-        screen.addWindow(layoutWindow, true);
-        return screen;
     }
 }

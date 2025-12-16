@@ -1,4 +1,4 @@
-package games.moegirl.sinocraft.sinocore.api.gui.widgets;
+package games.moegirl.sinocraft.sinocore.api.client.gui.component;
 
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.Container;

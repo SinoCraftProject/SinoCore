@@ -1,8 +1,6 @@
-package games.moegirl.sinocraft.sinocore.api.gui.component;
+package games.moegirl.sinocraft.sinocore.api.client.gui.component;
 
 import games.moegirl.sinocraft.sinocore.api.gui.Bounds;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.Component;
@@ -33,10 +31,6 @@ public abstract class AbstractComponent extends AbstractWidget implements ICompo
     @Override
     public void setParent(@Nullable IComposedComponent parent) {
         this.parent = parent;
-    }
-
-    protected final Minecraft getMinecraft() {
-        return Minecraft.getInstance();
     }
 
     @Override

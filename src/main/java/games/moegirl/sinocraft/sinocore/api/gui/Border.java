@@ -32,6 +32,8 @@ public class Border {
 
     public static final Codec<Border> CODEC = CodecHelper.withDecodingFallbacks(CODEC_NAMED, List.of(CODEC_LIST, CODEC_INT));
 
+    public static final Border ZERO = new Border(0);
+
     private final int top;
     private final int right;
     private final int bottom;
@@ -50,6 +52,10 @@ public class Border {
 
     public Border(int upDown, int leftRight) {
         this(upDown, leftRight, upDown, leftRight);
+    }
+
+    public boolean hasBorder() {
+        return top > 0 || right > 0 || bottom > 0 || left > 0;
     }
 
     @Override

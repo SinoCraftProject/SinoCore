@@ -9,8 +9,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Optional;
-
 /**
  * @author luqin2007
  */

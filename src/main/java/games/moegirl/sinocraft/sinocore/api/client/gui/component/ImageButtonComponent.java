@@ -1,16 +1,19 @@
-package games.moegirl.sinocraft.sinocore.api.gui.component;
+package games.moegirl.sinocraft.sinocore.api.client.gui.component;
 
+import games.moegirl.sinocraft.sinocore.api.client.gui.GuiImageRender;
 import games.moegirl.sinocraft.sinocore.api.gui.Bounds;
 import games.moegirl.sinocraft.sinocore.api.gui.GuiImage;
+import lombok.Getter;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 
+@Getter
 public class ImageButtonComponent extends ButtonComponent {
 
-    protected final GuiImage texture;
-    protected final GuiImage hoverTexture;
-    protected final GuiImage pressTexture;
-    protected final GuiImage disabledTexture;
+    protected GuiImage texture;
+    protected GuiImage hoverTexture;
+    protected GuiImage pressTexture;
+    protected GuiImage disabledTexture;
 
     protected boolean pressing = false;
 
@@ -31,17 +34,17 @@ public class ImageButtonComponent extends ButtonComponent {
 
     @Override
     public void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        GuiImage sprite;
+        GuiImage image;
         if (!isActive()) {
-            sprite = disabledTexture;
+            image = disabledTexture;
         } else if (pressing) {
-            sprite = pressTexture;
+            image = pressTexture;
         } else if (isHoveredOrFocused()) {
-            sprite = hoverTexture;
+            image = hoverTexture;
         } else {
-            sprite = texture;
+            image = texture;
         }
-        sprite.blit(guiGraphics, getX(), getY(), getWidth(), getHeight());
+        GuiImageRender.blitImage(image, guiGraphics, getX(), getY(), getWidth(), getHeight());
     }
 
     @Override

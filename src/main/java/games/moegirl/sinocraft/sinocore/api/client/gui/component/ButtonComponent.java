@@ -1,4 +1,4 @@
-package games.moegirl.sinocraft.sinocore.api.gui.component;
+package games.moegirl.sinocraft.sinocore.api.client.gui.component;
 
 import games.moegirl.sinocraft.sinocore.api.gui.Bounds;
 import net.minecraft.client.gui.components.Button;

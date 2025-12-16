@@ -1,7 +1,7 @@
-package games.moegirl.sinocraft.sinocore.api.gui.screen;
+package games.moegirl.sinocraft.sinocore.api.client.gui.screen;
 
-import games.moegirl.sinocraft.sinocore.api.gui.component.IComponent;
-import games.moegirl.sinocraft.sinocore.api.gui.component.window.IWindow;
+import games.moegirl.sinocraft.sinocore.api.client.gui.component.IComponent;
+import games.moegirl.sinocraft.sinocore.api.client.gui.component.window.IWindow;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;

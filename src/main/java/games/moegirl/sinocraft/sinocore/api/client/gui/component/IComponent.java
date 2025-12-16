@@ -1,6 +1,7 @@
-package games.moegirl.sinocraft.sinocore.api.gui.component;
+package games.moegirl.sinocraft.sinocore.api.client.gui.component;
 
 import games.moegirl.sinocraft.sinocore.api.gui.Position;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.events.GuiEventListener;
@@ -39,6 +40,10 @@ public interface IComponent extends Renderable, GuiEventListener, LayoutElement,
 
     boolean isVisible();
     void setVisible(boolean visible);
+
+    default Minecraft getMinecraft() {
+        return Minecraft.getInstance();
+    }
 
     // region LayoutElement
 

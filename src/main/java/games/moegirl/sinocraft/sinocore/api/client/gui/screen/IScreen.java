@@ -1,7 +1,7 @@
-package games.moegirl.sinocraft.sinocore.api.gui.screen;
+package games.moegirl.sinocraft.sinocore.api.client.gui.screen;
 
-import games.moegirl.sinocraft.sinocore.api.gui.component.IComposedComponent;
-import games.moegirl.sinocraft.sinocore.api.gui.component.window.IWindowHolder;
+import games.moegirl.sinocraft.sinocore.api.client.gui.component.IComposedComponent;
+import games.moegirl.sinocraft.sinocore.api.client.gui.component.window.IWindowHolder;
 import net.minecraft.client.gui.GuiGraphics;
 import org.jetbrains.annotations.Nullable;
 

@@ -1,10 +1,12 @@
-package games.moegirl.sinocraft.sinocore.api.gui.layout;
+package games.moegirl.sinocraft.sinocore.api.client.gui.layout;
 
+import games.moegirl.sinocraft.sinocore.api.client.gui.GuiImageRender;
+import games.moegirl.sinocraft.sinocore.api.client.gui.component.*;
 import games.moegirl.sinocraft.sinocore.api.gui.Bounds;
-import games.moegirl.sinocraft.sinocore.api.gui.component.*;
-import games.moegirl.sinocraft.sinocore.api.gui.component.window.AbstractWindow;
+import games.moegirl.sinocraft.sinocore.api.client.gui.component.window.AbstractWindow;
+import games.moegirl.sinocraft.sinocore.api.gui.layout.Layout;
 import games.moegirl.sinocraft.sinocore.api.gui.layout.entry.*;
-import games.moegirl.sinocraft.sinocore.api.gui.screen.IScreen;
+import games.moegirl.sinocraft.sinocore.api.client.gui.screen.IScreen;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
@@ -63,7 +65,7 @@ public class LayoutWindow extends AbstractWindow {
     @Override
     protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         if (layout.getBackground() != null) {
-            layout.getBackground().blit(guiGraphics, getX(), getY(), getWidth(), getHeight());
+            GuiImageRender.blitImage(layout.getBackground(), guiGraphics, getX(), getY(), getWidth(), getHeight());
         }
 
         super.renderWidget(guiGraphics, mouseX, mouseY, partialTick);
