@@ -21,7 +21,11 @@ public interface IWindowHolder extends IComposedComponent {
     void setFocusedWindow(@Nullable IWindow window);
 
     default void addWindow(IWindow window) {
-        addWindow(window, false, true);
+        addWindow(window, false);
+    }
+
+    default void addWindow(IWindow window, boolean modal) {
+        addWindow(window, modal, true);
     }
 
     default boolean isFocused(IWindow window) {

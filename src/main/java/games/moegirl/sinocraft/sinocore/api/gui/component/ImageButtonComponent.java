@@ -1,26 +1,26 @@
 package games.moegirl.sinocraft.sinocore.api.gui.component;
 
 import games.moegirl.sinocraft.sinocore.api.gui.Bounds;
-import games.moegirl.sinocraft.sinocore.api.gui.GuiTexture;
+import games.moegirl.sinocraft.sinocore.api.gui.GuiImage;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 
 public class ImageButtonComponent extends ButtonComponent {
 
-    protected final GuiTexture texture;
-    protected final GuiTexture hoverTexture;
-    protected final GuiTexture pressTexture;
-    protected final GuiTexture disabledTexture;
+    protected final GuiImage texture;
+    protected final GuiImage hoverTexture;
+    protected final GuiImage pressTexture;
+    protected final GuiImage disabledTexture;
 
     protected boolean pressing = false;
 
-    public ImageButtonComponent(Bounds bounds, GuiTexture texture, GuiTexture hoverTexture,
-                                GuiTexture pressTexture, GuiTexture disabledTexture, OnPress onPress) {
+    public ImageButtonComponent(Bounds bounds, GuiImage texture, GuiImage hoverTexture,
+                                GuiImage pressTexture, GuiImage disabledTexture, OnPress onPress) {
         this(bounds, texture, hoverTexture, pressTexture, disabledTexture, onPress, DEFAULT_NARRATION);
     }
 
-    public ImageButtonComponent(Bounds bounds, GuiTexture texture, GuiTexture hoverTexture,
-                                GuiTexture pressTexture, GuiTexture disabledTexture,
+    public ImageButtonComponent(Bounds bounds, GuiImage texture, GuiImage hoverTexture,
+                                GuiImage pressTexture, GuiImage disabledTexture,
                                 OnPress onPress, CreateNarration createNarration) {
         super(bounds, Component.empty(), onPress, createNarration);
         this.texture = texture;
@@ -31,7 +31,7 @@ public class ImageButtonComponent extends ButtonComponent {
 
     @Override
     public void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        GuiTexture sprite;
+        GuiImage sprite;
         if (!isActive()) {
             sprite = disabledTexture;
         } else if (pressing) {

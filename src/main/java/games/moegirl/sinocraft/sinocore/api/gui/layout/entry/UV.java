@@ -20,11 +20,11 @@ public record UV(Position position, Size size) {
     }
 
     public int getUStart() {
-        return position.x();
+        return position.getX();
     }
 
     public int getVStart() {
-        return position.y();
+        return position.getY();
     }
 
     public int getUEnd() {
@@ -36,10 +36,10 @@ public record UV(Position position, Size size) {
     }
 
     public int getUWidth() {
-        return size.width();
+        return size.getWidth();
     }
 
     public int getVHeight() {
-        return size.height();
+        return size.getHeight();
     }
 }

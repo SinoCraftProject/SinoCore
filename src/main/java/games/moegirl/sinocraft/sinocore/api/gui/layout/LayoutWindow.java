@@ -14,13 +14,13 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.DoubleSupplier;
 
-public class LayoutComponent extends AbstractWindow {
+public class LayoutWindow extends AbstractWindow {
     protected final IScreen screen;
     protected final Layout layout;
 
     protected final Map<String, IComponent> components = new LinkedHashMap<>();
 
-    public LayoutComponent(IScreen screen, Layout layout) {
+    public LayoutWindow(IScreen screen, Layout layout) {
         super(getStart(screen.getWidth(), layout.getWidth()), getStart(screen.getHeight(), layout.getHeight()),
                 layout.getWidth(), layout.getHeight(), layout.getTitle());
         this.screen = screen;

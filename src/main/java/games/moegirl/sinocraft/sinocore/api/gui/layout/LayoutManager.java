@@ -7,21 +7,27 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.MapCodec;
 import games.moegirl.sinocraft.sinocore.SinoCorePlatform;
+import games.moegirl.sinocraft.sinocore.api.gui.GuiImage;
+import games.moegirl.sinocraft.sinocore.api.gui.GuiTexture;
 import games.moegirl.sinocraft.sinocore.api.gui.layout.entry.*;
+import games.moegirl.sinocraft.sinocore.api.gui.screen.AbstractMenuScreen;
+import games.moegirl.sinocraft.sinocore.api.gui.screen.AbstractScreen;
 import games.moegirl.sinocraft.sinocore.api.util.ResourceManagerHelper;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.*;
 
-public class LayoutLoader {
+public class LayoutManager {
 
     private static final Map<String, MapCodec<? extends AbstractComponentEntry>> CODEC_MAP = new HashMap<>();
     private static final Map<Class<?>, String> CODEC_NAME_MAP = new HashMap<>();
 
-    public static final Codec<AbstractComponentEntry> COMPONENTS_CODEC = Codec.STRING.dispatch(LayoutLoader::getTypeName, CODEC_MAP::get);
+    public static final Codec<AbstractComponentEntry> COMPONENTS_CODEC = Codec.STRING.dispatch(LayoutManager::getTypeName, CODEC_MAP::get);
 
     /**
      * 每次调用 loadWidgets 都重新从硬盘加载
@@ -32,19 +38,21 @@ public class LayoutLoader {
         addComponent("button", ButtonEntry.MAP_CODEC, ButtonEntry.class);
         addComponent("edit_box", EditBoxEntry.MAP_CODEC, EditBoxEntry.class);
         addComponent("image_button", ImageButtonEntry.MAP_CODEC, ImageButtonEntry.class);
-        addComponent("point", PointEntry.MAP_CODEC, PointEntry.class);
         addComponent("progress_bar", ProgressBarEntry.MAP_CODEC, ProgressBarEntry.class);
         addComponent("rectangle", RectangleEntry.MAP_CODEC, RectangleEntry.class);
         addComponent("slot", SlotEntry.MAP_CODEC, SlotEntry.class);
         addComponent("slot_list", SlotListEntry.MAP_CODEC, SlotListEntry.class);
         addComponent("slot_grid", SlotGridEntry.MAP_CODEC, SlotGridEntry.class);
-        addComponent("sprite", SpriteEntry.MAP_CODEC, SpriteEntry.class);
+        addComponent("image", ImageEntry.MAP_CODEC, ImageEntry.class);
         addComponent("text", TextEntry.MAP_CODEC, TextEntry.class);
     }
-
     private static <T extends AbstractComponentEntry> void addComponent(String name, MapCodec<T> codec, Class<T> clazz) {
         CODEC_MAP.put(name, codec);
         CODEC_NAME_MAP.put(clazz, name);
+    }
+
+    private static String getTypeName(AbstractComponentEntry entry) {
+        return CODEC_NAME_MAP.get(entry.getClass());
     }
 
     private static final BiMap<ResourceLocation, Layout> LAYOUTS = HashBiMap.create();
@@ -77,13 +85,14 @@ public class LayoutLoader {
         }
     }
 
-    public static ResourceLocation getBackground(Layout layout) {
+    public static GuiImage getBackground(Layout layout) {
         var background = layout.getBackground();
         if (background != null) {
-            return background.getPath();
+            return background;
         }
         var name = LAYOUTS.inverse().get(layout);
-        return ResourceLocation.fromNamespaceAndPath(name.getNamespace(), name.getPath() + ".png");
+        var path = ResourceLocation.fromNamespaceAndPath(name.getNamespace(), name.getPath() + ".png");
+        return new GuiTexture(path);
     }
 
     /**
@@ -97,7 +106,17 @@ public class LayoutLoader {
         }
     }
 
-    public static String getTypeName(AbstractComponentEntry entry) {
-        return CODEC_NAME_MAP.get(entry.getClass());
+    public static AbstractScreen createLayoutScreen(Layout layout) {
+        var screen = new AbstractScreen(layout.getTitle());
+        var layoutWindow = new LayoutWindow(screen, layout);
+        screen.addWindow(layoutWindow, true);
+        return screen;
+    }
+
+    public static <T extends AbstractContainerMenu> AbstractMenuScreen<T> createLayoutMenuScreen(T menu, Inventory playerInventory, Layout layout) {
+        var screen = new AbstractMenuScreen<>(menu, playerInventory, layout.getTitle());
+        var layoutWindow = new LayoutWindow(screen, layout);
+        screen.addWindow(layoutWindow, true);
+        return screen;
     }
 }

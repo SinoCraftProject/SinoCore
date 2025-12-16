@@ -2,20 +2,18 @@ package games.moegirl.sinocraft.sinocore.api.gui.component;
 
 import games.moegirl.sinocraft.sinocore.api.gui.Bounds;
 import games.moegirl.sinocraft.sinocore.api.gui.Direction2D;
-import games.moegirl.sinocraft.sinocore.api.gui.GuiTexture;
+import games.moegirl.sinocraft.sinocore.api.gui.GuiImage;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarratedElementType;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
-import net.minecraft.network.chat.Component;
 
 import java.util.function.DoubleSupplier;
 
 public class ProgressBarComponent extends AbstractComponent {
 
     private final Direction2D direction;
-    private final GuiTexture texture;
-    private final GuiTexture filledTexture;
+    private final GuiImage texture;
+    private final GuiImage filledTexture;
 
     /**
      * 0 ~ 1 for percentage of progress
@@ -23,7 +21,7 @@ public class ProgressBarComponent extends AbstractComponent {
     private final DoubleSupplier progressSupplier;
 
     public ProgressBarComponent(Bounds bounds,
-                                Direction2D direction, GuiTexture texture, GuiTexture filledTexture,
+                                Direction2D direction, GuiImage texture, GuiImage filledTexture,
                                 DoubleSupplier progress) {
         super(bounds);
         this.direction = direction;
@@ -42,7 +40,7 @@ public class ProgressBarComponent extends AbstractComponent {
 
     @Override
     protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        guiGraphics.blitSprite(texture.getPath(), getX(), getY(), getWidth(), getHeight());
+        texture.blit(guiGraphics, getX(), getY(), getWidth(), getHeight());
 
         guiGraphics.pose().pushPose();
 
@@ -66,7 +64,7 @@ public class ProgressBarComponent extends AbstractComponent {
             }
         }
 
-        guiGraphics.blitSprite(filledTexture.getPath(), getX(), getY(), getProgressOf(getWidth()), getHeight());
+        filledTexture.blit(guiGraphics, getX(), getY(), getWidth(), getHeight());
         guiGraphics.disableScissor();
 
         guiGraphics.pose().popPose();

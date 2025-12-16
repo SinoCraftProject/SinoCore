@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 
 public class AbstractScreen extends Screen implements IScreen {
-    protected AbstractScreen(Component title) {
+    public AbstractScreen(Component title) {
         super(title);
     }
 
