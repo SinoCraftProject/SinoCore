@@ -2,28 +2,25 @@ package games.moegirl.sinocraft.sinocore.fabric.registry;
 
 import games.moegirl.sinocraft.sinocore.api.registry.IRegRef;
 import games.moegirl.sinocraft.sinocore.api.registry.ITabRegistry;
-import games.moegirl.sinocraft.sinocore.api.registry.TabItemGenerator;
+import games.moegirl.sinocraft.sinocore.api.registry.TabDisplayItemsGenerator;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
-import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.Supplier;
+import java.util.function.Consumer;
 
 public class FabricTabRegistry implements ITabRegistry {
 
     private final String modId;
     private final Registry<CreativeModeTab> registry;
-    private final Map<ResourceLocation, IRegRef<CreativeModeTab>> refs = new HashMap<>();
+    private final Map<ResourceLocation, IRegRef<CreativeModeTab>> elements = new HashMap<>();
 
     @SuppressWarnings("unchecked")
     public FabricTabRegistry(String modId) {
@@ -41,51 +38,34 @@ public class FabricTabRegistry implements ITabRegistry {
     }
 
     @Override
-    public IRegRef<CreativeModeTab> registerForRef(String name) {
-        TabItemGenerator generator = new TabItemGenerator();
-        ResourceLocation id = ResourceLocation.fromNamespaceAndPath(modId, name);
-        ResourceKey<CreativeModeTab> key = ResourceKey.create(Registries.CREATIVE_MODE_TAB, id);
-        GENERATORS.put(key, generator);
-        return registerForRef(name, () -> FabricItemGroup.builder()
-                .title(Component.translatable(ITabRegistry.buildDefaultTranslationKey(modId, name)))
-                .displayItems(generator)
-                .icon(generator::displayItem)
-                .build());
-    }
-
-    @Override
-    public <T extends CreativeModeTab> IRegRef<CreativeModeTab> registerForRef(String name, Supplier<? extends T> supplier) {
-        ResourceLocation id = ResourceLocation.fromNamespaceAndPath(modId, name);
-        ResourceKey<CreativeModeTab> key = ResourceKey.create(Registries.CREATIVE_MODE_TAB, id);
-        var ref = new FabricRegRef<>(Registry.registerForHolder(registry, key, supplier.get()));
-        refs.put(ResourceLocation.fromNamespaceAndPath(modId, name), ref);
-        return ref;
-    }
-
-    @Override
-    public synchronized TabItemGenerator tabItems(ResourceKey<CreativeModeTab> tab) {
-        if (GENERATORS.containsKey(tab)) {
-            return GENERATORS.get(tab);
-        }
-        return VANILLA_GENERATORS.computeIfAbsent(tab, __ -> {
-            TabItemGenerator generator = TabItemGenerator.vanilla(tab);
-            ItemGroupEvents.modifyEntriesEvent(tab).register(entries -> generator.accept(entries.getContext(), entries));
-            return generator;
-        });
-    }
-
-    @Override
-    public @NotNull Registry<CreativeModeTab> getRegistry() {
+    public Registry<CreativeModeTab> getRegistry() {
         return registry;
     }
 
     @Override
     public Iterable<IRegRef<CreativeModeTab>> getEntries() {
-        return refs.values();
+        return elements.values();
     }
 
     @Override
     public Optional<IRegRef<CreativeModeTab>> get(ResourceLocation id) {
-        return Optional.ofNullable(refs.get(id));
+        return Optional.ofNullable(elements.get(id));
+    }
+
+    @Override
+    public IRegRef<CreativeModeTab> registerTab(String name, Consumer<CreativeModeTab.Builder> consumer) {
+        var generator = new TabDisplayItemsGenerator();
+        var builder = FabricItemGroup.builder();
+        consumer.accept(builder);
+        var tab = builder.build();
+        var ref = new FabricRegRef<>(Registry.registerForHolder(registry, getId(name), tab));
+        elements.put(ResourceLocation.fromNamespaceAndPath(modId, name), ref);
+        TabDisplayItemsGenerator.setRegisteredGenerators(ref.getKey(), generator);
+        return ref;
+    }
+
+    private ResourceKey<CreativeModeTab> getId(String name) {
+        ResourceLocation id = ResourceLocation.fromNamespaceAndPath(modId, name);
+        return ResourceKey.create(Registries.CREATIVE_MODE_TAB, id);
     }
 }

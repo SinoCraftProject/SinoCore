@@ -18,6 +18,6 @@ public class TestItemTagsProvider extends ItemTagsProvider {
 
     @Override
     protected void addTags(HolderLookup.@NotNull Provider registries) {
-        tag(TestTags.TEST_ITEM_TAG).add(TestRegistry.TEST_ITEM_MOD_TAB.getKey());
+        tag(TestTags.TEST_ITEM_TAG).add(TestRegistry.TEST_ITEM_TAB_1.getKey());
     }
 }

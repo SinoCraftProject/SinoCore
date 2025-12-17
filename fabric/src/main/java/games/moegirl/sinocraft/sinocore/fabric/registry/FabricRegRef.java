@@ -35,7 +35,7 @@ public class FabricRegRef<O> implements IRegRef<O> {
     }
 
     @Override
-    public @NotNull O get() {
+    public O get() {
         return obj.value();
     }
 }

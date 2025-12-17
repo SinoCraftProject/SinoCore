@@ -57,7 +57,7 @@ public class FabricRegistry<T> implements IRegistry<T> {
     }
 
     @Override
-    public @NotNull Registry<T> getRegistry() {
+    public Registry<T> getRegistry() {
         return sup.get();
     }
 

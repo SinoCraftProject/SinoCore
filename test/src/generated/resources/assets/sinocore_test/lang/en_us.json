@@ -1,9 +1,8 @@
 {
   "block.sinocore_test.test_block": "Test Block",
-  "item.sinocore_test.test_item_mc_tab": "Test Item: In building tab",
-  "item.sinocore_test.test_item_mod_mc_tab": "Test Item: In mod and building tab",
-  "item.sinocore_test.test_item_mod_tab": "Test Item: In mod tab",
-  "itemGroup.sinocore_test.sinocore_test": "SinoTest: Test Tab",
+  "item.sinocore_test.test_item_tab_1": "Test Item 1: In SinoTest mod tab 1",
+  "item.sinocore_test.test_item_tab_2": "Test Item 2: In SinoTest mod tab + Vanilla Building Block tab",
+  "itemGroup.sinocore_test.sinocore_test_tab": "SinoTest: Test Tab",
   "sinocore_test.test.block": "You clicked a block with test tag.",
   "sinocore_test.test.item": "Your offhand has item with test tag."
 }

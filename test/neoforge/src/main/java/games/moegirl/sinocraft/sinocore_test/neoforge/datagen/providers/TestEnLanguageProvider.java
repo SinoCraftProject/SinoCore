@@ -14,9 +14,8 @@ public class TestEnLanguageProvider extends AbstractLanguageProvider {
     @Override
     protected void register() {
         addTab(TestRegistry.TEST_TAB, "SinoTest: Test Tab");
-        addItem(TestRegistry.TEST_ITEM_MC_TAB, "Test Item: In building tab");
-        addItem(TestRegistry.TEST_ITEM_MOD_TAB, "Test Item: In mod tab");
-        addItem(TestRegistry.TEST_ITEM_MOD_MC_TAB, "Test Item: In mod and building tab");
+        addItem(TestRegistry.TEST_ITEM_TAB_1, "Test Item 1: In SinoTest mod tab 1");
+        addItem(TestRegistry.TEST_ITEM_TAB_2, "Test Item 2: In SinoTest mod tab + Vanilla Building Block tab");
         addBlock(TestRegistry.TEST_BLOCK, "Test Block");
         add(TestLangKeys.TEST_WITH_ITEM, "Your offhand has item with test tag.");
         add(TestLangKeys.TEST_WITH_BLOCK, "You clicked a block with test tag.");

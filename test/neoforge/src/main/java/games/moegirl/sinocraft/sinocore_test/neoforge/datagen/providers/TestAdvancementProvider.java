@@ -10,6 +10,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
 import java.util.concurrent.CompletableFuture;
@@ -23,9 +24,9 @@ public class TestAdvancementProvider extends AbstractAdvancementProvider {
     @Override
     protected void register() {
         addAdvancementTree(saver -> new AdvancementTree(saver, modLoc("test_adv"), Advancement.Builder.advancement()
-                .display(new ItemStack(TestRegistry.TEST_ITEM_MC_TAB.get()),
+                .display(new ItemStack(Items.APPLE),
                         Component.literal("测试成就"),
-                        Component.literal("这是一个用于测试的成就"),
+                        Component.literal("我想吃苹果！"),
                         null, AdvancementType.TASK, false, true, false)
                 .addCriterion("test", PlayerTrigger.TriggerInstance.tick())));
     }

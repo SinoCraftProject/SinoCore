@@ -1,7 +1,10 @@
 {
     "injected_interfaces": {
         "net/minecraft/class_1792$class_1793": [
-            "games/moegirl/sinocraft/sinocore/api/injectable/ISinoItemProperties"
+            "games/moegirl/sinocraft/sinocore/api/injectable/ISinoItem_Properties"
+        ],
+        "net/minecraft/class_1761$class_7913": [
+            "games/moegirl/sinocraft/sinocore/api/injectable/ISinoCreativeModeTab_Builder"
         ]
     }
 }

@@ -1,6 +1,6 @@
 package games.moegirl.sinocraft.sinocore.api.client;
 
-import games.moegirl.sinocraft.sinocore.platform.ClientPlatform;
+import games.moegirl.sinocraft.sinocore.client.platform.ClientPlatform;
 import net.minecraft.client.color.block.BlockColor;
 import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;

@@ -4,6 +4,7 @@ import games.moegirl.sinocraft.sinocore.api.registry.IRegRef;
 import games.moegirl.sinocraft.sinocore.api.registry.IRegistry;
 import games.moegirl.sinocraft.sinocore.api.registry.ITabRegistry;
 import games.moegirl.sinocraft.sinocore.api.registry.RegistryManager;
+import games.moegirl.sinocraft.sinocore_test.SinoCoreTest;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -17,58 +18,43 @@ import static games.moegirl.sinocraft.sinocore_test.SinoCoreTest.MODID;
 
 public class TestRegistry {
 
-    public static IRegistry<Item> ITEMS;
-    public static IRegistry<Block> BLOCKS;
-    public static IRegistry<TestRegistryData> TEST_DATA;
-    public static ITabRegistry TABS;
+    public static final IRegistry<Item> ITEMS = RegistryManager.create(MODID, Registries.ITEM);
+    public static final IRegistry<Block> BLOCKS = RegistryManager.create(MODID, Registries.BLOCK);
+    public static final IRegistry<TestRegistryItem> TEST_REGISTRY = RegistryManager.create(MODID, ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath(MODID, "test_data")));
+    public static final ITabRegistry TABS = RegistryManager.createTab(MODID);
 
-    public static ResourceKey<CreativeModeTab> TEST_TAB;
-    public static IRegRef<Item> TEST_ITEM_MOD_TAB;
-    public static IRegRef<Item> TEST_ITEM_MC_TAB;
-    public static IRegRef<Item> TEST_ITEM_MOD_MC_TAB;
+    private static final ResourceKey<CreativeModeTab> VANILLA_BUILDING_BLOCKS_TAB = ResourceKey.create(Registries.CREATIVE_MODE_TAB, ResourceLocation.withDefaultNamespace("building_blocks"));
+
+    public static IRegRef<Item> TEST_ITEM_TAB_1;
+    public static IRegRef<Item> TEST_ITEM_TAB_2;
+
+    public static IRegRef<CreativeModeTab> TEST_TAB;
+
     public static IRegRef<Block> TEST_BLOCK;
     public static IRegRef<BlockItem> TEST_BLOCK_ITEM;
+    public static IRegRef<TestRegistryItem> TEST_REGISTRY_ITEM_1;
+    public static IRegRef<TestRegistryItem> TEST_REGISTRY_ITEM_2;
 
     public static void registerAll() {
-        ITEMS = RegistryManager.create(MODID, Registries.ITEM);
-        BLOCKS = RegistryManager.create(MODID, Registries.BLOCK);
-        TABS = RegistryManager.createTab(MODID);
-        TEST_DATA = RegistryManager.create(MODID, ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath(MODID, "test_data")));
-
-        registerTabs();
-        registerBlocks();
-        registerItems();
-        registerCustomRegistry();
+        register();
 
         ITEMS.register();
         BLOCKS.register();
         TABS.register();
-        TEST_DATA.register();
+        TEST_REGISTRY.register();
     }
 
-    private static void registerTabs() {
-        TEST_TAB = TABS.register("sinocore_test");
-    }
+    private static void register() {
+        TEST_TAB = TABS.register("sinocore_test_tab", builder -> {
+            builder.sino$icon(() -> TestRegistry.TEST_ITEM_TAB_1.get());
+        });
 
-    private static void registerItems() {
-        ResourceKey<CreativeModeTab> BUILDING_BLOCKS = ResourceKey.create(Registries.CREATIVE_MODE_TAB, ResourceLocation.withDefaultNamespace("building_blocks"));
+        TEST_ITEM_TAB_1 = ITEMS.register("test_item_tab_1", () -> new Item(new Item.Properties().sino$tab(TEST_TAB)));
+        TEST_ITEM_TAB_2 = ITEMS.register("test_item_tab_2", () -> new Item(new Item.Properties().sino$tab(TEST_TAB).sino$tab(VANILLA_BUILDING_BLOCKS_TAB)));
 
-        TEST_ITEM_MOD_TAB = ITEMS.register("test_item_mod_tab", () ->
-                new Item(new Item.Properties().sino$tab(TEST_TAB, true)));
-        TEST_ITEM_MC_TAB = ITEMS.register("test_item_mc_tab", () ->
-                new Item(new Item.Properties().sino$tab(BUILDING_BLOCKS)));
-        TEST_ITEM_MOD_MC_TAB = ITEMS.register("test_item_mod_mc_tab", () ->
-                new Item(new Item.Properties().sino$tab(TEST_TAB).sino$tab(BUILDING_BLOCKS)));
-    }
-
-    private static void registerBlocks() {
         TEST_BLOCK = BLOCKS.register("test_block", () -> new Block(BlockBehaviour.Properties.of()));
-        TEST_BLOCK_ITEM = ITEMS.register("test_block", () ->
-                new BlockItem(TEST_BLOCK.get(), new Item.Properties().sino$tab(TEST_TAB)));
-    }
-
-    private static void registerCustomRegistry() {
-        TEST_DATA.register("test_hello", () -> new TestRegistryData("Hello"));
-        TEST_DATA.register("test_sino", () -> new TestRegistryData(MODID));
+        TEST_BLOCK_ITEM = ITEMS.register("test_block", () -> new BlockItem(TEST_BLOCK.get(), new Item.Properties().sino$tab(TEST_TAB)));
+        TEST_REGISTRY_ITEM_1 = TEST_REGISTRY.register("test_hello_world", () -> new TestRegistryItem("Hello, world!"));
+        TEST_REGISTRY_ITEM_2 = TEST_REGISTRY.register("test_sino_craft", () -> new TestRegistryItem(SinoCoreTest.MODID));
     }
 }

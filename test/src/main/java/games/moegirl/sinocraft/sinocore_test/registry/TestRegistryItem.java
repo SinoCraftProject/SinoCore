@@ -1,4 +1,4 @@
 package games.moegirl.sinocraft.sinocore_test.registry;
 
-public record TestRegistryData(String value) {
+public record TestRegistryItem(String value) {
 }

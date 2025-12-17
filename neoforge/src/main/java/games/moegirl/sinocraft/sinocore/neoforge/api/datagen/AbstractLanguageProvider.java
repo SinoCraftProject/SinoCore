@@ -1,6 +1,8 @@
 package games.moegirl.sinocraft.sinocore.neoforge.api.datagen;
 
+import games.moegirl.sinocraft.sinocore.api.registry.IRegRef;
 import games.moegirl.sinocraft.sinocore.api.registry.ITabRegistry;
+import games.moegirl.sinocraft.sinocore.api.util.TranslationKeyHelper;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.network.chat.contents.TranslatableContents;
@@ -12,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
+import java.util.function.Supplier;
 
 public abstract class AbstractLanguageProvider extends LanguageProvider {
     public static final String LOCALE_EN_US ="en_us";
@@ -124,7 +127,11 @@ public abstract class AbstractLanguageProvider extends LanguageProvider {
 
     protected abstract void register();
 
-    protected void addTab(ResourceKey<CreativeModeTab> key, String name) {
+    protected void addTab(IRegRef<CreativeModeTab> key, String name) {
+        add(key.getKey(), name);
+    }
+
+    protected void add(ResourceKey<CreativeModeTab> key, String name) {
         CreativeModeTab group = BuiltInRegistries.CREATIVE_MODE_TAB.get(key);
         // 检查是否已经注册
         if (group != null) {
@@ -137,9 +144,9 @@ public abstract class AbstractLanguageProvider extends LanguageProvider {
             }
         } else {
             // Tab 并未注册，只添加
-            String lang = ITabRegistry.buildDefaultTranslationKey(key);
-            logger.warn("Add language to unregistered tab {}: {} = {}.", key.location(), lang, name);
-            add(lang, name);
+            var itemKey = TranslationKeyHelper.buildDefaultTranslationKey(key);
+            logger.warn("Add language to unregistered tab {}: {} = {}.", key.location(), itemKey, name);
+            add(itemKey, name);
         }
     }
 }

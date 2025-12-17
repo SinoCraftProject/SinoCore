@@ -61,7 +61,7 @@ public class NeoForgeRegistry<T> implements IRegistry<T> {
     }
 
     @Override
-    public @NotNull Registry<T> getRegistry() {
+    public Registry<T> getRegistry() {
         return dr.getRegistry().get();
     }
 

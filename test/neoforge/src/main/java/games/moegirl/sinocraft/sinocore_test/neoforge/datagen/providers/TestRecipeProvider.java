@@ -1,11 +1,11 @@
 package games.moegirl.sinocraft.sinocore_test.neoforge.datagen.providers;
 
-import games.moegirl.sinocraft.sinocore_test.registry.TestRegistry;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.world.item.Items;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.CompletableFuture;
@@ -19,7 +19,7 @@ public class TestRecipeProvider extends RecipeProvider {
     @Override
     protected void buildRecipes(@NotNull RecipeOutput output) {
         threeByThreePacker(output, RecipeCategory.MISC,
-                TestRegistry.TEST_ITEM_MOD_MC_TAB.get(),
-                TestRegistry.TEST_ITEM_MC_TAB.get());
+                Items.REDSTONE_BLOCK,
+                Items.APPLE);
     }
 }

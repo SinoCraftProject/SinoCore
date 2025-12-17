@@ -1,8 +1,6 @@
 package games.moegirl.sinocraft.sinocore.mixin.item;
 
-import games.moegirl.sinocraft.sinocore.api.registry.ITabRegistry;
-import games.moegirl.sinocraft.sinocore.api.registry.RegistryManager;
-import net.minecraft.core.registries.Registries;
+import games.moegirl.sinocraft.sinocore.api.registry.TabDisplayItemsGenerator;
 import net.minecraft.world.item.Item;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -18,17 +16,12 @@ public abstract class ItemMixin {
 
     @Inject(method = "<init>", at = @At("TAIL"))
     private void injectConstructor(Item.Properties properties, CallbackInfo ci) {
-        properties.sino$getTabs().forEach(p -> RegistryManager
-                .getRegistries(p.getKey().location().getNamespace(), Registries.CREATIVE_MODE_TAB)
-                .stream()
-                .map(t -> ((ITabRegistry) t))
-                .forEach(t -> t.tabItems(p.getKey())
-                        .addStack(() -> p.getValue().apply(asItem()))));
-        properties.sino$getTabIcon().forEach((key, icon) -> RegistryManager
-                .getRegistries(key.location().getNamespace(), Registries.CREATIVE_MODE_TAB)
-                .stream()
-                .map(t -> ((ITabRegistry) t))
-                .forEach(t -> t.tabItems(key)
-                        .setIcon(() -> icon.apply(asItem()))));
+        for (var e : properties.sino$getTabs()) {
+            var key = e.getKey();
+            var value = e.getValue();
+            var reg = TabDisplayItemsGenerator.getGenerator(key);
+            var item = value.apply(asItem());
+            reg.addStack(item);
+        }
     }
 }

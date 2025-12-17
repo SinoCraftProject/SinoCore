@@ -1,82 +1,50 @@
 package games.moegirl.sinocraft.sinocore.api.registry;
 
-import net.minecraft.resources.ResourceKey;
+import games.moegirl.sinocraft.sinocore.api.util.TranslationKeyHelper;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Supplier;
+import java.util.function.Consumer;
 
 /**
  * CreativeModeTab 注册表
  */
 public interface ITabRegistry extends IRegistryBase<CreativeModeTab> {
-
     /**
-     * 所有非通过该接口创建的 Tab 物品添加器
-     */
-    Map<ResourceKey<CreativeModeTab>, TabItemGenerator> VANILLA_GENERATORS = new ConcurrentHashMap<>();
-
-    /**
-     * 所有通过该接口创建的 Tab 物品添加器
-     */
-    Map<ResourceKey<CreativeModeTab>, TabItemGenerator> GENERATORS = new ConcurrentHashMap<>();
-
-    /**
-     * 注册一个默认的 CreativeModeTab 并返回其引用
+     * Create a CreativeModeTab with default Builder
      *
-     * @param name 注册名
-     * @return CreativeModeTab 的引用
+     * @param name Name
+     * @return CreativeModeTab register reference
      */
-    IRegRef<CreativeModeTab> registerForRef(String name);
-
-    /**
-     * 注册一个默认的 CreativeModeTab 并返回其 Key
-     *
-     * @param name 注册名
-     * @return CreativeModeTab 的 Key
-     */
-    default ResourceKey<CreativeModeTab> register(String name) {
-        return registerForRef(name).getKey();
+    default IRegRef<CreativeModeTab> register(String name) {
+        return register(name, tab -> {
+        });
     }
 
     /**
-     * 注册一个自定义 CreativeModeTab 并返回其引用
+     * Create a CreativeModeTab with default Builder + custom builder
      *
-     * @param name 注册名
-     * @return CreativeModeTab 的引用
+     * @param name    Name
+     * @param builder Builder
+     * @return CreativeModeTab register reference
      */
-    <T extends CreativeModeTab> IRegRef<CreativeModeTab> registerForRef(String name, Supplier<? extends T> supplier);
-
-    /**
-     * 注册一个自定义 CreativeModeTab 并返回其 Key
-     *
-     * @param name 注册名
-     * @return CreativeModeTab 的 Key
-     */
-    default <T extends CreativeModeTab> ResourceKey<CreativeModeTab> register(String name, Supplier<? extends T> supplier) {
-        return registerForRef(name, supplier).getKey();
+    default IRegRef<CreativeModeTab> register(String name, Consumer<CreativeModeTab.Builder> builder) {
+        var generator = new TabDisplayItemsGenerator();
+        var ref = registerTab(name, tab -> {
+            tab.title(Component.translatable(TranslationKeyHelper.buildDefaultTranslationKey(modId(), name)));
+            tab.displayItems(generator);
+            builder.accept(tab);
+        });
+        TabDisplayItemsGenerator.setRegisteredGenerators(ref.getKey(), generator);
+        return ref;
     }
 
     /**
-     * 根据 Key 获取一个 TabItemGenerator，用于向对应 CreativeModeTab 添加物品
+     * Create a CreativeModeTab with custom builder
      *
-     * @param tab CreativeModeTab Key
+     * @param name     Name
+     * @param consumer Builder consumer
+     * @return CreativeModeTab register reference
      */
-    TabItemGenerator tabItems(ResourceKey<CreativeModeTab> tab);
-
-    /**
-     * 生成默认 CreativeModeTab 标签名的语言文件键
-     *
-     * @param modId modId
-     * @param name  tab名
-     * @return CreativeModeTab 的语言键
-     */
-    static String buildDefaultTranslationKey(String modId, String name) {
-        return "itemGroup." + modId + "." + name;
-    }
-
-    static String buildDefaultTranslationKey(ResourceKey<CreativeModeTab> name) {
-        return buildDefaultTranslationKey(name.location().getNamespace(), name.location().getPath());
-    }
+    IRegRef<CreativeModeTab> registerTab(String name, Consumer<CreativeModeTab.Builder> consumer);
 }

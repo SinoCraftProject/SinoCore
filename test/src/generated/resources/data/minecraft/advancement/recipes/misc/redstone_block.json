@@ -1,11 +1,11 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_test_item_mc_tab": {
+    "has_apple": {
       "conditions": {
         "items": [
           {
-            "items": "sinocore_test:test_item_mc_tab"
+            "items": "minecraft:apple"
           }
         ]
       },
@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "sinocore_test:test_item_mod_mc_tab"
+        "recipe": "minecraft:redstone_block"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -21,12 +21,12 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_test_item_mc_tab"
+      "has_apple"
     ]
   ],
   "rewards": {
     "recipes": [
-      "sinocore_test:test_item_mod_mc_tab"
+      "minecraft:redstone_block"
     ]
   }
 }

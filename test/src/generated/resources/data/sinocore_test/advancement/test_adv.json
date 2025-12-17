@@ -5,10 +5,10 @@
     }
   },
   "display": {
-    "description": "这是一个用于测试的成就",
+    "description": "我想吃苹果！",
     "icon": {
       "count": 1,
-      "id": "sinocore_test:test_item_mc_tab"
+      "id": "minecraft:apple"
     },
     "show_toast": false,
     "title": "测试成就"

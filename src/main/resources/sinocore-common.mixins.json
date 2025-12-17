@@ -5,7 +5,7 @@
     "compatibilityLevel": "JAVA_17",
     "mixins": [
         "item.ItemMixin",
-        "item.ItemPropertiesExtension",
+        "extension.ItemPropertiesExtension",
         "advancement.ServerPlayerMixin",
         "event.game.crafting.CartographyTableMenuMixin"
     ],
