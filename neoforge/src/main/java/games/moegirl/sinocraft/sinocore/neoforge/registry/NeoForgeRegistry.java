@@ -74,4 +74,8 @@ public class NeoForgeRegistry<T> implements IRegistry<T> {
     public Optional<IRegRef<T>> get(ResourceLocation id) {
         return Optional.ofNullable(elements.get(id));
     }
+
+    ResourceLocation createId(String name) {
+        return ResourceLocation.fromNamespaceAndPath(modId, name);
+    }
 }

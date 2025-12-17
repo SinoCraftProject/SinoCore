@@ -3,65 +3,43 @@ package games.moegirl.sinocraft.sinocore.neoforge.registry;
 import com.google.common.base.Suppliers;
 import games.moegirl.sinocraft.sinocore.api.registry.ICustomStatRegistry;
 import games.moegirl.sinocraft.sinocore.api.registry.IRegRef;
-import games.moegirl.sinocraft.sinocore.api.registry.IRegistry;
-import games.moegirl.sinocraft.sinocore.neoforge.util.ModBusHelper;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.stats.StatFormatter;
 import net.minecraft.stats.Stats;
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import org.jetbrains.annotations.NotNull;
+import net.neoforged.neoforge.registries.RegisterEvent;
 
-import java.util.Optional;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Supplier;
 
-public class NeoForgeCustomStatRegistry implements ICustomStatRegistry {
-
-    private final IRegistry<ResourceLocation> reg;
-    private final IEventBus bus;
-    private final String modId;
+public class NeoForgeCustomStatRegistry extends NeoForgeRegistry<ResourceLocation> implements ICustomStatRegistry {
+    protected final Map<ResourceLocation, StatFormatter> formatters = new HashMap<>();
 
     public NeoForgeCustomStatRegistry(String modId) {
-        this.reg = new NeoForgeRegistry<>(modId, Registries.CUSTOM_STAT);
-        this.bus = ModBusHelper.getModBus(modId);
-        this.modId = modId;
-    }
-
-    @Override
-    public String modId() {
-        return modId;
+        super(modId, Registries.CUSTOM_STAT);
     }
 
     @Override
     public void register() {
-        reg.register();
-        bus.addListener(this::onSetup);
+        super.register();
+        bus.addListener((RegisterEvent event) -> {
+            for (Map.Entry<ResourceLocation, StatFormatter> entry : formatters.entrySet()) {
+                Stats.CUSTOM.get(entry.getKey(), entry.getValue());
+            }
+        });
+    }
+
+    @Override
+    public <R extends ResourceLocation> IRegRef<R> register(String name, Supplier<? extends R> supplier) {
+        throw new AssertionError();
     }
 
     @Override
     public ResourceLocation register(String name, StatFormatter statFormatter) {
-        ResourceLocation statKey = ResourceLocation.fromNamespaceAndPath(modId, name);
-        reg.register(name, Suppliers.ofInstance(statKey));
-        return statKey;
-    }
-
-    @Override
-    public @NotNull Registry<ResourceLocation> getRegistry() {
-        return reg.getRegistry();
-    }
-
-    @Override
-    public Iterable<IRegRef<ResourceLocation>> getEntries() {
-        return reg.getEntries();
-    }
-
-    @Override
-    public Optional<IRegRef<ResourceLocation>> get(ResourceLocation id) {
-        return reg.get(id);
-    }
-
-    private void onSetup(FMLCommonSetupEvent event) {
-        reg.getEntries().forEach(r -> Stats.CUSTOM.get(r.get()));
+        ResourceLocation key = createId(name);
+        register(name, Suppliers.ofInstance(key));
+        formatters.put(key, statFormatter);
+        return key;
     }
 }

@@ -3,55 +3,29 @@ package games.moegirl.sinocraft.sinocore.fabric.registry;
 import com.google.common.base.Suppliers;
 import games.moegirl.sinocraft.sinocore.api.registry.ICustomStatRegistry;
 import games.moegirl.sinocraft.sinocore.api.registry.IRegRef;
-import games.moegirl.sinocraft.sinocore.api.registry.IRegistry;
-import games.moegirl.sinocraft.sinocore.platform.fabric.RegistryPlatformImpl;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.stats.StatFormatter;
 import net.minecraft.stats.Stats;
-import org.jetbrains.annotations.NotNull;
 
-import java.util.Optional;
+import java.util.function.Supplier;
 
-public class FabricCustomStatRegistry implements ICustomStatRegistry {
-
-    private final IRegistry<ResourceLocation> reg;
+public class FabricCustomStatRegistry extends FabricRegistry<ResourceLocation> implements ICustomStatRegistry {
 
     public FabricCustomStatRegistry(String modId) {
-        reg = RegistryPlatformImpl.create(modId, Registries.CUSTOM_STAT);
+        super(modId, Registries.CUSTOM_STAT);
     }
 
     @Override
-    public String modId() {
-        return reg.modId();
-    }
-
-    @Override
-    public void register() {
-        reg.register();
+    public <R extends ResourceLocation> IRegRef<R> register(String name, Supplier<? extends R> supplier) {
+        throw new AssertionError();
     }
 
     @Override
     public ResourceLocation register(String name, StatFormatter statFormatter) {
-        ResourceLocation statKey = ResourceLocation.fromNamespaceAndPath(modId(), name);
-        reg.register(name, Suppliers.ofInstance(statKey));
-        Stats.CUSTOM.get(statKey, statFormatter);
-        return statKey;
-    }
-
-    @Override
-    public @NotNull Registry<ResourceLocation> getRegistry() {
-        return reg.getRegistry();
-    }
-
-    @Override
-    public Iterable<IRegRef<ResourceLocation>> getEntries() {
-        return reg.getEntries();
-    }
-
-    @Override
-    public Optional<IRegRef<ResourceLocation>> get(ResourceLocation id) {
-        return reg.get(id);
+        var key = createId(name);
+        register(name, Suppliers.ofInstance(key));
+        Stats.CUSTOM.get(key, statFormatter);
+        return key;
     }
 }

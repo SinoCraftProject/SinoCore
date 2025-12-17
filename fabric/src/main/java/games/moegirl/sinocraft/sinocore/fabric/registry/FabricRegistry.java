@@ -9,7 +9,6 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.function.Supplier;
@@ -69,5 +68,9 @@ public class FabricRegistry<T> implements IRegistry<T> {
     @Override
     public Optional<IRegRef<T>> get(ResourceLocation id) {
         return Optional.ofNullable(elements.get(id));
+    }
+
+    ResourceLocation createId(String name) {
+        return ResourceLocation.fromNamespaceAndPath(modId, name);
     }
 }
