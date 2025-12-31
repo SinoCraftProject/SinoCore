@@ -25,12 +25,6 @@ jobs:
           path: 'output'
       - run: ls -R output
 
-      - name: Remove last week's build
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh release delete weekly-build --yes --cleanup-tag --repo ${{ github.repository }} 2>/dev/null || true
-
       - name: Publish pre-release
         uses: softprops/action-gh-release@v2
         with:
@@ -40,6 +34,6 @@ jobs:
           make_latest: true
           preserve_order: true
           tag_name: ${{ github.ref_name }}
-          name: "Release ${{ github.run_number }}"
+          name: "Release ${{ github.ref_name }}"
           files: |
             output/**/*@(-neoforge|-fabric)*@(.[0-9]).jar
