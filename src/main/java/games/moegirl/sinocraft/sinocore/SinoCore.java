@@ -1,6 +1,7 @@
 package games.moegirl.sinocraft.sinocore;
 
 import games.moegirl.sinocraft.sinocore.advancement.criterion.SinoCoreCriteriaTriggers;
+import games.moegirl.sinocraft.sinocore.api.data.DataTypes;
 import games.moegirl.sinocraft.sinocore.command.SinoCoreCommands;
 import games.moegirl.sinocraft.sinocore.utility.BuildInfo;
 
@@ -10,6 +11,7 @@ public class SinoCore {
     public SinoCore() {
         BuildInfo.printBuildInfo();
 
+        DataTypes.register();
         SinoCoreCriteriaTriggers.register();
         SinoCoreCommands.register();
     }

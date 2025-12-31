@@ -1,10 +1,11 @@
 package games.moegirl.sinocraft.sinocore.api.data;
 
+import com.mojang.serialization.Codec;
 import games.moegirl.sinocraft.sinocore.api.injectable.ISinoDataHolder;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
@@ -14,31 +15,41 @@ import net.minecraft.world.level.chunk.ChunkAccess;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Predicate;
 
 @Getter
 @AllArgsConstructor
 public class DataType<DATA> {
+    private final Class<DATA> clazz;
     private final DataKey key;
 
     @Nullable
-    private IDataSerializer<DATA, CompoundTag> serializer;
+    private Codec<DATA> codec;
 
     @Nullable
-    private IDataStreamSerializer<DATA, RegistryFriendlyByteBuf> streamSerializer;
+    private StreamCodec<RegistryFriendlyByteBuf, DATA> streamCodec;
 
-    private final Map<Predicate<DataKey>, IDataMigrator<?, DATA>> fromMigrators;
+    @Nullable
+    private DataType<?> migratesTo;
+    @Nullable
+    private IDataMigrator<DATA, ?> migrator;
+
     private final List<Class<? extends ISinoDataHolder>> appliesTo;
 
-    public boolean canMigrateFrom(ResourceLocation id, int version) {
-        return canMigrateFrom(new DataKey(id, version));
+    public boolean is(ResourceLocation id, int version) {
+        return is(new DataKey(id, version));
     }
 
-    public boolean canMigrateFrom(DataKey key) {
-        return fromMigrators.keySet().stream().anyMatch(k -> k.test(key));
+    public boolean is(DataKey version) {
+        return key.equals(version);
+    }
+
+    public boolean canBeSaved() {
+        return codec != null;
+    }
+
+    public boolean canBeSynced() {
+        return streamCodec != null;
     }
 
     public boolean isAvailableFor(ISinoDataHolder holder) {
@@ -59,12 +70,16 @@ public class DataType<DATA> {
         private final DataKey key;
 
         @Nullable
-        private IDataSerializer<DATA, CompoundTag> serializer;
+        private Codec<DATA> codec;
 
         @Nullable
-        private IDataStreamSerializer<DATA, RegistryFriendlyByteBuf> streamSerializer;
+        private StreamCodec<RegistryFriendlyByteBuf, DATA> streamCodec;
 
-        private final Map<Predicate<DataKey>, IDataMigrator<?, DATA>> fromMigrators = new HashMap<>();
+        @Nullable
+        private DataType<?> migratesTo;
+        @Nullable
+        private IDataMigrator<DATA, ?> migrator;
+
         private final List<Class<? extends ISinoDataHolder>> appliesTo = new ArrayList<>();
 
         public Builder(Class<DATA> clazz, ResourceLocation id, int version) {
@@ -72,26 +87,19 @@ public class DataType<DATA> {
             this.key = new DataKey(id, version);
         }
 
-        public Builder<DATA> serializer(IDataSerializer<DATA, CompoundTag> serializer) {
-            this.serializer = serializer;
+        public Builder<DATA> codec(Codec<DATA> codec) {
+            this.codec = codec;
             return this;
         }
 
-        public Builder<DATA> streamSerializer(IDataStreamSerializer<DATA, RegistryFriendlyByteBuf> streamSerializer) {
-            this.streamSerializer = streamSerializer;
+        public Builder<DATA> streamCodec(StreamCodec<RegistryFriendlyByteBuf, DATA> streamCodec) {
+            this.streamCodec = streamCodec;
             return this;
         }
 
-        public <FROM> Builder<DATA> canMigrateFrom(ResourceLocation id, int version, IDataMigrator<FROM, DATA> migrator) {
-            return canMigrateFrom(new DataKey(id, version), migrator);
-        }
-
-        public <FROM> Builder<DATA> canMigrateFrom(DataKey key, IDataMigrator<FROM, DATA> migrator) {
-            return canMigrateFrom(k -> k.equals(key), migrator);
-        }
-
-        public <FROM> Builder<DATA> canMigrateFrom(Predicate<DataKey> predicate, IDataMigrator<FROM, DATA> migrator) {
-            this.fromMigrators.put(predicate, migrator);
+        public <TARGET> Builder<DATA> migratesTo(DataType<TARGET> type, IDataMigrator<DATA, TARGET> migrator) {
+            this.migratesTo = type;
+            this.migrator = migrator;
             return this;
         }
 
@@ -112,7 +120,7 @@ public class DataType<DATA> {
         }
 
         public DataType<DATA> build() {
-            return new DataType<>(key, serializer, streamSerializer, fromMigrators, appliesTo);
+            return new DataType<>(clazz, key, codec, streamCodec, migratesTo, migrator, appliesTo);
         }
     }
 }

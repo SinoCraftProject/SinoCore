@@ -1,10 +1,8 @@
 package games.moegirl.sinocraft.sinocore.api.data;
 
-import games.moegirl.sinocraft.sinocore.api.injectable.ISinoDataHolder;
-
 import java.util.Map;
 
-public interface IDataContainer<HOLDER extends ISinoDataHolder> {
+public interface IDataContainer {
     <DATA> void set(DataType<DATA> type, DATA data);
 
     <DATA> DATA get(DataType<DATA> type);
@@ -13,5 +11,5 @@ public interface IDataContainer<HOLDER extends ISinoDataHolder> {
 
     <DATA> void remove(DataType<DATA> type);
 
-    Map<DataType<Object>, Object> getAll();
+    Map<DataType<?>, ?> getAll();
 }

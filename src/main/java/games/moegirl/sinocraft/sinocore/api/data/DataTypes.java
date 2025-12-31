@@ -5,7 +5,8 @@ import games.moegirl.sinocraft.sinocore.api.registry.RegistryManager;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import org.jetbrains.annotations.Nullable;
+
+import java.util.Optional;
 
 public class DataTypes {
     public static final ResourceKey<Registry<DataType<?>>> KEY = ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath(SinoCore.MODID, "data_type"));
@@ -15,12 +16,7 @@ public class DataTypes {
         // just for init
     }
 
-    public static boolean has(ResourceLocation id) {
-        return REGISTRY.containsKey(id);
-    }
-
-    @Nullable
-    public static DataType<?> get(ResourceLocation id) {
-        return REGISTRY.get(id);
+    public static Optional<DataType<?>> get(DataKey key) {
+        return REGISTRY.stream().filter(type -> type.is(key)).findFirst();
     }
 }
