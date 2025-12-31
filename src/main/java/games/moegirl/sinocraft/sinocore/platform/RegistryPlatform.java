@@ -9,6 +9,11 @@ import org.jetbrains.annotations.ApiStatus;
 @ApiStatus.Internal
 public class RegistryPlatform {
     @ExpectPlatform
+    public static <T> Registry<T> createRegistry(RegistryBuilder<T> builder) {
+        throw new AssertionError();
+    }
+
+    @ExpectPlatform
     public static <T> IRegistry<T> create(String modId, ResourceKey<Registry<T>> key) {
         throw new AssertionError();
     }

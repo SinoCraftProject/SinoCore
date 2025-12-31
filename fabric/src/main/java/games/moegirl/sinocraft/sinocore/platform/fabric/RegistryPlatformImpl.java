@@ -2,12 +2,22 @@ package games.moegirl.sinocraft.sinocore.platform.fabric;
 
 import games.moegirl.sinocraft.sinocore.api.registry.*;
 import games.moegirl.sinocraft.sinocore.fabric.registry.*;
+import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
+import net.fabricmc.fabric.api.event.registry.RegistryAttribute;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import org.jetbrains.annotations.ApiStatus;
 
 @ApiStatus.Internal
 public class RegistryPlatformImpl {
+    public static <T> Registry<T> createRegistry(RegistryBuilder<T> builder) {
+        var b = FabricRegistryBuilder.createSimple(builder.getKey());
+        if (builder.isSync()) {
+            b.attribute(RegistryAttribute.SYNCED);
+        }
+        return b.buildAndRegister();
+    }
+
     public static <T> IRegistry<T> create(String modId, ResourceKey<Registry<T>> key) {
         return new FabricRegistry<>(modId, key);
     }

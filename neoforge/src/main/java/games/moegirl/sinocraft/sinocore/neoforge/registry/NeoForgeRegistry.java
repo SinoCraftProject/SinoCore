@@ -2,19 +2,15 @@ package games.moegirl.sinocraft.sinocore.neoforge.registry;
 
 import games.moegirl.sinocraft.sinocore.api.registry.IRegRef;
 import games.moegirl.sinocraft.sinocore.api.registry.IRegistry;
+import games.moegirl.sinocraft.sinocore.api.registry.RegistryManager;
 import games.moegirl.sinocraft.sinocore.neoforge.util.ModBusHelper;
 import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import net.neoforged.neoforge.registries.NewRegistryEvent;
-import net.neoforged.neoforge.registries.RegistryBuilder;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class NeoForgeRegistry<T> implements IRegistry<T> {
@@ -31,11 +27,10 @@ public class NeoForgeRegistry<T> implements IRegistry<T> {
         this.modId = modId;
         this.dr = DeferredRegister.create(key, modId);
 
-        if (!BuiltInRegistries.REGISTRY.containsKey(key.location())) {
-            bus.addListener((Consumer<NewRegistryEvent>) event -> event.register(new RegistryBuilder<>(key)
-                    .sync(true)
-                    .create()));
+        if (!RegistryManager.hasRegistry(key)) {
+            RegistryManager.createRegistry(key);
         }
+
         registered = false;
     }
 

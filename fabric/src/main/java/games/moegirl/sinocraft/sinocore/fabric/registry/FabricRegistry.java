@@ -3,8 +3,7 @@ package games.moegirl.sinocraft.sinocore.fabric.registry;
 import com.google.common.base.Suppliers;
 import games.moegirl.sinocraft.sinocore.api.registry.IRegRef;
 import games.moegirl.sinocraft.sinocore.api.registry.IRegistry;
-import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
-import net.fabricmc.fabric.api.event.registry.RegistryAttribute;
+import games.moegirl.sinocraft.sinocore.api.registry.RegistryManager;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
@@ -26,13 +25,7 @@ public class FabricRegistry<T> implements IRegistry<T> {
         this.modId = modId;
         this.key = key;
 
-        registry = (Registry<T>) BuiltInRegistries.REGISTRY.get(key.location());
-        if (registry == null) {
-            // 不存在的注册表 -- 创建自定义注册表
-            registry = FabricRegistryBuilder.createSimple(key)
-                    .attribute(RegistryAttribute.SYNCED)
-                    .buildAndRegister();
-        }
+        registry = RegistryManager.getOrCreateRegistry(key);
         sup = Suppliers.memoize(() -> (Registry<T>) BuiltInRegistries.REGISTRY.get(key.location()));
     }
 

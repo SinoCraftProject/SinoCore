@@ -1,11 +1,27 @@
 package games.moegirl.sinocraft.sinocore.platform.neoforge;
 
+import games.moegirl.sinocraft.sinocore.SinoCore;
 import games.moegirl.sinocraft.sinocore.api.registry.*;
 import games.moegirl.sinocraft.sinocore.neoforge.registry.*;
+import games.moegirl.sinocraft.sinocore.neoforge.util.ModBusHelper;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
+import net.neoforged.neoforge.registries.NewRegistryEvent;
+
+import java.util.function.Consumer;
 
 public class RegistryPlatformImpl {
+    public static <T> Registry<T> createRegistry(RegistryBuilder<T> builder) {
+        var b = new net.neoforged.neoforge.registries.RegistryBuilder<T>(builder.getKey());
+        b.sync(builder.isSync());
+        var registry = b.create();
+
+        var bus = ModBusHelper.getModBus(SinoCore.MODID);
+        bus.addListener((Consumer<NewRegistryEvent>) event -> event.register(registry));
+
+        return registry;
+    }
+
     public static <T> IRegistry<T> create(String modId, ResourceKey<Registry<T>> key) {
         return new NeoForgeRegistry<>(modId, key);
     }

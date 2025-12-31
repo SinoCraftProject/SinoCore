@@ -4,8 +4,10 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.logging.LogUtils;
 import games.moegirl.sinocraft.sinocore.platform.RegistryPlatform;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
 import java.util.ArrayList;
@@ -41,6 +43,15 @@ public class RegistryManager {
         return registrable;
     }
 
+    /**
+     * Get all registries created by SinoCore for a mod and registry key.
+     *
+     * @param modId Mod Id.
+     * @param key   Registry key.
+     * @param <T>   Registry entry type.
+     * @param <U>   Registry type.
+     * @return List of registries.
+     */
     @SuppressWarnings("unchecked")
     public static <T, U extends IRegistryBase<T>> List<U> getRegistries(String modId, ResourceKey<Registry<T>> key) {
         if (!REGISTRIES.containsKey(modId)) {
@@ -55,6 +66,70 @@ public class RegistryManager {
         return new ImmutableList.Builder<U>()
                 .addAll((List<U>) map.get(key))
                 .build();
+    }
+
+    /**
+     * Check if a registry exists.
+     *
+     * @param key Registry key.
+     * @param <T> Registry entry type.
+     * @return true if exists.
+     */
+    public static <T> boolean hasRegistry(ResourceKey<Registry<T>> key) {
+        if (!key.isFor(BuiltInRegistries.REGISTRY.key())) {
+            return false;
+        }
+        return BuiltInRegistries.REGISTRY.containsKey(key.location());
+    }
+
+    /**
+     * Get a registry by its key.
+     *
+     * @param key Registry key.
+     * @param <T> Registry entry type.
+     * @return The registry, or null if not found.
+     */
+    @Nullable
+    @SuppressWarnings("unchecked")
+    public static <T> Registry<T> getRegistry(ResourceKey<Registry<T>> key) {
+        return (Registry<T>) BuiltInRegistries.REGISTRY.get(key.location());
+    }
+
+    /**
+     * Create a new registry (sync by default).
+     *
+     * @param key Registry key.
+     * @param <T> Registry entry type.
+     * @return The created registry.
+     */
+    public static <T> Registry<T> createRegistry(ResourceKey<Registry<T>> key) {
+        return createRegistry(new RegistryBuilder<>(key).sync());
+    }
+
+    /**
+     * Create a new registry.
+     *
+     * @param builder Registry builder.
+     * @param <T>     Registry entry type.
+     * @return The created registry.
+     */
+    public static <T> Registry<T> createRegistry(RegistryBuilder<T> builder) {
+        return RegistryPlatform.createRegistry(builder);
+    }
+
+    /**
+     * Get if the registry exists, otherwise create a new one (sync by default).
+     *
+     * @param key Registry key.
+     * @param <T> Registry entry type.
+     * @return The registry.
+     */
+    public static <T> Registry<T> getOrCreateRegistry(ResourceKey<Registry<T>> key) {
+        Registry<T> registry = getRegistry(key);
+        if (registry != null) {
+            return registry;
+        }
+        return createRegistry(key);
     }
 
     /**
