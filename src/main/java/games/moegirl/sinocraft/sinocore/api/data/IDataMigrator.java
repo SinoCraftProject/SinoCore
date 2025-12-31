@@ -1,14 +1,12 @@
 package games.moegirl.sinocraft.sinocore.api.data;
 
 /**
- * Data migrator for data versioning.
+ * Data migrator between 2 data versioning. <br/>
+ * For upgrading and downgrading data.
  *
- * @param <SELF> Data type itself.
- * @param <UP>   Upgraded data type.
- * @param <DOWN> Downgraded data type.
+ * @param <SELF>   Data type itself.
+ * @param <TARGET> The target data type.
  */
-public interface IDataMigrator<SELF, UP, DOWN> {
-    UP up(SELF data);
-
-    DOWN down(SELF data);
+public interface IDataMigrator<SELF, TARGET> {
+    TARGET migrate(SELF data);
 }
