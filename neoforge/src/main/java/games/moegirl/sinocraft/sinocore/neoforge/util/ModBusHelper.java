@@ -8,9 +8,9 @@ import java.util.Objects;
 public class ModBusHelper {
     public static IEventBus getModBus(String modId) {
         if ("minecraft".equals(modId)) {
-            return getModBus("sinocore");
+            throw new RuntimeException("Hey, Minecraft has no event bus!");
         }
 
-        return Objects.requireNonNull(ModList.get().getModContainerById(modId).get().getEventBus());
+        return Objects.requireNonNull(ModList.get().getModContainerById(modId).orElseThrow().getEventBus());
     }
 }

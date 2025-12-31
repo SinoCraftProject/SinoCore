@@ -4,8 +4,10 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.logging.LogUtils;
 import games.moegirl.sinocraft.sinocore.platform.RegistryPlatform;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
 import java.util.ArrayList;
@@ -55,6 +57,35 @@ public class RegistryManager {
         return new ImmutableList.Builder<U>()
                 .addAll((List<U>) map.get(key))
                 .build();
+    }
+
+    public static <T> boolean hasRegistry(ResourceKey<Registry<T>> key) {
+        if (!key.isFor(BuiltInRegistries.REGISTRY.key())) {
+            return false;
+        }
+        return BuiltInRegistries.REGISTRY.containsKey(key.location());
+    }
+
+    @Nullable
+    @SuppressWarnings("unchecked")
+    public static <T> Registry<T> getRegistry(ResourceKey<Registry<T>> key) {
+        return (Registry<T>) BuiltInRegistries.REGISTRY.get(key.location());
+    }
+
+    public static <T> Registry<T> createRegistry(ResourceKey<Registry<T>> key) {
+        return createRegistry(new RegistryBuilder<>(key).sync());
+    }
+
+    public static <T> Registry<T> createRegistry(RegistryBuilder<T> builder) {
+        return RegistryPlatform.createRegistry(builder);
+    }
+
+    public static <T> Registry<T> getOrCreateRegistry(ResourceKey<Registry<T>> key) {
+        Registry<T> registry = getRegistry(key);
+        if (registry != null) {
+            return registry;
+        }
+        return createRegistry(key);
     }
 
     /**
