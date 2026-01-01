@@ -4,35 +4,20 @@ import com.mojang.serialization.Codec;
 import games.moegirl.sinocraft.sinocore.api.injectable.ISinoDataHolder;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.chunk.ChunkAccess;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Getter
 @AllArgsConstructor
-public class DataType<DATA> {
-    private final Class<DATA> clazz;
-    private final DataKey key;
+public class DataType {
+    private final ResourceLocation id;
 
-    @Nullable
-    private Codec<DATA> codec;
+    private final boolean saved;
+    private final boolean synced;
 
-    @Nullable
-    private StreamCodec<RegistryFriendlyByteBuf, DATA> streamCodec;
-
-    @Nullable
-    private DataType<?> migratesTo;
-    @Nullable
-    private IDataMigrator<DATA, ?> migrator;
+    private final Map<Integer, DataVersion<?>> versions;
 
     private final List<Class<? extends ISinoDataHolder>> appliesTo;
 
@@ -45,11 +30,11 @@ public class DataType<DATA> {
     }
 
     public boolean canBeSaved() {
-        return codec != null;
+        return this.saved;
     }
 
     public boolean canBeSynced() {
-        return streamCodec != null;
+        return this.synced;
     }
 
     public boolean isAvailableFor(ISinoDataHolder holder) {
@@ -61,66 +46,7 @@ public class DataType<DATA> {
     }
 
     @Override
-    public int hashCode() { // Use the hash code of DataKey.
-        return key.hashCode();
-    }
-
-    public static class Builder<DATA> {
-        private final Class<DATA> clazz;
-        private final DataKey key;
-
-        @Nullable
-        private Codec<DATA> codec;
-
-        @Nullable
-        private StreamCodec<RegistryFriendlyByteBuf, DATA> streamCodec;
-
-        @Nullable
-        private DataType<?> migratesTo;
-        @Nullable
-        private IDataMigrator<DATA, ?> migrator;
-
-        private final List<Class<? extends ISinoDataHolder>> appliesTo = new ArrayList<>();
-
-        public Builder(Class<DATA> clazz, ResourceLocation id, int version) {
-            this.clazz = clazz;
-            this.key = new DataKey(id, version);
-        }
-
-        public Builder<DATA> codec(Codec<DATA> codec) {
-            this.codec = codec;
-            return this;
-        }
-
-        public Builder<DATA> streamCodec(StreamCodec<RegistryFriendlyByteBuf, DATA> streamCodec) {
-            this.streamCodec = streamCodec;
-            return this;
-        }
-
-        public <TARGET> Builder<DATA> migratesTo(DataType<TARGET> type, IDataMigrator<DATA, TARGET> migrator) {
-            this.migratesTo = type;
-            this.migrator = migrator;
-            return this;
-        }
-
-        /**
-         * Holder types (default supported):<br/>
-         * {@link Entity},
-         * {@link BlockEntity},
-         * {@link ItemStack},
-         * {@link ChunkAccess},
-         * {@link Level}
-         *
-         * @param holderClass Holder type.
-         * @return this
-         */
-        public Builder<DATA> appliesTo(Class<ISinoDataHolder> holderClass) {
-            this.appliesTo.add(holderClass);
-            return this;
-        }
-
-        public DataType<DATA> build() {
-            return new DataType<>(clazz, key, codec, streamCodec, migratesTo, migrator, appliesTo);
-        }
+    public int hashCode() {
+        return id.hashCode();
     }
 }
