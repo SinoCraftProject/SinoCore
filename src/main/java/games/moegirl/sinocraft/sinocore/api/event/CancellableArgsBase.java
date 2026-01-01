@@ -1,15 +1,13 @@
 package games.moegirl.sinocraft.sinocore.api.event;
 
+import lombok.Getter;
+
 public abstract class CancellableArgsBase implements ICancellableArgs {
-    private boolean isCancelled = false;
+    @Getter
+    private boolean cancelled = false;
 
     @Override
     public void cancel() {
-        isCancelled = true;
-    }
-
-    @Override
-    public boolean isCancelled() {
-        return isCancelled;
+        cancelled = true;
     }
 }
