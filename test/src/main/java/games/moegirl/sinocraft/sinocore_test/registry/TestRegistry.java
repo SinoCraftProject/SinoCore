@@ -46,7 +46,7 @@ public class TestRegistry {
 
     private static void register() {
         TEST_TAB = TABS.register("sinocore_test_tab", builder -> {
-            builder.sino$icon(() -> TestRegistry.TEST_ITEM_TAB_1.get());
+            builder.sino$icon(() -> TestRegistry.TEST_ITEM_TAB_1);
         });
 
         TEST_ITEM_TAB_1 = ITEMS.register("test_item_tab_1", () -> new Item(new Item.Properties().sino$tab(TEST_TAB)));
