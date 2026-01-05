@@ -1,4 +1,4 @@
-package games.moegirl.sinocraft.sinocore.fabric.client.resource;
+package games.moegirl.sinocraft.sinocore.fabric.api.client.resource;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -16,8 +16,7 @@ import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Load render type from model JSON like neoforge.
@@ -32,6 +31,16 @@ import java.util.Map;
  */
 public class RenderTypeLoader extends SimpleJsonResourceReloadListener implements IdentifiableResourceReloadListener {
 
+    private static final Set<Block> EXCLUDED_BLOCKS = new HashSet<>();
+
+    /**
+     * Exclude blocks from being modified by this loader.
+     * @param blocks Blocks to exclude.
+     */
+    public void exclude(Block... blocks) {
+        EXCLUDED_BLOCKS.addAll(Arrays.asList(blocks));
+    }
+
     private static final Map<Block, RenderType> MODIFIED_BLOCK_RENDER_TYPES = new HashMap<>();
 
     private RenderTypeLoader() {
@@ -42,52 +51,77 @@ public class RenderTypeLoader extends SimpleJsonResourceReloadListener implement
     protected void apply(Map<ResourceLocation, JsonElement> map, ResourceManager resourceManager, ProfilerFiller profiler) {
         profiler.push("sinocore_render_type_loader");
 
+        Map<Block, RenderType> toModify = new HashMap<>();
+
+        // Collect modifications.
         for (var entry : map.entrySet()) {
             var key = entry.getKey();
             var value = entry.getValue();
 
             if (key.getPath().startsWith("block/")) {
                 var id = ResourceLocation.fromNamespaceAndPath(key.getNamespace(), key.getPath().substring("block/".length()));
-                applyForBlock(id, value);
-            }
-        }
+                var blockOptional = BuiltInRegistries.BLOCK.getOptional(id);
+                if (blockOptional.isEmpty()) {
+                    // Has no block with id, pass.
+                    continue;
+                }
+                var block = blockOptional.get();
+                if (EXCLUDED_BLOCKS.contains(block)) {
+                    continue;
+                }
 
-        profiler.pop();
-    }
-
-    private void applyForBlock(ResourceLocation id, JsonElement value) {
-        var blockOptional = BuiltInRegistries.BLOCK.getOptional(id);
-        if (blockOptional.isEmpty()) {
-            // Has no block with id, pass.
-            return;
-        }
-
-        var block = blockOptional.get();
-        var existing = ItemBlockRenderTypes.TYPE_BY_BLOCK.get(block);
-        var modified = MODIFIED_BLOCK_RENDER_TYPES.get(block);
-        if (value instanceof JsonObject model) {
-            if (model.has("render_type")) {
-                var typeId = ResourceLocation.parse(model.get("render_type").getAsString());
-                RenderType renderType = getVanillaBlockRenderType(typeId);
-                if (renderType != null) {
-                    // It has a valid render type in model.
-                    if (renderType != existing) {
-                        // Apply our modify.
-                        BlockRenderLayerMap.INSTANCE.putBlock(block, renderType);
-                        MODIFIED_BLOCK_RENDER_TYPES.put(block, renderType);
-                        return;
+                if (value instanceof JsonObject model) {
+                    if (model.has("render_type")) {
+                        var typeId = ResourceLocation.parse(model.get("render_type").getAsString());
+                        RenderType renderType = getVanillaBlockRenderType(typeId);
+                        if (renderType != null) {
+                            toModify.put(block, renderType);
+                        }
                     }
                 }
             }
         }
 
-        if (modified != null) {
-            // It has a render type previously, but now not, remove it.
-            if (modified == existing) {
-                ItemBlockRenderTypes.TYPE_BY_BLOCK.remove(block);
+        // Restore changed previous modifications.
+        var it = MODIFIED_BLOCK_RENDER_TYPES.entrySet().iterator();
+        while (it.hasNext()) {
+            var entry = it.next();
+            var block = entry.getKey();
+            var renderType = entry.getValue();
+
+            if (!toModify.containsKey(block)) {
+                // Not modified now.
+                var existing = ItemBlockRenderTypes.TYPE_BY_BLOCK.get(block);
+                if (existing == renderType) {
+                    // We modified before, but no need now, remove it.
+                    ItemBlockRenderTypes.TYPE_BY_BLOCK.remove(block);
+                }   // Else, somebody else modified it, leave it alone.
+                it.remove();
             }
-            MODIFIED_BLOCK_RENDER_TYPES.remove(block);
+
+            var newRenderType = toModify.get(block);
+            if (renderType == newRenderType) {
+                // Same as before, skip.
+                toModify.remove(block);
+            }
         }
+
+        // Apply new modifications.
+        for (var entry : toModify.entrySet()) {
+            var block = entry.getKey();
+            var renderType = entry.getValue();
+
+            var existing = ItemBlockRenderTypes.TYPE_BY_BLOCK.get(block);
+            if (existing != null) {
+                // It has a render type already, we back-off.
+                continue;
+            }
+
+            BlockRenderLayerMap.INSTANCE.putBlock(block, renderType);
+            MODIFIED_BLOCK_RENDER_TYPES.put(block, renderType);
+        }
+
+        profiler.pop();
     }
 
     private static final ResourceLocation SOLID = ResourceLocation.withDefaultNamespace("solid");

@@ -1,6 +1,6 @@
 package games.moegirl.sinocraft.sinocore.fabric.client;
 
-import games.moegirl.sinocraft.sinocore.fabric.client.resource.RenderTypeLoader;
+import games.moegirl.sinocraft.sinocore.fabric.api.client.resource.RenderTypeLoader;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.minecraft.server.packs.PackType;
