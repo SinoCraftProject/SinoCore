@@ -4,3 +4,6 @@ accessible method net/minecraft/world/inventory/AbstractContainerMenu addSlot (L
 accessible method net/minecraft/advancements/CriteriaTriggers register (Ljava/lang/String;Lnet/minecraft/advancements/CriterionTrigger;)Lnet/minecraft/advancements/CriterionTrigger;
 accessible field net/minecraft/server/network/ServerCommonPacketListenerImpl connection Lnet/minecraft/network/Connection;
 accessible method net/minecraft/client/gui/components/ImageWidget <init> (IIII)V
+
+# For RenderTypeLoader in Fabric
+accessible field net/minecraft/client/renderer/ItemBlockRenderTypes TYPE_BY_BLOCK Ljava/util/Map;
