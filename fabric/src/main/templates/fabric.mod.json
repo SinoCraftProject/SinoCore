@@ -10,6 +10,7 @@
   "contributors": [
     "${mod_credits}"
   ],
+  "icon": "assets/sinocore/logo.png",
   "contact": {
     "homepage": "${mod_homepage}",
     "sources": "${mod_sources}",
@@ -34,5 +35,18 @@
     "minecraft": "${fabric_minecraft_version_range}",
     "fabricloader": "${fabric_loader_version_range}",
     "fabric": "${fabric_api_version_range}"
+  },
+  "custom": {
+    "modmenu": {
+      "links": {
+        "modmenu.curseforge": "https://www.curseforge.com/minecraft/mc-mods/sinocore",
+        "modmenu.modrinth": "https://modrinth.com/mod/sinocore",
+        "modmenu.wiki": "https://docs.sino.moegirl.games/dev/",
+        "modmenu.github_releases": "https://github.com/SinoCraftProject/SinoCore/releases",
+        "modmenu.discord": "https://discord.gg/Q6zuDWDHJV"
+      },
+      "badges": ["library"],
+      "update_checker": true
+    }
   }
 }

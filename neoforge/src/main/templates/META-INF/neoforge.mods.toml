@@ -11,7 +11,7 @@ authors = "${mod_authors}"
 credits = "${mod_credits}"
 description = "${mod_description}"
 displayURL = "${mod_homepage}"
-logoFile = "sinocore_logo.png"
+logoFile = "assets/sinocore/logo.png"
 displayTest = "MATCH_VERSION"
 
 [[dependencies.${ mod_id }]]
