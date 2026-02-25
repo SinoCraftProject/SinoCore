@@ -21,5 +21,7 @@ public class TestZhLanguageProvider extends AbstractLanguageProvider {
         add(TestLangKeys.TEST_WITH_BLOCK, "你点击的方块带有测试标签。");
 
         add("sinocoretest.key_only_in_zh_cn", "仅在中文语言文件中存在的翻译键，AbstractLanguageProvider会对此提出警告。");
+
+        System.out.println("Total " + getData().size() + " entries in " + getName());
     }
 }

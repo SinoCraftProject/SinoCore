@@ -3,6 +3,7 @@ package games.moegirl.sinocraft.sinocore.neoforge.api.datagen;
 import games.moegirl.sinocraft.sinocore.api.registry.IRegRef;
 import games.moegirl.sinocraft.sinocore.api.registry.ITabRegistry;
 import games.moegirl.sinocraft.sinocore.api.util.TranslationKeyHelper;
+import games.moegirl.sinocraft.sinocore.neoforge.mixin.datagen.LanguageProviderAccessor;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.network.chat.contents.TranslatableContents;
@@ -17,7 +18,7 @@ import java.util.*;
 import java.util.function.Supplier;
 
 public abstract class AbstractLanguageProvider extends LanguageProvider {
-    public static final String LOCALE_EN_US ="en_us";
+    public static final String LOCALE_EN_US = "en_us";
 
     protected static final Map<String, Map<String, List<String>>> KNOWN_LANG_KEYS = new HashMap<>();
 
@@ -148,5 +149,9 @@ public abstract class AbstractLanguageProvider extends LanguageProvider {
             logger.warn("Add language to unregistered tab {}: {} = {}.", key.location(), itemKey, name);
             add(itemKey, name);
         }
+    }
+
+    protected Map<String, String> getData() {
+        return ((LanguageProviderAccessor) this).sinocore$getData();
     }
 }
