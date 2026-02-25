@@ -1,19 +1,15 @@
 package games.moegirl.sinocraft.sinocore.api.event.game.args.entity;
 
-import games.moegirl.sinocraft.sinocore.api.event.ICancellableArgs;
+import games.moegirl.sinocraft.sinocore.api.event.CancellableArgsBase;
+import games.moegirl.sinocraft.sinocore.api.event.game.args.lifecycle.ITickArgs;
 import lombok.Getter;
 import net.minecraft.world.entity.Entity;
 
-public class BeforeTickEntityArgs extends EntityArgs implements ICancellableArgs {
+public class BeforeTickEntityArgs extends CancellableArgsBase implements IEntityArgs, ITickArgs {
     @Getter
-    private boolean cancelled = false;
+    private final Entity entity;
 
     public BeforeTickEntityArgs(Entity entity) {
-        super(entity);
-    }
-
-    @Override
-    public void cancel() {
-        this.cancelled = true;
+        this.entity = entity;
     }
 }

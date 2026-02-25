@@ -1,13 +1,14 @@
 package games.moegirl.sinocraft.sinocore.api.event.game.args.entity;
 
-import games.moegirl.sinocraft.sinocore.api.event.ICancellableArgs;
+import games.moegirl.sinocraft.sinocore.api.event.CancellableArgsBase;
+import games.moegirl.sinocraft.sinocore.api.event.game.args.level.ILevelArgs;
 import lombok.Getter;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 
-public class EntityJoinLevelArgs extends EntityArgs implements ICancellableArgs {
+public class EntityJoinLevelArgs extends CancellableArgsBase implements IEntityArgs, ILevelArgs {
     @Getter
-    private boolean cancelled = false;
+    private final Entity entity;
 
     @Getter
     private final Level level;
@@ -20,13 +21,8 @@ public class EntityJoinLevelArgs extends EntityArgs implements ICancellableArgs 
     }
 
     public EntityJoinLevelArgs(Entity entity, Level level, boolean worldGenSpawned) {
-        super(entity);
+        this.entity = entity;
         this.level = level;
         this.worldGenSpawned = worldGenSpawned;
-    }
-
-    @Override
-    public void cancel() {
-        this.cancelled = true;
     }
 }
